@@ -1,0 +1,2 @@
+cancelar = poder sair com a tecla esc
+padrao= o foco ser nessa tecla

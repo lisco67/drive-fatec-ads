@@ -1,0 +1,68 @@
+
+#ex n finalizado pq n sei usar o date
+
+Sub Tinta
+Dim alt As Single
+Dim larg As Single
+
+alt = InputBox("Digite a alt")
+larg = InputBox("Digite a larg")
+MsgBox "Para duas demãos na área de " & larg*alt & "m² será(ão) necessário(s) " & larg*alt/30 & "galão(ões) de tinta"
+
+End Sub
+
+Sub Tabuada
+
+Dim contador
+Dim num As Byte
+Dim text AS String
+
+num = InputBox("Digite o número de 1 a 9:")
+text= "A tabuada do número " & num & chr(10)
+
+for contador = 1 to 10
+text = text + num & "x" & contador & "=" &num*contador & chr(10)
+next
+
+msgbox text
+
+End Sub
+
+Sub Multa
+Dim velocidade as single
+Dim limite as single
+dim hora as byte
+
+velocidade=inputbox("Digite a distãncia em Km: ")
+hora=inputbox("Digite o tempo: ")
+limite=inputbox("Digite o limite: ")
+
+if velocidade/hora <= limite then
+msgbox "Sua Velocidade é " & velocidade/hora & " Km/h e está dentro do limite da vida de " & limite & " Km/h"
+elseif velocidade/limite<=1.2 then
+msgbox "Sua Velocidade é " & velocidade/hora & " Km/h e está até 20% do limite da via de " & limite & " Km/h" & chr(10) & "Multa média - 3 Pontos"
+elseif velocidade/limite<=1.5 then
+msgbox "Sua Velocidade é " & velocidade/hora & " Km/h e está até 50% do limite da via de " & limite & " Km/h" & chr(10) & "Multa grave - 5 Pontos"
+else
+msgbox "Sua Velocidade é " & velocidade/hora & " Km/h e está a mais de 50% do limite da via de "& limite & " Km/h" & chr(10) & "Multa gravíssima - 7 Pontos"
+end if
+
+End Sub
+
+
+
+
+
+-----------------------------
+Sub Aniversario
+dim date as date
+date=inputbox("textou:")
+msgbox date
+if data > 12/12/12 then
+msgbox "teste"
+
+
+endif
+
+End Sub
+-------------------------
