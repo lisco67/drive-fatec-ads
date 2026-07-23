@@ -5,9 +5,15 @@ Continuação do [antigo Drive](https://drive.google.com/drive/folders/1yqSr2BiL
 ## :alarm_clock: HORÁRIOS E SALAS: [clique aqui](https://www.fatecsp.br/paginas/grade_horaria.php#titulo1)
 
 ## 💀 Grade antiga
-### Disciplinas que não estarão disponíveis semestre que vem
+### Disciplinas que não estarão disponíveis semestre que vem em nenhum turno
 - LHW (Laboratório de Hardware)
-- SO II (Sistemas Operacionais II)
+- SO I (Sistemas Operacionais I)
+### Mudanças de sigla
+- Engenharia de Software I: IES100 --> IES036  
+- Engenharia de Software II: IES200 --> IES037
+- Comunicação e Expressão: LPO001 --> COM141
+- Algoritmos e Lógica de Programação: IAL002 --> IAL027
+- Arquitetura e Organização de Computadores: IAC --> IAC012
 ### Minha disciplina morreu. E agora?
 1. Cursar disciplina equivalente
 2. Caso a sua matéria não exista mais de **forma alguma, nem equivalente,** você pode cursar uma disciplina de sua escolha para contar como **carga-horária** (é importante que a cargahorária seja a mesma)
