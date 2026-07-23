@@ -1,3 +1,3 @@
 # Drive-Fatec-ADS
-Continuação do antigo Drive
-//ai aqui a gente coloca informaçÕes sobre o que tem e como entrar em contato pra contribuir (?)
+Continuação do antigo Drive [https://drive.google.com/drive/folders/1yqSr2BiLIPiZHDlnmf9lzSNSfIZeckuS] 
+Formulário de contribuição [https://forms.gle/232r8NBnMnpn1TK7A]
