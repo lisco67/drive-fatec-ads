@@ -1,0 +1,75 @@
+             i----------------------------------------------©
+             ¦ RBT   ¦   Curso de Assembly   ¦   Aula Nº 07 ¦
+             È----------------------------------------------¥
+
+Por: Frederico Pissarra
+
+
+i--------------©
+¦ ASSEMBLY VII ¦
+È--------------¥
+
+    Algumas instruçöes afetam  somente  aos  flags.  Dentre elas, as
+mais utilizadas säo as instruçöes de comparaçäo entre dois dados.
+
+ ¦ Comparaçöes aritiméticas:
+
+    A  instruçäo  CMP  é  usada  quando se quer comparar dois dados,
+afetando somente aos flags.  Eis a sintaxe:
+
+ +-----------------------------------------------------------------+
+ ¦  CMP AL,1Fh                                                     ¦
+ ¦  CMP ES:[DI],1                                                  ¦
+ ¦  CMP AX,[SI]                                                    ¦
+ +-----------------------------------------------------------------+
+
+    Esta  instruçäo faz a subtraçäo entre o operando mais a esquerda
+e o mais a direita, afetando  somente  os flags.  Por exemplo, se os
+dois operandos  tiverem  valores  iguais  a  subtraçäo  dará valores
+iguais e o flag de ZERO será 1. Eis a mecânica de CMP:
+
+ +-----------------------------------------------------------------+
+ ¦  CMP AL,1Fh   ; AL - 1Fh, afetando somente os Flags             ¦
+ +-----------------------------------------------------------------+
+
+ ¦ Comparaçöes lógicas:
+
+    A instruçäo TEST é usada quando se quer  comparar  o  estado  de
+determinados bits de um operando. Eis a sintaxe:
+
+ +-----------------------------------------------------------------+
+ ¦  TEST AL,10000000b                                              ¦
+ ¦  TEST [BX],00001000b                                            ¦
+ +-----------------------------------------------------------------+
+
+    Esta  instruçäo faz um AND com os dois operados, afetando apenas
+os flags.  Os flags Z, S  e  P  säo  afetados,  os flags O e C seräo
+zerados.
+
+ ¦ Instruçöes que mudam o estado dos flags diretamente:
+
+    CLC - Abreviaçäo de CLear Carry (Zera o flag Carry).
+    CLD - Abreviaçäo de CLear Direction (Ajusta flag de  direçäo  em
+          zero,  especificando  o sentido correto para instruçöes de
+          bloco).
+    CLI - Abreviaçäo   de  CLear   Interrupt   (Mascara   flag    de
+          interrupçäo,   näo  permitindo  que  a  CPU  reconheça  as
+          interrupçöes mascaráveis).
+    CMC - Abreviaçäo de CoMplement Carry (Inverte o flag de carry).
+    STC - Abreviaçäo de SeT Carry (Faz carry = 1).
+    STD - Abreviaçäo  de  SeT  Direction  (flag  de direçäo setado -
+          indica que as instruçöes de bloco  incrementaräo  os  seus
+          pointers no sentido contrário - de cima para baixo).
+    STI - Abreviaçäo  de  SeT Interrupt (Faz com que a CPU volte a
+          reconhecer as interrupçöes mascaráveis).
+
+    Uma  interrupçäo  é  um  "desvio"  feito  pela  CPU  quando   um
+dispositivo  requer  a  atençäo  da mesma.  Por exemplo, quando você
+digita uma tecla, o circuito do  teclado requisita a atençäo da CPU,
+que  por  sua  vez,  para  o  que  está fazendo e executa uma rotina
+correspondente à  requisiçäo  feita  pelo  dispositivo  (ou  seja, a
+rotina da interrupçäo).  Ao final da rotina, a CPU retorna à  tarefa
+que  estava  desempenhando  antes da interrupçäo.  Nos PCs, TODAS as
+interrupçöes  säo  mascaráveis  (podem  ser  ativadas  e desativadas
+quando  quisermos),  com a única excessäo da interrupçao de checagem
+do sistema (o famoso MEMORY PARITY ERROR é um exeplo!).

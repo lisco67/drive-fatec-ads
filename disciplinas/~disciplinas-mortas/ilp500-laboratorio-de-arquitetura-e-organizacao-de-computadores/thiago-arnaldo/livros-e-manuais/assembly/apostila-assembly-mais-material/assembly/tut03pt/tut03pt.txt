@@ -1,0 +1,474 @@
+
+          ÉÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ»
+          º          Tutorial de Assembler de Adam Hyde 1.0        ÃÄ¿
+          º                                                        º ³
+          º                        PARTE III                       º ³
+          º            Traduzido por Renato Nunes Bastos           º ³
+          ÈÍÑÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼ ³
+            ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+
+
+Versão   :  1.1
+Data     :  27-02-1996
+Contato  :  blackcat@vale.faroc.com.au
+            http://www.faroc.com.au/~blackcat
+;Renato  :  bastos@lci.ufrj.br
+            krull@geocities.com
+            http://www.geocities.com/SiliconValley/Park/3174
+
+
+ ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+Bem-vindos ao terceiro tutorial da série. No último tutorial eu disse que 
+estaríamos discutindo mais algumas instruções, flags e um verdadeiro programa
+em Assembly.
+
+Durante este tutorial, você achará os livros "Peter Norton's Guide to
+Assembler", "Peter Norton's Guide to the VGA Card", ou qualquer
+um dos livros "Peter Norton's Guide to..." muito úteis. Você não pode
+programar em Assembler sem saber pra que são todas as interrupções 
+e o que são todas as subfunções.
+
+Eu lhe recomendo conseguir uma cópia desses livros assim que possível.
+
+
+ ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+ Um Programa Assembly
+-----------------------
+
+Eu geralmente não escrevo código 100% em Assembly. É muito mais conveniente
+usar uma linguagem de alto nível como C ou Pascal, e usar Assembly para
+acelerar os bits lentos. Contudo, você pode querer se torturar e escrever uma
+aplicação completamente em Assembly, então aqui vai a configuração básica:
+
+   ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+   ³ DOSSEG     - diz à CPU como organizar o segmento
+   ÃÄÄ
+   ³ MODEL      - declara o modelo que vamos usar
+   ÃÄÄ
+   ³ STACK      - quanta pilha vamos alocar?
+   ÃÄÄ
+   ³ DATA       - o quê vai no  segmento de dados
+   ÃÄÄ
+   ³ CODE       - o quê vai no segmento de código
+   ÃÄÄ
+   ³ START      - o início do seu código
+   ÃÄÄ
+   ³ END START  - o fim do seu código
+   ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+FATO ENGRAÇADO: Eu sei de alguém que escreveu um clone de Space Invaders (9K),
+                todo em Assembly. Eu tenho o código fonte, se alguém estiver
+                interessado...
+
+Okay, agora vamos dar uma olhada no programa de exemplo em que eu não
+farei absolutamente nada!
+
+    DOSSEG
+    .MODEL SMALL
+    .STACK 200h
+    .DATA
+    .CODE
+
+START:
+    MOV   AX, 4C00h   ; AH = 4Ch, AL = 00h
+    INT   21h
+END START
+
+Vamos ver em detalhes. Abaixo, cada uma das frases acima está explicada.
+
+   ş DOSSEG     - isto ordena os segmentos na ordem:
+
+                  Segmentos de Código;
+                  Segmentos de Dados;
+                  Segmentos de Pilha.
+
+                  Não se preocupe muito com isso por enquanto, apenas inclua
+                  até que você saiba o que está fazendo.
+
+   ş MODEL      - isso permite à CPU determinar como seu programa está
+                  estruturado. Você pode ter os seguintes MODELos:
+
+                  1) TINY    - tanto código quanto dados se encaixam
+                               no mesmo segmento de 64K.
+
+                  2) SMALL   - código e dados estão em segmentos diferentes,
+                               embora cada um tenha menos de.
+
+                  3) MEDIUM  - código pode ser maior que 64K, mas os dados
+                               têm que ter menos que 64K.
+
+                  4) COMPACT - códido é menos de 64K, mas dados podem ter
+                               mais que 64K.
+
+                  5) LARGE   - código e dados podem ter mais que 64K, embora
+                               arrays não possam ser maiores que 64K.
+
+                  6) HUGE    - código, dados e arrays podem ter mais de 64K.
+
+   ş STACK      - isso instrui ao PC para arrumar uma pilha tão grande quanto
+                  for especificado.
+
+   ş DATA       - permite a você criar um segmento de dados.  Por exemplo:
+
+                  MySegment SEGMENT PARA PUBLIC 'DATA'
+
+                      ; Declare alguns bytes, words, etc.
+
+                  MySegment ENDS
+
+                  Isso é similar a CONSTANTES in Pascal.
+
+   ş CODE       - permite a você criar um segmento de código.  Ex.:
+
+                  MyCodeSegment SEGMENT PARA PUBLIC 'CODE'
+
+                      ; Declare algo
+
+                  MyCodeSegment ENDS
+
+   ş START      - Apenas um label para dizer ao compilador onde a parte 
+                  principal do seu programa começa.
+
+      ş MOV   AX, 4C00h   ; AH = 4Ch, AL = 00h
+
+      Isso move 4Ch para ah, que coincidentemente nos traz de volta ao DOS.
+      Quando a interrupção 21h é chamada e AH = 4Ch, de volta ao DOS lá vamos
+      nós.
+
+      ş INT   21h
+
+   ş END START  - Você não tem imaginação?
+
+Okay, Espeo que você tenha entendido tudo isso, porque agora nós vamos mesmo
+fazer algo.  Ficou excitado?  :)
+
+Neste examplo nós vamos usar a interrupção 21h, (a interrupção do DOS), para
+imprimir uma string. Para ser preciso, vamos usar a subfunção 9h, e ela se
+parece com isso:
+
+   ş INTERRUPÇÃO 21h
+   ş SUBFUNÇÃO 9h
+
+   Requer:
+
+   ş AH     = 9h
+   ş DS:DX  = ponteiro FAR para a string a ser impressa. A string deve ser
+              terminada com um sinal $.
+
+Assim, aqui está o exemplo:
+
+    DOSSEG
+    .MODEL SMALL
+    .STACK 200h
+    .DATA
+
+OurString   DB  "Isto é uma string de caracteres.  "
+            DB  "Você não tem imaginação? Coloque algo interessante aqui!$"
+
+    .CODE
+
+START:
+    MOV   AX, SEG OurString     ; Move o segmento onde OurString está 
+    MOV   DS, AX                ; para AX, e agora para DS
+
+    MOV   DX, OFFSET OurString  ; Offset de OurString -> DX
+    MOV   AH, 9h                ; Subfunção de imprimir strings
+    INT   21h                   ; Gera a interrupção 21h
+
+    MOV   AX, 4C00h             ; Subfunção de saída para o DOS
+    INT   21h                   ; Gera a interrupção 21h
+END START
+
+
+Se você assemblar isso com TASM - TASM SEJALADOQUEVOCECHAMOUELE.ASM então
+linkar com TLINK - TLINK SEJALADOQUEVOCECHAMOUELE.OBJ  você vai conseguir
+um arquivo EXE de cerca de 652 bytes. Você pode usar estes programas no DEBUG
+com algumas modificações, mas eu vou deixar isso contigo. Para trabalhar com
+Assembler puro você _precisa_ de TASM e TLINK, embora eu ache que MASM <aahh!>
+faria o mesmo trabalho muito bem.
+
+Agora vamos ao código com um pouco mais detalhado:
+
+    MOV   AX, SEG OurString     ; Move o segment onde OurString está
+    MOV   DS, AX                ; para AX, e agora para DS
+
+    MOV   DX, OFFSET OurString  ; Move o offset onde OurString está localizado
+    MOV   AH, 9h                ; Subfunção de escrita de strings
+    INT   21h                   ; Gera a interrupção 21h
+
+Você vai notar que tivemos que usar AX para p“r o endereço do segmento de
+OurString em DS. Você vai descobrir que não dá pra referenciar um registrador
+de segmento diretamente em Assembler. Na procedure PutPixel do último
+tutorial, eu movi o endereço da VGA para AX, e então para ES.
+
+A instrução SEG é também introduzida. SEG retorna o segmento onde a string
+OurString está localizada, e OFFSET retorna, adivinha o quê?, o offset do
+início do segmento para onde a string termina.
+
+Note também que nós usamos DB. DB não é nada de especial, e significa Declare
+Byte, que é o que tudo o que ela faz.  DW, Declare Word e DD, Declare Double
+Word também existem.
+
+
+Você poderia ter também colocado OurString segmento de código, a vantagem é
+que estaria CS apontando para o mesmo segmento que OurSting, de modo que
+você não tem que se preocupar em procurar o segmento em que OurString está.
+
+O programa acima no segmento de código seria mais ou menos assim:
+
+    DOSSEG
+    .MODEL SMALL
+    .STACK 200h
+    .CODE
+
+OurString     DB  "Abaixo o segmento de dados!$"
+
+START:
+    MOV   AX, CS
+    MOV   DS, AX
+
+    MOV   DX, OFFSET OurString
+    MOV   AH, 9
+    INT   21h
+
+    MOV   AX, 4C00h
+    INT   21h
+END START
+
+Simples, não?
+
+Nós não vamos ver muitos programas só em Assembly de novo, mas a maioria das
+técnicas que usaremos podem ser implementadas em programas só em Assembler.
+
+
+ ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+ Então, o que são flags?
+--------------------------
+
+Esta parte é para meu companheiro Clive que tem me perguntado sobre flags,
+então lá vamos nós Clive, com FLAGS.
+
+Eu não me lembro se já introduzimos a instrução CMP ou não, CMP - (COMPARE),
+mas CMP compara dois números e reflete a comparação nos FLAGS.  Para
+usá-la você faria algo desse tipo:
+
+   ş CMP   AX, BX
+
+então seguir com uma instrução como essas abaixo:
+
+
+ COMPARAÇÕES SEM SINAL:
+------------------------
+
+   ş JA      - pula (jump) se AX foi MAIOR que BX;
+   ş JAE     - pula se AX foi MAIOR ou IGUAL a BX;
+   ş JB      - pula se AX foi MENOR que BX;
+   ş JBE     - pula se AX foi MENOR ou IGUAL a BX;
+   ş JNA     - pula se AX foi NÃO MAIOR que BX;
+   ş JNAE    - pula se AX foi NÃO MAIOR ou IGUAL a BX;
+   ş JNB     - pula se AX foi NÃO MENOR que BX;
+   ş JNBE    - pula se AX foi NÃO MENOR ou IGUAL a BX;
+   ş JZ      - pula se o flag de ZERO está setado - o mesmo que JE;
+   ş JE      - pula se AX for IGUAL a BX;
+   ş JNZ     - pula se o flag de ZERO NÃO está setado - o mesmo que JNE;
+   ş JNE     - pula se AX NÃO for IGUAL a BX;
+
+
+ COMPARAÇÕES COM SINAL:
+------------------------
+
+   ş JG      - pula (jump) se AX foi MAIOR que BX;
+   ş JGE     - pula se AX foi MAIOR ou IGUAL a BX;
+   ş JL      - pula se AX foi MENOR que BX;
+   ş JLE     - pula se AX foi MENOR ou IGUAL a BX
+   ş JNG     - pula se AX foi NÃO MAIOR que BX
+   ş JNGE    - pula se AX foi NÃO MAIOR ou IGUAL a BX;
+   ş JNL     - pula se AX foi NÃO MENOR que BX;
+   ş JNLE    - pula se AX foi NÃO MENOR ou IGUAL a BX;
+   ş JZ      - pula se o flag de ZERO está setado - o mesmo que JE;
+   ş JE      - pula se AX for IGUAL a BX;
+   ş JNZ     - pula se o flag de ZERO NÃO está setado - o mesmo que JNE;
+   ş JNE     - pula se AX NÃO for IGUAL a BX;
+
+
+ NÃO TÃO COMUNS:
+-----------------
+
+   ş JC      - pula se o flag de CARRY está setado;
+   ş JNC     - pula se o flag de CARRY NÃO está setado;
+   ş JO      - pula se o flag de OVERFLOW está setado;
+   ş JNO     - pula se o flag de OVERFLOW NÃO está setado;
+   ş JP      - pula se o flag de PARIDADE está setado;
+   ş JNP     - pula se o flag de PARIDADE NÃO está setado;
+   ş JPE     - pula se a PARIDADE for PAR - o mesmo que JP;
+   ş JPO     - pula se a PARIDADE for ÖMPAR - o mesmo que JNP;
+   ş JS      - pula se o flag de SINAL NÃO está setado;
+   ş JNS     - pula se o flag de SINAL está setado.
+
+Ufa! Meus olhos quase secaram depois de olhar pra essa tela por tanto tempo!
+
+
+De qualquer modo, aqui está com o que eles se parecem:
+
+              ÚÄÄÄÄÄÄÂÄÄÄÄÂÄÄÄÄÂÄÄÄÄÂÄÄÄÄÂÄÄÄÄÂÄÄÄÄÂÄÄÄÄÂÄÄÄÄ¿
+              ³ Flag ³ SF ³ ZF ³ -- ³ AF ³ -- ³ PF ³ -- ³ CF ³
+              ÃÄÄÄÄÄÄÅÄÄÄÄÅÄÄÄÄÅÄÄÄÄÅÄÄÄÄÅÄÄÄÄÅÄÄÄÄÅÄÄÄÄÅÄÄÄÄ´
+              ³ Bit  ³ 07 ³ 06 ³ 05 ³ 04 ³ 03 ³ 02 ³ 01 ³ 00 ³
+              ÀÄÄÄÄÄÄÁÄÄÄÄÁÄÄÄÄÁÄÄÄÄÁÄÄÄÄÁÄÄÄÄÁÄÄÄÄÁÄÄÄÄÁÄÄÄÄÙ
+
+   Legenda:
+  ----------
+
+  SF - Flag de Sinal;
+  ZF - Flag de Zero;
+  AF - Flag Auxiliar;
+  PF - Flag de Paridade.
+  CF - Flag de Carry (vai um).
+
+Nota: HÁ MUITO MAIS FLAGS PARA APRENDER. Eles serão vistos num Tutorial mais
+      à frente.
+
+
+ ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+COISAS PARA FAZER:
+
+ 1) Volte ao frame da configuração básica de Assembler e memorize-o.
+ 2) Tenter escreer um programa simples que mostre alguns comentários
+    _criativos_.
+ 3) Aprenda as instruções JUMP menos criptográficos de cor.
+
+
+ ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+Okay, no último tutorial eu lhe dei algumas procedures, e pedi para você 
+comentá-las. Eu não queria uma explicação detalhada do que eles faziam
+- não se espera que você saiba isso ainda - apenas um sumário do que cada
+comando faz.
+
+Ex.:
+
+   MOV   AX, 0003h   ; AX agora é igual a 03h;
+   ADD   AX, 0004h   ; AX agora é igual a 07h;
+
+Então, aqui vai o conjunto completo das procedures com comentários:
+
+
+{ Esta procedure limpa a tela em modo texto }
+
+Procedure ClearScreen(A : Byte; Ch : Char);   Assembler;
+
+Asm     { ClearScreen }
+  mov   ax, 0B800h    { Move o endereço de vídeo para AX    }
+  mov   es, ax        { Aponta ES para o segmento de vídeo  }
+  xor   di, di        { Zera  DI                            }
+  mov   cx, 2000      { Move 2000 (80x25) para CX           }
+  mov   ah, A         { Move o atributo para AH             }
+  mov   al, &Ch       { Move o caracter a usar para AL      }
+  rep   stosw         { Faz isso                            }
+End;    { ClearScreen }
+
+
+Explicação:
+
+Nós zeramos DI, logo é igual a 0 - o canto esquerdo da tela. Isto é de onde 
+vamos começar a encher a tela.
+
+Movemos 2000 para CX porque vamos colocar 2000 caracteres na tela.
+
+
+{ Esta procedure move o cursor para a posição X, Y }
+
+Procedure CursorXY(X, Y : Word);   Assembler;
+
+Asm    { CursorXY }
+   mov   ax, Y              { Move o valor Y para AX               }
+   mov   dh, al             { Y vai para DH                        }
+   dec   dh                 { rotina baseada em ajustar para zero  }
+   mov   ax, X              { Move o valor de X para AX            }
+   mov   dl, al             { X vai para  DL                       }
+   dec   dl                 { rotina baseada em ajustar para zero  }
+   mov   ah, 2              { Chama a função correspondente        }
+   xor   bh, bh             { Zera  BH                             }
+   int   10h                { faz isso (põe o cursor na posição)   }
+End;    { CursorXY }
+
+
+Explicação:
+
+A ' rotina baseada em ajustar para zero' é realizada porque a BIOS refere-se à
+posição (1, 1) como (0, 0), e igualmente (80, 25) como (79, 24).
+
+
+
+Procedure PutPixel(X, Y : Integer; C : Byte; Adr : Word);   Assembler;
+
+Asm     { PutPixel }
+   mov   ax, [Adr]          { Move o endereço do VGA em  AX       }
+   mov   es, ax             { Joga AX em ES                       }
+   mov   bx, [X]            { Move o valor de X para BX           }
+   mov   dx, [Y]            { Move o valor de Y para DX           }
+   xchg  dh, dl             { Daqui pra frente calcula o          }
+   mov   al, [C]            { offset do pixel a ser plotado       }
+   mov   di, dx             { e põe este valor em DI.  Vamos      }
+   shr   di, 2              { ver isso mais tarde - próximo tutorial}
+   add   di, dx             { quando falarmos sobre shifts         }
+   add   di, bx             { versus muls                          }
+   stosb                    { Guarda o byte em ES:DI               }
+End;    { PutPixel }
+
+
+NOTA:  Eu estaria muito interessado em achar uma procedure PutPixel mais
+       rápida que essa. Eu já vi uma inline que faz isso em metade do tempo,
+       mas mesmo assim, essa é muito quente.
+
+
+{ Esta procedure é uma função de delay independente de CPU }
+
+Procedure Delay(ms : Word);   Assembler;
+
+Asm     { Delay }
+   mov   ax, 1000           { Move o número de ms em um segundo para AX   }
+   mul   ms                 { Faz AX = número de ms a esperar             }
+   mov   cx, dx             { Prepara para o delay - põe número de ms     }
+   mov   dx, ax             { onde necessário                             }
+   mov   ah, 86h            { Cria o delay                                }
+   int   15h
+End;    { Delay }
+
+
+ ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+Quase todo o fluido saiu do meus olhos agora - é quase meia-noite - então
+eu acho melhor parar. Desculpe se os comentários são um pouco curtos, mas eu
+preciso dormir!
+
+No próximo tutorial vamos ver:
+
+   ş Shifts - o que são eles?
+   ş Alguns exemplos de CMP/JMP.
+   ş Como a memória VGA é arrumada, e como acessá-la.
+   ş hum, algum outro grande tópico.
+
+Na próxima semana eu vou fazer um esforço para te mostrar com acessar
+a memória rapidamente, isto é, o VGA, e lhe dar alguns exemplos.
+
+Se você deseja ver um tópico discutido num tutorial no futuro, escreva-me, e
+eu vou ver o que eu posso fazer.
+
+
+ ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+
+Não perca!!! Baixe o tutorial da próxima semana na minha homepage:
+
+  ş http://www.faroc.com.au/~blackcat
+  ş http://www.geocities.com/SiliconValley/Park/3174
+
+Vejo vocês na próxima semana!
+
+- Adam.
+- Renato Nunes Bastos

@@ -1,0 +1,70 @@
+             i----------------------------------------------©
+             ¦ RBT   ¦   Curso de Assembly   ¦   Aula Nº 09 ¦
+             È----------------------------------------------¥
+
+Por: Frederico Pissarra
+
+
+i-------------©
+¦ ASSEMBLY IX ¦
+È-------------¥
+
+    O assunto de  hoje  é  INTERRUPÇÖES.   Como  já disse antes, uma
+interrupçäo é uma requisiçäo da atençäo da CPU  por  um  dispositivo
+(por  exemplo  o  teclado,  quando  apertamos  uma  tecla!).   A CPU
+INTERROMPE o processamento normal e  salta para a rotina que "serve"
+a interrupçäo requisitada, retornando ao ponto em que  estava  ANTES
+da  interrupçäo  quando  finalizar  a  rotina de interrupçäo.  Assim
+funciona a nível de hardware.
+
+    A novidade nos processadores INTEL  da série 80x86 é que existem
+instruçöes assembly que  EMULAM  a  requisiçäo  de  uma  interruçäo.
+Essas  instruçöes  nada  mais  säo  que  um  "CALL", mas ao invés de
+usarmos um endereço para  uma  subrotina,  informamos o índice (ou o
+código) da interrupçäo requisitada e a CPU se comportará como se  um
+dispositivo tivesse requisitado a interrupçäo...
+
+    As  rotinas  do DOS e da BIOS säo chamadas por essas instruçöes.
+Na realidade,  este  artificio  da  família  INTEL  facilita muito o
+trabalho dos programadores  porque  näo  precisamos  saber  onde  se
+encontram  as  rotinas  da  BIOS  e do DOS na memória...  Precisamos
+saber apenas o índice da  interrupçäo  de cada uma das rotinas...  o
+endereço a CPU calcula para nós!
+
+    Eis a sintaxe da instruçäo:
+
+ +------------------------------------------------------------------+
+ ¦  INT 21h                                                         ¦
+ ¦  INT 10h                                                         ¦
+ +------------------------------------------------------------------+
+
+    Onde 21h e 10h säo índices.
+
+    A CPU sabe para onde saltar porque no inicio da memória de  todo
+PC   tem   uma   tabela   conhecida  como  "Tabela  dos  vetores  de
+interrupçäo".  A CPU, de posse do índice na instruçäo INT, "pega"  o
+endereço  correspondente a esse índice nessa tabela e efetua um CALL
+diferente (porque  o  fim  de  uma  rotina  de  interrupçäo  tem que
+terminar em IRET e  näo  em  RET  -  IRET  é  o  RET  da  rotina  de
+interrupçäo - Interrupt RETurn).
+
+    Por exemplo...  Se precisamos abrir um  arquivo,  o  trabalho  é
+enviado  ao  DOS pela interrupçao de indice 21h.  Se queremos ler um
+setor do disco, usamos a interrupçao de indice 13h, etc...  Mas, nao
+use a instruçao INT  sem  saber  exatamente  o que está fazendo, ok?
+Pode ter resultados desastrosos!
+
+    Uma  descriçäo  da  maioria   das   interrupçöes   de   software
+disponíveis  nos  PCs  compatíveis está disponível no livro "Guia do
+programador para PC e PS/2"  de  Peter Norton (recomendo a aquisiçäo
+deste livro!  De preferencia a  versao americana!).  Ou, se preferir
+"literatura eletronica" recomendo  o  arquivo  HELPPC21.ZIP  (v2.1),
+disponivel  em qualquer bom BBS...  Ainda assim pedirei para o RC do
+ES (RBT) para disponibiliza-lo para  FREQ aos Sysops interessados em
+adquiri-lo.
+
+    Quanto as interruçöes  de  hardware  (as  famosas  IRQs!)...   é
+assunto  meio  complexo  no  momento e requer um bom conhecimento de
+eletronica digital  e  do  funcionamento  do  micrprocessador...  no
+futuro (próximo, espero!) abordarei esse assunto.
+

@@ -1,0 +1,170 @@
+             i----------------------------------------------©
+             ¦ RBT   ¦   Curso de Assembly   ¦   Aula Nº 06 ¦
+             È----------------------------------------------¥
+
+Por: Frederico Pissarra
+
+
+i-------------©
+¦ ASSEMBLY VI ¦
+È-------------¥
+
+    Instruçöes aritiméticas  säo  o  tópico  de  hoje.   Já discuti,
+brevemente,  os  flags  e  os  sistemas  de numeraçäo.  Aqui vai uma
+aplicaçäo prática:
+
+ ¦ Soma:
+
+    A  soma  é  feita através das instruçöes ADD e ADC.  A diferença
+entre elas é que uma faz  a  soma  normalmente e a outra faz a mesma
+coisa acrecentando o conteúdo do flag CARRY. Eis a sintaxe:
+
+ +-----------------------------------------------------------------+
+ ¦  ADD AL,10h                                                     ¦
+ ¦  ADC AH,22h                                                     ¦
+ ¦                                                                 ¦
+ ¦  ADD AX,2210h                                                   ¦
+ +-----------------------------------------------------------------+
+
+    As duas primeiras instruçöes fazem exatamente a mesma coisa  que
+a  terceira.  Note que na primeiria somamos AL com 10h e o resultado
+ficará em AL (se  ocorrer  "vai  um"  nesta  soma  o flag CARRY será
+setado).   A  segunda  instruçäo  soma  AH  com  22h  MAIS  o  carry
+resultante  da  primeira  instruçäo  e  o  resultado  ficará  em  AH
+(novamente  setando  o  flag  carry  se  houver outro "vai um"!).  A
+terceira instruçäo faz a mesma coisa porque soma 2210h a AX, ficando
+o resultado em AX e o possível "vai um" no carry.
+
+    Todos  os  flags  säo  afetados  após  a  execuçäo  de  uma  das
+instruçöes de soma, exceto: I, D e Trap.
+
+
+ ¦ Subtraçäo
+
+    Semelhante as instruçöes  de  soma,  existem  duas instruçöes de
+subtraçäo: SUB e SBB.  A  primeira  faz  a  subtraçäo  simples  e  a
+segunda  faz  a  mesma  coisa subtraindo também o conteúdo prévio do
+flag CARRY (como é uma subtraçäo o CARRY é conhecido como BORROW!).
+
+    A sintaxe:
+
+ +-----------------------------------------------------------------+
+ ¦  SUB AL,1                                                       ¦
+ ¦  SBB AH,0                                                       ¦
+ ¦                                                                 ¦
+ ¦  SUB AX,1                                                       ¦
+ +-----------------------------------------------------------------+
+
+    Como no exemplo  anterior,  as  duas  primeiras instruçöes fazem
+exatamente o que a terceira faz...  Os flags afetados seguem a mesma
+regra das instruçöes de soma!
+
+
+ ¦ Incremento e decremento:
+
+    As instruçöes INC e DEC säo usadas no lugar  de  ADD  e  SUB  se
+quisermos incrementar ou decrementar o conteúdo de algum registrador
+(ou de uma posiçäo de memória) de uma unidade. A sintaxe é simples:
+
+ +----------------------------------------------------------------+
+ ¦  DEC AX                                                        ¦
+ ¦  INC BL                                                        ¦
+ +----------------------------------------------------------------+
+
+    Os  flags afetados seguem a mesma regra de uma instruçäo de soma
+ou uma de subtraçäo!
+
+
+ ¦ Multiplicaçäo:
+
+    Os  processadores  da   família   80x86  possuem  instruçöes  de
+multiplicaçäo e divisäo  inteiras  (ponto  flutuante fica pro 8087).
+Alguns cuidados devem ser tomados quando usarmos  uma  instruçäo  de
+divisäo (que será vista mais adiante!).
+
+    Uma   coisa   interessante   com   a   multiplicaçäo  é  que  se
+multiplicarmos dois registradores de  16  bits obteremos o resultado
+necessariamente em 32 bits.   O  par  de  registradores  DX e AX säo
+usados para armazenar esse número de 32 bits da seguinte  forma:  DX
+será a word mais significativa e AX a menos significativa.
+
+    Por exemplo, se  multiplicarmos  0FFFFh  por  0FFFFh  obteremos:
+0FFFE0001h (DX = 0FFFEh e AX = 0001h).
+
+    Eis  a  regra  para  descobrir  o  tamanho  do restultado de uma
+operaçäo de multiplicaçäo:
+
+                +---------------------------------+
+                ¦             A * B = M           ¦
+                +---------------------------------¦
+                ¦    A     ¦     B     ¦     M    ¦
+                +----------+-----------+----------¦
+                ¦  8 bits  ¦   8 bits  ¦  16 bits ¦
+                ¦          ¦           ¦          ¦
+                ¦ 16 bits  ¦  16 bits  ¦  32 bits ¦
+                +---------------------------------+
+
+    A multiplicaçäo sempre ocorrerá entre  o acumulador (AL ou AX) e
+um outro operando. Eis a sintaxe das instruçöes:
+
+ +----------------------------------------------------------------+
+ ¦  MUL BL      ; AX = AL * BL                                    ¦
+ ¦  IMUL CX     ; DX:AX = AX * CX                                 ¦
+ +----------------------------------------------------------------+
+
+    A primeira instruçäo (MUL) näo considera o sinal dos  operandos.
+Neste  caso, como BL é de 8 bits, a multiplicaçäo se dará entre BL e
+AL e o resultado será armazenado em AX.
+
+    A segunda instruçäo leva  em  consideraçäo o sinal dos operandos
+e, como CX é de 16 bits, a multiplicaçäo se dará entre CX e AX  e  o
+restultado  será armazenado em DX e AX.  Lembrando que o sinal de um
+número inteiro depende do seu bit mais significativo!
+
+
+ ¦ Divisäo:
+
+    Precisamos tomar cuidado com a  divisäo pelo seguinte motivo: Se
+o resultado näo couber no  registrador destino, um erro de "Division
+by zero" ocorrerá  (isto  näo  está  perfeitamente  documentado  nos
+diversos  manuais  que li enquanto estudava assembly 80x86...  Vim a
+descobrir este 'macete' numa  antiga  ediçäo  da revista PC MAGAZINE
+americana).  Outro cuidado é com o divisor...  se for 0 o mesmo erro
+ocorrerá!
+
+    A  divisäo  pode ser feita entre um número de 32 bits e um de 16
+ou entre um de 16 e um de 8, veja a tabela:
+
+                +--------------------------------+
+                ¦        A / B = Q e resto       ¦
+                +--------------------------------¦
+                ¦    A     ¦     B     ¦Q e resto¦
+                +----------+-----------+---------¦
+                ¦ 32 bits  ¦  16 bits  ¦ 16 bits ¦
+                ¦          ¦           ¦         ¦
+                ¦ 16 bits  ¦   8 bits  ¦  8 bits ¦
+                +--------------------------------+
+
+    Assim como na multiplicaçäo  o  número  (dividendo) de 32 bits é
+armazenado em DX e AX.
+
+    Depois da divisäo o quociente é armazenado em AL e o resto em AH
+(no caso de divisäo 16/8 bits) ou o quociente fica em AX e  o  resto
+em DX (no caso de divisäo 32/8 bits).
+
+    Exemplo da sintaxe:
+
+ +-----------------------------------------------------------------+
+ ¦  DIV CX      ; AX=DX:AX / CX, DX=resto                          ¦
+ ¦  IDIV BL     ; AL=AX / BL, AH=resto                             ¦
+ +-----------------------------------------------------------------+
+
+    O  primeiro  caso é uma divisäo sem sinal e o segundo com sinal.
+Note os divisores (CX e BL no nosso exemplo).
+
+    Na divisäo 16/8 bits o dividendo é armazenado  em  AX  antes  da
+divisäo... No caso de 32/8 bits DX e AX säo usados...
+
+    Mais  um  detalhe:  Os  flags,  depois  de  uma multiplicaçäo ou
+divisäo näo devem ser considerados.
+

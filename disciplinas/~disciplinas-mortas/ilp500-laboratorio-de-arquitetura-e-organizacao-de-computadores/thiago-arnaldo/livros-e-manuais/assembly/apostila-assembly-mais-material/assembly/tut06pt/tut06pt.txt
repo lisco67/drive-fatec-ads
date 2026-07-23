@@ -1,0 +1,521 @@
+
+          ÉÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ»
+          º          Tutorial de Assembler de Adam Hyde 1.0        Çõ¿
+          º                                                        º ³
+          º                        PARTE VI                        º ³
+          º            Traduzido por Renato Nunes Bastos           º ³
+          ÈÍÑÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼ ³
+            ÀõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõÙ
+
+
+Versão   :  1.1
+Data     :  13-04-1996
+Contato  :  blackcat@vale.faroc.com.au
+            http://www.faroc.com.au/~blackcat
+;Renato  :  bastos@lci.ufrj.br
+            krull@geocities.com
+            http://www.geocities.com/SiliconValley/Park/3174
+
+
+ õõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõ
+
+Olá de novo, programadores de Assembler. Esta edição demorou um pouco, mas eu
+tinha muita coisa para terminar, e eu estou trabalhando em um jogo meu agora.
+É um jogo de estratégia, como Warlords II, e acho que eu vou ter que escrever
+a maior parte do código em 640x480, não meu amado 320x200 - mas eu posso
+mudar de idéia. Eca, a quantidade de jogos que eu comecei a escrever mas
+nunca cheguei a terminar é enorme, e este não deve chegar muito longe.
+
+De qualquer modo, eu disse que daríamos uma olhada numas rotinas de linha e
+círculo esta semana, então, vamos lá...
+
+
+ õõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõ
+
+Semana passada nós chegamos à seguinte rotina de linhas horizontais - 
+
+      mov   ax, 0A000h
+      mov   es, ax        ; Aponta ES para a VGA
+
+      mov   ax, x1        ; AX = X1
+      mov   bx, y         ; BX = Y
+      mov   cx, x2        ; CX = X2
+
+      sub   cx, ax        ; CX = Diferença de X2 e X1
+
+      mov   di, ax        ; DI = X1
+      mov   dx, bx        ; DX = Y
+      shl   bx, 8         ; Y SHL 8
+      shl   dx, 6         ; Y SHL 6
+      add   dx, bx        ; DX = Y SHL 8 + Y SHL 6
+      add   di, dx        ; DI = Offset do primeiro pixel
+
+      mov   al, color     ; Põe a cor a plotar em AL
+      rep   stosb         ; Desenha a linha
+
+
+Agora, embora essa rotina seja muito mais rápida que as rotinas do BGI, (ou
+seja lá o que for que seu compilador tenha), ela poderia ser melhorada
+pra caramba. Se entrarmos na rotina, com a lista de clocks que eu dei no
+último tutorial, você vai ver que ela gasta bem pouco.
+
+Eu vou deixar a otimização com você por enquanto, (vamos ver isso em outro
+tutorial), mas se substituir STOSB por MOV ES:[DI], AL ou STOSW vai melhorar
+muito as coisas. Não se esqueça que se você decidir usar um loop,
+para jogar words na VGA, você terá que decrementar CX de uma unidade.
+
+Agora, vamos ver uma linha vertical. Teremos que calcular o offset do primeiro
+pixel como nós fizemos na rotina de linhas horizontais, então, algo desse tipo
+funcionaria:
+
+   mov   ax, 0A000h      ; Põe o segmento VGA em AX
+   mov   es, ax          ; Aponta ES para a VGA
+
+   mov   ax, Y1          ; Move o primeiro valor de Y para AX
+   shl   ax, 6           ; Y x 2^^6 (dois à sexta potência)
+   mov   di, ax          ; Move o novo valor de Y para DI
+   shl   ax, 2           ; Agora temos Y = Y x 320
+   add   di, ax          ; Adiciona aquele valor a DI
+   add   di, X           ; Soma o valor de X a DI
+
+
+Agora umas coisas básicas...
+
+
+   mov   cx, Y2          ; Guarda Y2 em CX
+   mov   al, Color       ; Guarda a cor a plotar em AL
+   sub   cx, Y1          ; CX = tamanho da linha
+
+
+E agora o loop final...
+
+
+Plota:
+   mov   es:[di], al     ; Põe um pixel no offset corrente
+   add   di, 320         ; Move para a próxima linha
+   dec   cx              ; Decrementa CX de um
+   jnz   Plota           ; Se CX <> 0, então continua plotando
+
+
+Não é uma rotina fantástica, mas é muito boa. Note como foi possível realizar
+uma comparação depois de DEC CX. Isto é um conceito extremamente útil, logo,
+não se esqueça de que isso é possível.
+
+Brinque um pouco com o código, e tente fazê-lo mais rápido. Tente outros
+métodos de calcular o offset, ou métodos diferentes de controle de fluxo.
+
+ õõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõ
+
+Agora, isso foi a coisa fácil. Vamos ver agora uma rotina capaz de desenhar 
+linhas diagonais.
+
+A seguinte rotina foi tirada de SWAG, autor desconhecido, e é uma rotina ideal
+para demonstrar um algoritmo de linhas. Ele está precisando muito de uma
+otimização, assim, essa pode ser uma tarefa para você - se você quiser.
+Alguns dos pontos a considerar são:
+
+   1) Seja lá quem o escreveu nunca ouviu falar de XCHG - isso economizaria
+      alguns clocks;
+
+   2) Ele comete um dos grandes pecados do código não-otimizado - ele move
+      um valor para AX, e então realiza uma operação envolvendo AX na próxima
+      instrução, assim fazendo um ciclo a mais. (Vamos falar sobre isso semana
+      que vem).
+
+   3) Ele trabalha com BYTES e não WORDS, assim, a velocidade de escrita para a
+      VGA poderia se dobrada se usasse words.
+
+   4) E o maior pecado de todos, ele usa um MUL para achar o offset. Tente
+      usar shifts ou um XCHG para acelerar as coisas.
+
+De qualquer modo, eu pus os comentários nele, e acho que ele é
+auto-explicativo, assim, eu não vou entrar em detalhes como ele funciona.
+Você deve ser capaz de pegar isso sozinho. Adentre a rotina, e veja como
+a derivada (gradiente, variação, inclinação...) da linha foi calculada.
+
+
+Procedure Line(X1, Y1, X2, Y2 : Word; Color : Byte);   Assembler;
+
+Var
+   DeX          : Integer;
+   DeY          : Integer;
+   IncF         : Integer;
+
+Asm     { Line }
+   mov   ax, [X2]      { Move X2 para AX                                    }
+   sub   ax, [X1]      { Pega o tamanho horizontal da linha    (X2 - X1)    }
+   jnc   @Dont1        { X2 - X1 é negativo?                                }
+   neg   ax            { Sim, então faz com que seja positivo               }
+
+@Dont1:
+   mov   [DeX], ax     { Agora, move o tamanho horizontal da linha para DeX }
+   mov   ax, [Y2]      { Move Y2 para AX                                    }
+   sub   ax, [Y1]      { Subtrai Y1 de Y2, dando o tamanho vertical         }
+   jnc   @Dont2        { Foi negativo?                                      }
+   neg   ax            { Sim, então faça-o positivo                         }
+
+@Dont2:
+   mov   [DeY], ax     { Move o tamanho vertica para DeY                    }
+   cmp   ax, [DeX]     { Compara o tamanho vertivcal com o horizontal       }
+   jbe   @OtherLine    { Se o vertical foi <= horizontal então pula         }
+
+   mov   ax, [Y1]      { Move Y1 para AX                                    }
+   cmp   ax, [Y2]      { Compara Y1 a Y2                                    }
+   jbe   @DontSwap1    { Se Y1 <= Y2 então pula, senão...                   }
+   mov   bx, [Y2]      { Põe Y2 em BX                                       }
+   mov   [Y1], bx      { Põe Y2 em Y1                                       }
+   mov   [Y2], ax      { Move Y1 para Y2                                    }
+                       { Para que depois de tudo isso.....                  }
+                       { Y1 = Y2 e Y2 = Y1                                  }
+
+   mov   ax, [X1]      { Põe X1 em AX                                       }
+   mov   bx, [X2]      { Põe X2 em BX                                       }
+   mov   [X1], bx      { Põe X2 em X1                                       }
+   mov   [X2], ax      { Põe X1 em X2                                       }
+
+@DontSwap1:
+   mov   [IncF], 1     { Põe 1 em IncF, i.e., plota outro pixel             }
+   mov   ax, [X1]      { Põe X1 em AX                                       }
+   cmp   ax, [X2]      { Compara X1 com X2                                  }
+   jbe   @SkipNegate1  { Se X1 <= X2 então pula, senão...                   }
+   neg   [IncF]        { Nega IncF                                          }
+
+@SkipNegate1:
+   mov   ax, [Y1]      { Move Y1 para AX                                    }
+   mov   bx, 320       { Move 320 para BX                                   }
+   mul   bx            { Multiplica 320 por Y1                              }
+   mov   di, ax        { Põe o resultado em DI                              }
+   add   di, [X1]      { Soma X1 a DI, e tcham - offset em  DI              }
+   mov   bx, [DeY]     { Põe DeY em BX                                      }
+   mov   cx, bx        { Põe DeY em CX                                      }
+   mov   ax, 0A000h    { Põe o segmento a ser plotado, em AX                }
+   mov   es, ax        { ES aponta para a VGA                               }
+   mov   dl, [Color]   { Põe a cor a usar em DL                             }
+   mov   si, [DeX]     { Aponta SI para DeX                                 }
+
+@DrawLoop1:
+   mov   es:[di], dl   { Põe a cor a plotar, DL, em ES:DI                   }
+   add   di, 320       { Soma 320 a DI, i.e., próxima linha abaixo          }
+   sub   bx, si        { Subtrai DeX de BX, DeY                             }
+   jnc   @GoOn1        { Ficou negativo?                                    }
+   add   bx, [DeY]     { Sim, então soma DeY a BX                           }
+   add   di, [IncF]    { Soma a quantidade a incrementar a DI               }
+
+@GoOn1:
+   loop  @DrawLoop1    { Nenhum resultado negativo, então plota outro pixel }
+   jmp   @ExitLine     { Acabou, então vamos embora!                        }
+
+@OtherLine:
+   mov   ax, [X1]      { Move X1 para AX                                    }
+   cmp   ax, [X2]      { Compara X1 a  X2                                   }
+   jbe   @DontSwap2    { X1 <= X2 ?                                         }
+   mov   bx, [X2]      { Não, então move X2 para BX                         }
+   mov   [X1], bx      { Move X2 para X1                                    }
+   mov   [X2], ax      { Move X1 para X2                                    }
+   mov   ax, [Y1]      { Move Y1 para AX                                    }
+   mov   bx, [Y2]      { Move Y2 para BX                                    }
+   mov   [Y1], bx      { Move Y2 para Y1                                    }
+   mov   [Y2], ax      { Move Y1 para Y2                                    }
+
+@DontSwap2:
+   mov   [IncF], 320   { Move 320 para IncF, i.e., o próximo pixel está na  }
+                       { próxima linha                                      }
+   mov   ax, [Y1]      { Move Y1 para AX                                    }
+   cmp   ax, [Y2]      { Compara Y1 a  Y2                                   }
+   jbe   @SkipNegate2  { Y1 <= Y2 ?                                         }
+   neg   [IncF]        { Não, então nega IncF                               }
+
+@SkipNegate2:
+   mov   ax, [Y1]      { Move Y1 para AX                                    }
+   mov   bx, 320       { Move 320 para BX                                   }
+   mul   bx            { Multiplica AX por 320                              }
+   mov   di, ax        { Move o resultado para DI                           }
+   add   di, [X1]      { Soma X1 a DI, dando o  offset                      }
+   mov   bx, [DeX]     { Move DeX para BX                                   }
+   mov   cx, bx        { Move BX para CX                                    }
+   mov   ax, 0A000h    { Move o endereço da VGA para AX                     }
+   mov   es, ax        { Aponta ES para a VGA                               }
+   mov   dl, [Color]   { Move a cor a plotar para DL                        }
+   mov   si, [DeY]     { Move DeY para SI                                   }
+
+@DrawLoop2:
+   mov   es:[di], dl   { Põe o byte em DL para ES:DI                        }
+   inc   di            { Incrementa DI de um, o próximo pixel               }
+   sub   bx, si        { Subtrai SI de BX                                   }
+   jnc   @GoOn2        { Ficou negativo?                                    }
+   add   bx, [DeX]     { Sim, então soma DeX a BX                           }
+   add   di, [IncF]    { Soma IncF a DI                                     }
+
+@GoOn2:
+   loop  @DrawLoop2    { Continua plotando                                  }
+
+@ExitLine:
+                       { Pronto!                                            }
+End;
+
+
+Acho que não fiz nenhum erro com os comentários, mas eu estou bem cansado,
+e não tenho bebido cafeína há dias - se você encontrar um erro - por favor
+me diga.
+
+Eu ia colocar um algoritmo de círculo, mas eu não consegui fazer a minha
+funcionar em Assembler - toda aquela matemática de ponto flutuante deve ter
+algo a ver com isso. Eu poderia incluir uma escrita em linguagem de alto
+nível, mas eu suponho que esse seja um tutorial de Assembler, não de gráficos.
+Contudo, se pessoas suficientes reclamarem, querendo uma...
+
+
+ õõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõ
+
+         Úõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõ¿
+         ³                                                          ³
+         ³                OS INS E OUTS DE IN E OUT                 ³
+         ³                                                          ³
+         ÀõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõÙ
+
+
+IN e OUT são uma parte muito importante de código em Assembler. Elas permitem
+você a mandar/receber diretamente dados de qualquer uma das  65,536 portas de
+hardware, ou registradores. A sintaxe básica é como segue:
+
+
+   ş IN <ACUMULADOR>, <PORTA>     - Nome: Entrada de porta de E/S
+                                    Tipo: 8086+
+
+                                    Descrição: Esta instrução lê um valor
+                                    de uma das 65536 portas de hardware 
+                                    para o acumulador especificado.
+
+                                    AX e AL são comumente usados para portas
+                                    de entrada, e DX é mais usado para
+                                    identificar a porta.
+
+                                    EX.: IN    AX, 72h
+
+                                         MOV   DX, 3C7h
+                                         IN    AL, DX
+
+
+   ş OUT <PORTA>, <ACUMULADOR>    - Nome: Saída para a Porta
+                                    Tipo: 8086+
+
+                                    Descrição: Esta instrução põe na saída o 
+                                    valor no acumulador para <PORTA>.  Usando
+                                    o registrador DX para passar a porta para
+                                    OUT, você pode acessar até 65,536 portas.
+
+                                    EX.: MOV   DX, 378h
+                                         OUT   DX, AX
+
+
+OK, isso não ajudou muito, já que não disse muito sobre como usar - muito
+menos para que usar. Bem, se você pretende trabalhar muito com a VGA, você
+terá que ser capaz de programar seus registradores internos. Semelhantes
+aos registradores com que você tem trabalhado até agora, você pode pensar
+em mudá-los como interrupções, exceto que: 1) Você passa os valores para a
+porta, e é isso aí; e 2) É muito perto de ser instantâneo.
+
+Como exemplo, vamos ver como setar e pegar a palette controlando diretamente
+o hardware da VGA.
+
+
+Agora, a VGA tem uma porção de registradores, mas as próximas três é bom que
+você conheça bem:
+
+   ş 03C7h       - PEL Registrador de Endereços (Leitura)
+                   Seta a palette em mode de leitura
+
+   ş 03C8h       - PEL Registrador de Endereços (Escrita)
+                   Seta a palette em modo de escrita
+
+   ş 03C9h       - PEL Registrador de Dados (Leitura/Escrita)
+                   Lê, ou escreve 3 valores RGB, a cada terceira escrita, o
+                   índice, ou cor que você está setando, é incrementado de um.
+
+O que tudo isso significa é -
+
+Se nós fôssemos setar um valor RGB de uma cor RGB, nós mandaríamos o valor da
+cor que queríamos mudar para 03C8h, então ler os 3 valores de 03C9h. Em
+Assembler, faríamos isso:
+
+   mov   dx, 03C8h        ; Põe o registrador DAC de leitura em DX
+   mov   al, [Color]      ; Põe o valor da cor em AL
+   out   dx, al           ; Manda AL para a porta DX
+   inc   dx               ; Agora usa a porta 03C9h
+   mov   al, [R]          ; Põe o novo valor VERMELHO em AL
+   out   dx, al           ; Manda AL para a porta DX
+   mov   al, [G]          ; Põe o novo valor VERDE em AL
+   out   dx, al           ; Manda AL para a porta DX
+   mov   al, [B]          ; Põe o novo valor AZUL em AL
+   out   dx, al           ; Manda AL para a porta DX
+
+E aquilo deveria fazer a coisas direitinho. Para ler a palette, faríamos isso:
+
+   mov   dx, 03C7h        ; Põe o registrador DAC de escrita em DX
+   mov   al, [Color]      ; Põe o valor da cor em AL
+   out   dx, al           ; Manda AL para a porta DX
+   add   dx, 2            ; Agora usa a porta 03C9h
+
+   in    al, dx           ; Põe o valor conseguido da porta DX em AL
+   les   di, [R]          ; Aponta DI para a variável R - Isso vem do Pascal
+   stosb                  ; Guarda AL em R
+
+   in    al, dx           ; Põe o valor conseguido da porta DX em AL
+   les   di, [G]          ; Aponta DI para a variável G
+   stosb                  ; Guarda AL em G
+
+   in    al, dx           ; Põe o valor conseguido da porta DX em AL
+   les   di, [B]          ; Aponta DI para a variável B
+   stosb                  ; Guarda AL em B
+
+Note como essa rotina foi codificada diferentemente. Isso era originalmente
+uma rotina em Pascal, e como o Pascal não gosta que você mexa com variáveis
+de Pascal em Assembler, você tem que improvisar.
+
+Se você está trabalhando com Assembler puro, então você pode codificar
+isso muito mais eficientemente, como o primeiro exemplo. Eu deixei o código
+como estava para que aqueles trabalhando com uma linguagem de alto nível
+possam chegar a um problema particularmente irritante.
+
+Agora você já viu como IN e OUT podem ser úteis. Controlar diretamente o
+hardware é mais rápido e mais eficiente. Nas próximas semanas, eu posso
+incluir uma lista das portas mais comuns, mas se você tivesse uma cópia da
+Ralf Brown's Interrupt List (disponível no X2FTP), você já teria uma cópia.
+
+
+OBS.: Você pode achar um link para a Ralf Brown's Interrupt List na minha
+      página.
+
+
+ õõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõ
+
+ Um pouco mais sobre o registrador de flags:
+
+
+Agora, embora tenhamos usado o registrador de flags em quase todo nosso
+código até esse ponto, eu não entrei profundamente nesse assunto. Você pode
+trabalhar felizmente sem conhecer muito sobre os flags, e comparar coisas
+sem saber o que está realmente acontecendo, mas se você quiser avançar no
+Assembler, você precisa saber algo mais.
+
+De volta ao Tutorial Três, eu dei uma visão simplista do registrador de FLAGS.
+Na realidade, os FLAGS, ou EFLAGS é na verdade um registrador de 32-bit,
+embora apenas só os bits de 0 a 18 sejam usados. Na realidade não precisamos
+conhecer os flags acima do 11 por enquanto, mas é bom saber que eles existem.
+
+
+O registrador EFLAGS na verdade se parece com isso:
+
+18  17  16  15  14  13  12  11  10  09  08  07  06  05  04  03  02  01  00
+AC  VM  RF  --  NT  IO/PL   OF  DF  IF  TF  SF  ZF  --  AF  --  PF  --  CF
+
+
+Agora, os flags são os seguintes:
+
+   ş AC   - Alignment Check (80486) / Checagem de Alinhamento
+   ş VM   - Virtual 8086 Mode / Modo Virtual 8086
+   ş RF   - Resume Flag / Flag de Continuação
+   ş NT   - Nested Task Flag / Flag de Tarefa Aninhada
+   ş IOPL - I/O Privilege Level / Nível de Privilégio de E/S
+            Tem um valor de 0,1,2 ou 3 logo ocupa 2 bits
+
+   ş OF   - Overflow Flag / Flag de Overflow
+            Este bit é setado para UM se uma instrução aritmética gerar um
+            resultado que é muito grande ou muito pequeno para caber no
+            registrador destino.
+
+   ş DF   - Direction Flag / Flag de Direção
+            Qaundo setado para ZERO, as instruções de string, como MOVS, LODS,
+            e STOS incrementarão o endereço de memória que elas estão
+            trabalhando de uma unidade. Isto significa que, digamos, DI será
+            incrementado quando você usar STOSB para colocar um pixel em
+            ES:DI. Setando o bit para UM decrementará o endereço de memória
+            após cada chamada.
+
+   ş IF   - Interrupt Enable Flag / Flag de Habilitação de Interrupções
+            Quando este bit está setado, o processador responderá a
+            interrupções externas do hardware. Quando o bit for resetado,
+            interrupções de hardware são ignoradas.
+
+   ş TF   - Trap Flag / Flag de Trap ("armadilha")
+            Quando este bit estiver setado, uma interrupção ocorrerá
+            imediatamente depois que a próxima instrução executar. Isto é
+            geralmente usado em depurações.
+
+   ş SF   - Sign Flag / Flag de Sinal
+            Este bit é mudado após operações aritméticas. O bit recebe
+            o bit de mais alta ordem do resultado, e se setado para UM,
+            indica que o resultado da operação foi negativo.
+
+   ş ZF   - Zero Flag / Flag de Zero
+            Este bit é setado quando instruções aritméticas geram um
+            resultado zero.
+
+   ş AF   - Auxiliary Carry Flag / Flag de Vai-Um Auxiliar
+            Este bit indica que um vai-um no nibble de baixa ordem de AL
+            ocorreu na instrução aritmética.
+
+   ş PF   - Parity Flag / Flag de Paridade
+            Este bit é setado para um quando uma instrução aritmética resulta
+            num número par de bits 1.
+
+   ş CF   - Carry Flag / Flag de Vai-Um
+            Este bit é setado quando o resultado de uma operação aritmética
+            é muito grande ou muito pequena para o registrador destino
+            ou endereço de memória.
+
+
+Agora, de todos esses acima, você não precisa mesmo se preocupar muito com
+a maioria deles. Por enquanto, só conhecer CF, PF, ZF, IF, DF e OF será
+suficiente. Eu não dei comentários para os primeiros já que eles são
+puramente técnicos, e são usados mais no modo protegido e situações complexas.
+Você não deveria ter que conhecê-los.
+
+Você pode, se quiser, mover uma copia do flags para AH com LAHF - (Carrega AH
+com Flags) - e modificar ou ler bits individualmente, ou mudar o status dos
+bits mais facilmente com CLx e STx. Contudo se você planeja mudar os flags,
+lembre-se de que eles podem ser extremamente úteis em muitas situações.
+
+(Eles podem também ser muito enjoados quando tarde da noite, linhas começam
+a desenhar para trás, e você gasta um hora procurando o porquê - e então se
+lembra que você se esqueceu de limpar o flag de direção!)
+
+
+ õõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõ
+
+Acho que cobrimos muito pouca coisa importante neste tutorial. Dê uma olhada
+nos flags, e volte naquela rotina compridona de fazer linhas, já que ela é
+um ótimo exemplo de controle de fluxo. Assegure-se de que suas capacidades de
+controlar fluxos de intruções estão perfeitas.
+
+Semana que vem, vou tentar amarrar todos os tópicos que vimos estas poucas
+semanas juntos, e apresentar alguma forma de revisão de tudo que você
+aprendeu. Semana que vem eu também vou entrar em otimização, e como você
+pode acelerar todo o código com que temos trabalhado até agora.
+
+
+ õõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõ
+
+No próximo tutorial vamos ver:
+
+   ş Uma revisão  de tudo que você aprendeu
+   ş Otimização
+   ş Declarando procedures (procedimentos) em Assembler
+   ş Ligando seu código a C/C++ ou Pascal
+
+Se você deseja ver um tópico discutido num tutorial no futuro, escreva-me, e
+eu vou ver o que eu posso fazer.
+
+
+ õõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõõ
+
+Não perca!!! Baixe o tutorial da próxima semana na minha homepage:
+
+  ş http://www.faroc.com.au/~blackcat
+  ş http://www.geocities.com/SiliconValley/Park/3174
+
+
+Vejo vocês na próxima semana!
+
+- Adam.
+- Renato Nunes Bastos

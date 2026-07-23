@@ -1,0 +1,213 @@
++----------------+
+¦ ASSEMBLY XXIII ¦
++----------------+
+
+    Confesso a todos vocês  que  a  experiência  que venho tendo com
+relaçäo a programaçäo da placa VGA começou com a leitura de  artigos
+e de um livro  de  um  camarada  chamado Michael Abrash...  Gostaria
+muito de conseguir outros livros desse sujeito!!  Aliás, se  puderem
+colocar  as  mäos  num livräo chamado "Zen of Graphics Programming",
+garanto  que  näo  haverá arrependimentos!  É um excelente livro com
+MUITOS macetes, rotinas e explicaçöes  sobre a VGA...  Tudo isso com
+bom humor!!! :)
+
+    Outra boa aquisiçäo, pelo menos com  relaçäo ao capítulo 10, é o
+livro "Guia do Programador para as placas  EGA  e  VGA"  da  editora
+CIENCIA  MODERNA  (o  autor  é  Richard  E.  Ferraro).  Explicitei o
+capítulo 10 porque acho que  esse  livro  só  näo é täo bom devido a
+falhas de traduçäo (coisa que acontece com  quase  todos  os  livros
+traduzidos   no  Brasil!)...   O  capítulo  10  é  täo  somente  uma
+referência (enorme e confusa,  mas  quebra  bem  o galho) a todos os
+registradores da VGA.  Esse é um dos livros que adoraria poder ter o
+original, em inglês!
+
+
+    ¦ Onde paramos?!
+
+    Ahhh... sim... até aqui vimos o  modo  de  escrita  "normal"  da
+placa VGA.  Esse modo de escrita é o usado pela BIOS e  é  conhecido
+como  "modo  de  escrita 0".  Antes de passarmos pra outros modos de
+escrita  vale  a   pena   ver   o   funcionamento   de  outros  dois
+registradores:   o  "Enable  Set/Reset"  e  o  "Set/Reset".    Esses
+registros,  como  você vai ver, facilita muito o trabalho de escrita
+nos planos de bits.
+
+
+    ¦ Ligando e desligando bits...
+
+    Na listagem do text 22 vimos que é possível a escrita em mais de
+um plano de bits ao mesmo tempo (basta habilitar em MapMask).  Vimos
+também que  os  planos  de  bits  näo  habilitados  para escrita via
+MapMask näo säo automaticamente  zerados...  lembra-se  do  caso  do
+pixel branco que queriamos transformar em magenta?!
+
+    Com tudo isso, tinhamos que fazer pelo menos 3 acessos à memória
+do  sistema:  Uma leitura para carregar os latches, uma escrita para
+setar bits nos planos selecionados, e mais uma escrita para zerar os
+bits dos outros planos...  Isso  sem contar com os registradores que
+teremos que atualizar:  MapMask  e  BitMask.   Surpreendentemente  a
+instruçäo  OUT  é uma das que mais consomem ciclos de máquina da CPU
+(especialmente nos 386s e 486s! Veja no seu HELP_PC).
+
+    Na tentativa de  reduzir  os  acessos  à  memória  do sistema (e
+indiretamenta aos planos de bits!), lançaremos mäo dos registradores
+"Enable Set/Reset" e "Set/Reset".  Eis a descriçäo deles:
+
+        » REGISTRO ENABLE SET/RESET
+
+                            7 6 5 4 3 2 1 0
+                           +-Ð-Ð-Ð-Ð-Ð-Ð-Ð-+
+                           ¦?¦?¦?¦?¦ ¦ ¦ ¦ ¦
+                           +-¤-¤-¤-¤-¤-¤-¤-+
+                                    ¦ ¦ ¦ ¦
+                                    ¦ ¦ ¦ +-- S/R bit 0
+                                    ¦ ¦ +---- S/R bit 1
+                                    ¦ +------ S/R bit 2
+                                    +-------- S/R bit 3
+
+        » REGISTRO SET/RESET
+
+                            7 6 5 4 3 2 1 0
+                           +-Ð-Ð-Ð-Ð-Ð-Ð-Ð-+
+                           ¦?¦?¦?¦?¦ ¦ ¦ ¦ ¦
+                           +-¤-¤-¤-¤-¤-¤-¤-+
+                                    ¦ ¦ ¦ ¦
+                                    ¦ ¦ ¦ +-- plano 0
+                                    ¦ ¦ +---- plano 1
+                                    ¦ +------ plano 2
+                                    +-------- plano 3
+
+    O registrador "Enable Set/Reset" informa  a placa VGA quais bits
+do registrador "Set/Reset" väo ser transferidos para  os  planos  de
+bits.  Note que cada bit de "Set/Reset" está associado a um plano de
+bits!  Os bits näo habilitados em "Enable Set/Reset" viräo da CPU ou
+dos latches, dependendo do conteúdo  de  BitMask  -  como  vimos  no
+exemplo do texto 22.
+
+    Näo sei se você percebeu, mas podemos agora escrever quatro bits
+diferentes  nos quatro planos de bits ao mesmo tempo...  Se setarmos
+os quatro bits de "Enable  Set/Reset", os quatro bits em "Set/Reset"
+seräo transferidos para a memória de vídeo.  Nesse caso o que a  CPU
+enviar para a memória do sistema será ignorado (já que é "Set/Reset"
+que está fornecendo os dados!).
+
+    Os registradores MapMask  e  BitMask  continuam funcionando como
+antes...  Se näo habilitarmos um ou  mais planos de bits em MapMask,
+este(s) plano(s)  näo  será(äo)  atualizado(s)!   Note  que  "Enable
+Set/Reset"  diz ao circuito da placa VGA que deve ler os respectivos
+bits de "Set/Reset" e  colocá-los  nos respectivos planos de bits...
+mas, MapMask pode ou näo permitir essa transferência!!!   Quanto  ao
+registrador  BitMask,  vai bem obrigado (veja discussäo sobre ele no
+texto anterior).
+
+    Hummm... virou bagunça!  Agora podemos  ter dados vindos de três
+fontes:  da  CPU  (via  memória  do  sistema),  dos  latches,  e  do
+registrador  Set/Reset.   Bem...  podemos  até  usar essa bagunça em
+nosso favor!
+
+    "Enable Set/Reset" e "Set/Reset"  pertencem ao mesmo circuito de
+BitMask:  o controlador gráfico  (GC).   Só  que  o  índice (que é o
+número do registro no circuito!) de "Set/Reset" é  0  e  de  "Enable
+Set/Reset" é 1.
+
+    Vamos a um exemplo com esses dois registradores:
+
+ +-----------------------------------------------------------------+
+ ¦  ; VGA3.ASM                                                     ¦
+ ¦  ; Compile com:                                                 ¦
+ ¦  ;                                                              ¦
+ ¦  ;   TASM vga3                                                  ¦
+ ¦  ;   TLINK /x/t vga3                                            ¦
+ ¦  ;                                                              ¦
+ ¦  ideal                                                          ¦
+ ¦  model tiny                                                     ¦
+ ¦  locals                                                         ¦
+ ¦  jumps                                                          ¦
+ ¦                                                                 ¦
+ ¦  codeseg                                                        ¦
+ ¦                                                                 ¦
+ ¦  org 100h                                                       ¦
+ ¦  start:                                                         ¦
+ ¦      mov     ax,12h      ; Poe no modo 640x480                  ¦
+ ¦      int     10h                                                ¦
+ ¦                                                                 ¦
+ ¦      mov     ax,0A000h   ; Faz ES = 0A000h                      ¦
+ ¦      mov     es,ax                                              ¦
+ ¦      sub     bx,bx       ; BX será o offset!                    ¦
+ ¦                                                                 ¦
+ ¦      mov     dx,03C4h                                           ¦
+ ¦      mov     ax,0F02h    ; MapMask = 1111b                      ¦
+ ¦      out     dx,ax                                              ¦
+ ¦                                                                 ¦
+ ¦      mov     dx,03CEh                                           ¦
+ ¦      mov     ax,8008h    ; BitMask = 10000000b                  ¦
+ ¦      out     dx,ax                                              ¦
+ ¦      mov     ax,0500h    ; Set/Reset = 0101b                    ¦
+ ¦      out     dx,ax                                              ¦
+ ¦      mov     ax,0F01h    ; Enable Set/Reset = 1111b             ¦
+ ¦      out     dx,ax                                              ¦
+ ¦                                                                 ¦
+ ¦      mov     al,[byte es:bx]     ; carrega os latches da VGA    ¦
+ ¦                                  ;  note que AL näo nos         ¦
+ ¦                                  ;  interessa!!!                ¦
+ ¦                                  ; Isso é necessário pq vamos   ¦
+ ¦                                  ;  alterar apenas o bit 7. Os  ¦
+ ¦                                  ;  demais säo fornecidos pelos ¦
+ ¦                                  ;  latches.                    ¦
+ ¦                                                                 ¦
+ ¦      mov     [byte es:bx],al     ; Escreve qualquer coisa...    ¦
+ ¦                                  ;  AL aqui também näo nos      ¦
+ ¦                                  ;  interessa, já que Set/Reset ¦
+ ¦                                  ;  é quem manda os dados para  ¦
+ ¦                                  ;  os planos de bits.          ¦
+ ¦                                                                 ¦
+ ¦      sub     ah,ah       ; Espera uma tecla!                    ¦
+ ¦      int     16h         ; ... senäo näo tem graça!!! :)        ¦
+ ¦                                                                 ¦
+ ¦      mov     ax,3        ; Volta p/ modo texto 80x25            ¦
+ ¦      int     10h                                                ¦
+ ¦                                                                 ¦
+ ¦      int     20h         ; Fim do prog                          ¦
+ ¦                                                                 ¦
+ ¦  end start                                                      ¦
+ +-----------------------------------------------------------------+
+
+    Explicando a listagem acima:  Os quatro planos  säo  habilitados
+em MapMask... depois habilitamos somente o bit 7 em BitMask, seguido
+pela   habilitaçäo   dos  quatro  bits  de  "Set/Reset"  em  "Enable
+Set/Reset".  Uma vez  que  os  quatro  planos estäo habilitados (por
+MapMask) e que os quatro  bits  de  "Set/Reset"  também  estäo  (via
+"Enable  Set/Reset"),  colocamos  em  "Set/Reset" os quatro bits que
+queremos que  sejam  escritos  nos  planos:   0101b  (ou 05h).  Pois
+bem... precisamos apenas carregar os latches e  depois  escrever  na
+memória do sistema.
+
+    Tudo bem, vc diz, mas qual é a grande  vantagem?!   Ora,  ora...
+temos condiçöes de alterar os quatro planos de bits ao mesmo tempo!!
+E,  melhor  ainda,  estamos  em condiçäo de setar até oito pixeis ao
+mesmo tempo!!!!  Experimente trocar a linha:
+
+ +-----------------------------------------------------------------+
+ ¦      mov     ax,8008h    ; BitMask = 10000000b                  ¦
+ +-----------------------------------------------------------------+
+
+    por:
+
+ +-----------------------------------------------------------------+
+ ¦      mov     ax,0FF08h   ; BitMask = 11111111b                  ¦
+ +-----------------------------------------------------------------+
+
+    Você verá oito pixeis magenta  com  uma única escrita na memória
+do sistema!!
+
+    Outra  grande  vantagem  é  o  ganho de velocidade:  Na listagem
+acima os dados que  väo  ser  colocados  nos  planos de bits näo säo
+fornecidos diretamente pela CPU, mas sim  por  "Set/Reset"  e  pelos
+latches.   Assim,  a  placa VGA näo se interessa pelo conteúdo de AL
+que foi escrito na memória do sistema e näo adiciona WAIT STATES, já
+que esse dado näo vai para a memória de vídeo (fica só na memória do
+sistema!!).
+
+    É um grande avanço, né?!   Well... próximos avanços nos próximos
+textos.
+

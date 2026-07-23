@@ -1,0 +1,148 @@
+             i----------------------------------------------©
+             ¦ RBT   ¦   Curso de Assembly   ¦   Aula Nº 08 ¦
+             È----------------------------------------------¥
+
+Por: Frederico Pissarra
+
+
+i---------------©
+¦ ASSEMBLY VIII ¦
+È---------------¥
+
+    Veremos agora as instruçöes de controle de fluxo de programa.
+
+    A CPU sempre executa instruçöes em  sequência,  a  näo  ser  que
+encontre instruçöes que "saltem" para outra posiçäo na memória.
+
+    Existem  diversas  formas   de   "saltar"  para  um  determinado
+endereço:
+
+ ¦ Salto incondicional:
+
+    A instruçäo JMP simplesmente salta  para onde se quer.  Antes de
+apresentar a sintaxe, um  detalhe  sobre  codificaçao: O operando da
+instruçäo JMP é um endereço na memória, mas, como usaremos sempre um
+compilador assembly, necessitamos criar um "rotulo" ou "label"  para
+onde  o  salto  será  efetuado...   O compilador trata de calcular o
+endereço pra gente.
+
+    Eis a sintaxe de JMP:
+
+ +-----------------------------------------------------------------+
+ ¦      JMP Aqui2                                                  ¦
+ ¦ Aqui1:                                                          ¦
+ ¦      JMP Aqui3                                                  ¦
+ ¦ Aqui2:                                                          ¦
+ ¦      JMP Aqui1                                                  ¦
+ ¦ Aqui3:                                                          ¦
+ +-----------------------------------------------------------------+
+
+    Os "labels" säo sempre seguidos de dois-pontos.  Note, no pedaço
+de código acima, a quebra da sequência de execuçäo.
+
+
+ ¦ Salto incondicional:
+
+    Diferente de JMP, temos instruçöes que realizam um salto somente
+se uma condiçäo  for  satisfeita.   Para  isso,  usa-se os flags.  A
+sintaxe dessas instruçöes depende da condiçäo do flag  que  se  quer
+testar. Eis a listagem dessas instruçöes:
+
+    - JZ "label"  -> Salta se flag Z=1
+    - JNZ "label" -> Salta se flag Z=0
+    - JC "label"  -> Salta se flag C=1
+    - JNC "label" -> Salta se flag C=0
+    - JO "label"  -> Salta se flag O=1
+    - JNO "label" -> Salta se flag O=0
+    - JPO "label" -> Salta se flag P=0 (paridade impar)
+    - JPE "label" -> Salta se flag P=1 (paridade par)
+    - JS "label"  -> Salta se flag S=1
+    - JNS "label" -> Salta se flag S=0
+
+    Existem  ainda mais saltos condicionais para facilitar a vida do
+programador:
+
+    - JE "label"  -> Jump if Equal (mesmo que JZ)
+    - JNE "label" -> Jump if Not Equal (mesmo que JNZ)
+    - JA "label"  -> Jump if Above (salta se acima)
+    - JB "label"  -> Jump if Below (salta se abaixo)
+    - JAE "label" -> Jump if Above or Equal (salta se acima ou =)
+    - JBE "label" -> Jump if Below of Equal (salta se abaixo ou =)
+    - JG "label"  -> Jump if Greater than (salta se >)
+    - JL "label"  -> Jump if Less than (salta se <)
+    - JGE "label" -> Jump if Greater than or Equal (salta se >=)
+    - JLE "label" -> Jump if Less or Equal (salta se <=)
+
+    A diferença entre JG e JA, JL e JB é:
+
+    - JA e JB säo relativos a comparaçöes sem sinal.
+    - JG e JL säo relativos a comparaçöes com sinal.
+
+    Os  saltos  condicionais  têm  uma  desvantagem  com relaçäo aos
+saltos incondicionais: O deslocamento é relativo a posiçäo corrente,
+isto é, embora no nosso código o salto se dê na posiçäo do "label" o
+assembler traduz esse salto para  uma  posiçäo "x" bytes para frente
+ou para tras em relaçäo a posiçäo da instruçäo de salto...   e  esse
+número  "x"  está  na  faixa de -128 a 127 (traduzindo isso tudo pra
+quem näo entendeu: Näo é possível saltos muito longos com instruçöes
+de salto condicionais...   salvo  em  casos especiais que explicarei
+mais tarde!).
+
+    Existe ainda a  instruçäo  JCXZ.   Essa  instruçäo  salta  se  o
+registrador CX for 0.
+
+    Mais uma instruçäo: LOOP
+
+    A  instruçäo  LOOP  salta  para  um  determinado  endereço  se o
+registrador CX for diferente de zero e, antes de saltar,  decrementa
+CX. Um exemplo do uso desta instruçäo:
+
+ +-----------------------------------------------------------------+
+ ¦      SUB AL,AL       ;AL = 0                                    ¦
+ ¦      SUB DI,DI       ;DI = 0                                    ¦
+ ¦      MOV CX,1000     ;CX = 1000                                 ¦
+ ¦  Loop1:                                                         ¦
+ ¦      MOV BYTE PTR ES:[DI],0  ;Poe 0 em ES:DI                    ¦
+ ¦      INC DI          ;Incrementa o offset (DI)                  ¦
+ ¦      LOOP Loop1      ;Repete ate' que CX seja 0                 ¦
+ +-----------------------------------------------------------------+
+
+    Essa  rotina  preenche  os  1000 bytes a partir de ES:0 com 0. O
+modificador "BYTE PTR" na frente de ES:[DI] resolve uma ambiguidade:
+Como podemos saber se a  instruçäo "MOV ES:[DI],0" escreverá um byte
+ou um word?  Por default, o compilador assume word, por  isso  temos
+que usar o modificador indicando que queremos byte.
+
+    Repare que o pedaço entre "Loop1" e o final da rotina equivale a
+uma instruçäo "REP STOSB".
+
+    Podemos também especificar uma instruçäo LOOP condicional, basta
+acrescentar  'Z'  ou  'NZ'  (ou os equivalentes 'E' ou 'NE') no fim.
+Isto quer dizer: Salte  ENQUANTO  CX  for  ZERO  (Z) ou NÄO for ZERO
+(NZ).  A instruçäo LOOP sem condiçäo é a mesma coisa que  LOOPNZ  ou
+LOOPNE!
+
+
+ ¦ Chamadas a sub-rotinas:
+
+    A instruçäo CALL funciona como se fosse  a  instruçäo  GOSUB  do
+velho BASIC.  Ela  salta  para  a  posiçäo  especificada  e quando a
+instruçäo RET for encontrada na sub-rotina a CPU salta de volta para
+a próxima instruçäo que segue o CALL. A sintaxe:
+
+ +-----------------------------------------------------------------+
+ ¦  CALL "label"                                                   ¦
+ +-----------------------------------------------------------------+
+
+    Eis um exemplo:
+
+ +-----------------------------------------------------------------+
+ ¦      MOV AL,9        ;Poe numero em AL                          ¦
+ ¦      CALL ShowNumber ;Salta para a subrotina                    ¦
+ ¦      ...                                                        ¦
+ ¦                                                                 ¦
+ ¦  ShowNumber:                                                    ¦
+ ¦      ...                                                        ¦
+ ¦      RET     ;Retorna                                           ¦
+ +-----------------------------------------------------------------+
+

@@ -1,0 +1,394 @@
+
+          ÉÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ»
+          º          Tutorial de Assembler de Adam Hyde 1.0        ÇÄ¿
+          º                                                        º ³
+          º                         PARTE I                        º ³
+          º            Traduzido por Renato Nunes Bastos           º ³
+          ÈÍÑÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼ ³
+            ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+
+
+Versão   :  1.2
+Data     :  16-02-1996
+Contato  :  blackcat@vale.faroc.com.au
+            http://www.faroc.com.au/~blackcat
+;Renato  :  bastos@lci.ufrj.br
+            krull@geocities.com
+            http://www.geocities.com/SiliconValley/Park/3174
+
+ ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+ O que é Assembler?
+--------------------
+
+Assembler conseguiu ser uma das minhas linguagens favoritas para trabalhar.
+Não que seja uma linhguagem fácil no início, mas quando você fica familiar
+com ela, você entende o quão lógica ela é.
+
+Assembler é uma linguagem de baixo nível, que você pode usar em seus programas
+para acelerar tarefas lentas. Basicamente ela consite de sentenças que
+representam instruções em linguagem de máquina, e, como ela está próxima
+ao código de máquina, ela é rápida.
+
+Há muito tempo atrás, quando o 8086 apareceu (sim, existiam humanos na Terra
+nessa época :), programar  não era uma tarefa fácil.  Quando os primeiros
+computadores foram desenvolvidos, a programação tinha que ser feita em código
+de máquina, que _não_ era uma tarefa fácil, e assim o Assembler nasceu.
+
+
+ Por que usá-lo?
+-----------------
+
+Como eu disse antes, Assembler é veloz. Ele também permite a você falar com
+a máquina a nível de hardware, e lhe dá muito maior controle e flexibilidade
+sobre o PC. Uma das outras vantagens do Assembler é que ele permite a você
+impressionar seus amigos com páginas de código aparentemente incompreensível.
+Não está vendo eles aglomerados em volta de você e impressionados/rindo
+de sua nerdeza?   :)
+
+
+ Como este tutorial apareceu?
+------------------------------
+
+Bem, Eu tinha uma dupla de amigos que queriam aprender Assembler para acelerar
+seus programas em Pascal, então eu dei-lhes alguns Tutoriais de Assembler que eu
+tinha. Como esses tutoriais tinham toda a informação que você precisaria, eles
+não foram escritos para os principiantes entenderem facilmente, então, decidi
+escrever meu próprio.
+
+Se você está usando este tutorial e o acha útil e informativo, então, por
+favor escreva para mim.
+
+
+
+ LIÇÃO 1 - Registradores
+--------------------------
+
+Quando você está trabalhando com Assembler, você tem que usar registradores.
+Você pode imaginá-los como sendo vari veis já definidas para você. Os mais
+comuns estão listados abaixo:
+
+   ş AX   - o acumulador.  Compreende AH e AL, os bytes alto e baixo
+            de AX.  Comumente usado em operações matemáticas e de E/S.
+
+   ş BX   - a base.  Compreende BH e BL.  Comumente usado como uma base ou
+            registrador apontador.
+
+   ş CX   - o contador.  Compreende CH e CL.  Usado frequentemente em loops.
+
+   ş DX   - o deslocamento, similar ao registrador de base.  Compreende DH
+            e DL. Acho que você está pegando o espírito da coisa agora.
+
+Estes registradores são definidos como registradores de uso geral pois podemos
+realmente armazenar qualquer coisa que quisermos neles. São também
+registradores de 16 bits, o que significa que podemos armazenar um inteiro
+positivo de 0 a 65535, ou um inteiro com sinal de -32768 to 32768.
+
+Incidentalmente, o assunto do alto e do baixo byte destes resgistradores
+causou muita confusão no passado, logo, tentarei dar alguma explicação aqui.
+AX tem um intervalo de 0 até FFFFh. Isto significa que você tem um intervalo
+de 0 até FFh para AH e AL.  (Se sabe pouco sobre hexadecimal, não se
+preocupe. O próximo tutorial vai falar sobre ele.)
+
+Agora, se nós tivermos que armazenar 0A4Ch em AX, AH conterá 0Ah, e AL conterá
+4Ch.  Sacou?  Este é um conceito muito importante, e eu falarei sobre ele
+mais profundamente no próximo tutorial.
+
+
+Os registradores de segmento:  - ta da!
+
+Estes são outros registradores que nós não vamos ver nos primeiros tutorias, 
+mas vamos vê-los em maior profundidade mais tarde. Eles são imensamente úteis,
+mas podem ser também perigosos.
+
+   ş CS - o segmento de código. O bloco de mem¢ria onde o código ‚ armazenado.
+          NÃO brinque com esse, a menos que saiba o que está fazendo.
+
+   ş DS - o segmento de dados. A área na memória onde os dados são armazenados.
+          Durante operações de bloco, quando grandes blocos de dados são movidos,
+          este é o segmento a que a CPU comumente se refere.
+
+   ş ES - o segmento extra. Apenas outro segmento de dados, mas este é
+          comumente usado quando se quer acessar o vídeo.
+
+   ş SS - não, não é o exército alemão. É o segmento de pilha, em que a
+          CPU armazena endere‡os de retorno de subrotinas. Tome cuidado com
+          ele.  :)
+
+Alguns outros que você vai comumente usar:
+
+   ş SI - o índice de fonte. Frequentemente usado para movimentações de blocos
+          de instruções. Este é um ponteiro que, com um segmento, geralmente
+          DS, é usado pela CPU para leitura.
+
+   ş DI - o índice de destino. Novamente, você o usará muito. Um outro
+          ponteiro que, com um segmento, geralmente ES, é usado para escrita
+          pela CPU.
+
+   ş BP - o apontador da base, usado em conjunto com o segmento de pilha. Nós
+          não vamos usá-lo muito.
+
+   ş SP - o apontador da pilha, comumente usado com o segmento de pilha. NÃO 
+          brinque com isso de jeito nenhum.  :|
+
+Por enquanto você deveria saber o que são registradores. Há outros
+registradores também, e coisas conhecidas como flags, mas nós não iremos 
+a eles agora.
+
+
+ ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+COISAS PARA FAZER:
+
+ 1) Aprender os vários registradores de cor.
+ 2) Arrumar uma calculadora que suporte hexadecimal - ou pelo menos uma
+    tabela ASCII. Isso cobre 0 - 255, ou, de 0h a FFh.
+
+
+ ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+ LIÇÃO 2 - O conjunto de instruções do 8086:
+----------------------------------------------
+
+Okay, então você já aprendeu sobre registradores, mas, como usá-los,
+e como se codifica em Assembler? Bem, primeiro você precisa de algumas
+instruções. As seguintes instruções podem ser usadas em todas as CPU's
+do 8086 para cima.
+
+   ş MOV <dest>, <valor> - MOVE. Esta instrução permite MOVER um valor
+                           para uma posição na mem¢ria.
+
+                           Ex.: MOV AX, 13h
+
+                           Isso deveria mover 13h (19 em decimal) para o
+                           registrador AX. Logo, se AX valia antes 0, ele
+                           agora seria 13h.
+
+                           ISSO APENAS MOVE UM VALOR PARA UM REGISTRADOR,
+                           NÃO FAZ NADA MAIS.
+
+                           Ex.: (Em Pascal) AX := $13;
+
+   ş INT <número>        - INTERRUPÇÃO. Esta instrução gera uma interupção.
+                           Você pode pensar nisso como sendo quase uma
+                           procedure.
+
+                           Ex.: INT 10h
+
+                           Geraria a interrupção 10h (16 em decimal). Agora, 
+                           o que isso faria depende do conteúdo do registrador
+                           AH, entre outras coisas. Por exemplo, se AX = 13h
+                           e a interrupção 10h foi gerada, o vídeo seria
+                           colocado no modo 320x200x256.
+
+                           Mais precisamente:
+
+                           AH seria igual a 00  - seleciona a subfunção do
+                                                  modo, e
+                           AL seria igual a 13h - modo gráfico 320x200x256.
+
+                           Contudo, se AH = 2h, e a interrupção 16h foi
+                           gerada, isso instruiria a CPU para checar se
+                           alguma tecla pressionada está no buffer do
+                           teclado.
+
+                           Se AH = 2h, e BH = 0h e a interrupção 10h foi
+                           gerada, então a CPU moveria o cursor para a
+                           posição X em DL e posição Y DH.
+
+                           NÃO SE PREOCUPE COM ISSO POR ENQUANTO! NÓS
+                           FALAREMOS NISSO MAIS TARDE, COM MAIS DETALHES.
+
+   ş ADD <dest> <valor>  - ADICIONA. Esta instrução soma um número ao valor
+                           armazenado em dest.
+
+                           Ex: MOV AX, 0h  ; AX agora é igual a 0h
+                               ADD AX, 5h  ; AX agora é igual a 5h
+                               ADD AX, 10h ; AX agora é igual a 15h
+
+                           Bem simples, não?
+
+   ş SUB <dest> <valor>  - SUBTRAI. Acho que dá pra você adivinhar o que isso
+                           faz.
+
+                           Ex: MOV AX, 13h  ; AX agora é igual a 13h  (19 dec)
+                               SUB AX, 5h   ; AX agora é igual a 0Eh  (14 dec)
+
+   ş DEC <registrador>   - DECREMENTA algo.
+
+                           Ex: MOV AX, 13h  ; AX agora é igual a 13h
+                               DEC AX       ; AX agora é igual a 12h
+
+   ş INC <registrador>   - INCREMENTA algo.
+
+                           Ex: MOV AX, 13h  ; Adivinha...
+                               INC AX       ; AX = AX + 1
+
+   ş JMP <posição>       - PULA para uma posição.
+
+                           EG: JMP 020Ah    ; Pula para a instrução em 020Ah
+                               JMP @MyLabel ; Pula para @MyLabel.
+
+                           NÃO SE PREOCUPE SE ISTO É UM POUCO CONFUSO - VAI 
+                           FICAR PIOR! HÁ OUTRAS 28 INSTRUÇÕES JUMP PARA
+                           APRENDER, TALVEZ MAIS. FALAREMOS NELAS MAIS TARDE.
+
+   ş CALL <procedimento> - CHAMA uma subfunção.
+
+                           EG: Procedure MyProc;
+
+                               Begin   { MyProc }
+                                  { ... }
+                               End;    { MyProc }
+
+                               Begin   { Main }
+                                  Asm
+                                     CALL MyProc   ; Adivinha o que isso faz!
+                                  End;
+                               End.
+
+                           Ou: CALL F6E0h  ; Chama subfunção em F6E0h
+
+   ş LOOP <rótulo/label> - Faz LOOPS (repetição) durante um certo tempo.
+
+                           EG: MOV CX, 10h  ; Isto é o porque de CX ser
+                                            ; chamado de  registro CONTADOR.
+                                            ; 10h = 16
+
+                               @MyLabel:
+
+                               ; alguma coisa
+                               ; mais coisa
+
+                               LOOP @MyLabel   ; At‚ que CX = 0
+                                               ; Note: CX é decrementado
+                                               ; a cada vez. NÆo decremente-o
+                                               ; você mesmo (DEC CX).
+
+                           ; ISSO DEVERIA SE REPETIR 16 vezes - i.e., 10
+                             em hexadecimal.
+
+   ş LODSB               - Carrega um byte
+     LODSW               - Carrega uma word
+     STOSB               - Armazena um byte
+     STOSW               - Armazena uma word
+
+     Estas instruções são usadas para pôr ou conseguir algo numa posição na
+     memória.  O registrador DS:SI, (lembra que nós falamos sobre isso antes,
+     sobre SI ser o índice de fonte?),  aponta para a localização de onde
+     queremos obter os dados, e DS:DI aponta para onde colocaremos informações.
+
+     É claro, não somos obrigados a usar DS - poderia ser ES por exemplo.
+     Meu procedimento PutPixel colocar  um byte em ES:DI.
+
+     De qualquer modo, imagine que temos a seguinte configuração na mem¢ria:
+
+     Posição na memória ³ 06 ³ 07 ³ 08 ³ 09 ³ 10 ³ 11 ³ 12
+     ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÅÄÄÄÄÅÄÄÄÄÅÄÄÄÄÅÄÄÄÄÅÄÄÄÄÅÄÄÄ
+     Valor              ³ 50 ³ 32 ³ 38 ³ 03 ³ 23 ³ 01 ³ 12
+
+     Quando nós usamos LODSB ou STOSB, ele retorna ou pega um número de AL.
+     Assim, se DS:SI apontava para 07 e executássemos uma instrução LODSB,
+     AL seria agora igual a 32.
+
+     Agora, se nós apontássemos DS:DI para 11, colocando, diria, 50 no
+     registrador AL, e executasse STOSB, então teríamos o seguinte resultado:
+
+     Posição na Memória ³ 06 ³ 07 ³ 08 ³ 09 ³ 10 ³ 11 ³ 12
+     ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÅÄÄÄÄÅÄÄÄÄÅÄÄÄÄÅÄÄÄÄÅÄÄÄÄÅÄÄÄ
+     Valor              ³ 50 ³ 32 ³ 38 ³ 03 ³ 23 ³ 50 ³ 12
+
+     OBS.:  Quando usamos LODSB/STOSB, usamos AL. Isto porque estaremos
+            mexendo com um número de 8 bits (um byte), apenas. Podemos
+            armazenar um número de 8 bits em AL, AH, ou AX, mas não podemos
+            armazenar um número de 16 bits em AH ou AL porque eles são
+            REGISTRADORES DE 8 BITS.
+
+            Como resultado, quando usarmos LODSW ou STOSW, nós devemos usar
+            AX e não AL, já que estaremos pegando/colocando um número de
+            16 bits.
+
+
+   ş MOVSB - Move um byte
+     MOVSW - Move uma word
+
+     Como exemplo vamos pegar um byte de DS:SI e mandá-lo para ES:DI.
+
+     Em DS:SI:
+
+     Posição de Memória ³ 06 ³ 07 ³ 08 ³ 09 ³ 10 ³ 11 ³ 12
+     ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÅÄÄÄÄÅÄÄÄÄÅÄÄÄÄÅÄÄÄÄÅÄÄÄÄÅÄÄÄ
+     Valor              ³ 50 ³ 32 ³ 38 ³ 03 ³ 23 ³ 50 ³ 12
+
+
+     Em ES:DI:
+
+     Posição de Memória ³ 06 ³ 07 ³ 08 ³ 09 ³ 10 ³ 11 ³ 12
+     ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÅÄÄÄÄÅÄÄÄÄÅÄÄÄÄÅÄÄÄÄÅÄÄÄÄÅÄÄÄ
+     Valor              ³ 10 ³ 11 ³ 20 ³ 02 ³ 67 ³ 00 ³ 12
+
+     Se apontarmos DS:SI para a posição 07, apontarmos ES:SI para a posição
+     11 e executarmos MOVSB, o resultado em ES:DI pareceria com:
+
+     Em ES:DI:
+
+     Posição de Memória ³ 06 ³ 07 ³ 08 ³ 09 ³ 10 ³ 11 ³ 12
+     ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÅÄÄÄÄÅÄÄÄÄÅÄÄÄÄÅÄÄÄÄÅÄÄÄÄÅÄÄÄ
+     Valor              ³ 10 ³ 11 ³ 20 ³ 02 ³ 67 ³ 32 ³ 12
+
+
+     ESPERO QUE VOCÊ PEGUE A IDÉIA GERAL. CONTUDO, É CLARO, NÃO É TÃO SIMPLES.
+     POSIÇÕES DE MEMÓRIA NÃO SÃO ARRUMADOAS EM FORMA DE ARRAY, EMBORA EU
+     DESEJASSE MUITO QUE FOSSEM. QUANDO FOR MOVER/PEGAR/COLOCAR, VOCE ESTARÁ
+     MEXENDO COM UMA POSIÇÃO TAL COMO: 100:102H. AINDA ASSIM, VOCÊ DEVERIA
+     PEGAR A IDÉIA.
+
+   ş REP - REPETE o número de vezes especificado no registrador CX.
+           Um REP na frente de um MOVSB/LODSB/STOSB causaria a repetição da
+           instrução. Logo:
+
+           Se CX = 5, e
+           se ES:DI apontava para 1000:1000h,
+
+           então REP STOSB armazenaria o que estava no  registrador AL na
+           posição 1000:1000h 5 vezes.
+
+COISAS A FAZER:
+
+1) Memorizar todas as instruções acima - não é tão difícil assim e não há tantas
+   lá.
+
+2) Tenha certeza que você entendeu a teoria por trás delas.
+
+
+ ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+                             NA PRÓXIMA SEMANA:
+                            ----------------------
+
+           ş Hexadecimal e o que é isso.
+
+           ş Segmentos e offsets (deslocamentos) - nós falamos nisso nesse
+             tutorial.
+
+           ş Mais algumas instruções.
+
+           ş Alguns programas de exemplo, e código que você pode usar
+             em seus programas.
+
+             Talvez um PutPixel, ClrScr, algo que eu ache útil.
+
+Se você deseja ver um tópico discutido em um tutorial futuro, então escreva-me,
+e eu vou ver o que eu posso fazer.
+
+
+ ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+Não perca!!!  Baixe o tutorial da próxima semana na minha home-page:
+
+  ş http://www.faroc.com.au/~blackcat
+  ş http://www.geocities.com/SiliconValley/Park/3174
+
+
+- Adam.   " Essa noite não, querida - eu tenho um modem. "
+- Renato Nunes Bastos

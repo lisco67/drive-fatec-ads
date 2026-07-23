@@ -1,0 +1,810 @@
+
+          ÉÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ»
+          º          Tutorial de Assembler de Adam Hyde 1.0        ÇÄ¿
+          º                                                        º ³
+          º                         PARTE XI                       º ³
+          º            Traduzido por Renato Nunes Bastos           º ³
+          ÈÍÑÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼ ³
+            ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+
+
+Versão   :  1.2
+Data     :  19-12-1996
+Contato  :  blackcat@vale.faroc.com.au
+            http://www.faroc.com.au/~blackcat
+;Renato  :  bastos@lci.ufrj.br
+            krull@geocities.com
+            http://www.geocities.com/SiliconValley/Park/3174
+
+
+
+Nota: O Tutorial de Assembler de Adam é PROTEGIDO POR DIREITOS AUTORAIS, 
+	e todos os direitos são reservadas pelo autor. Você pode redistribuir 
+	só o arquivo ORIGINAL livremente, e os tutoriais não deveriam ser 
+	editados de qualquer forma. 
+
+(by Renato - antes que alguém me pergunte, desde o início, antes de traduzir a
+ 1ª palavra do Tutorial 1, eu já havia pedido ao Adam a permissão para fazer isso,
+ OK? Suponho que eu possa traduzir, já que ele deixou - embora, como ele mesmo disse,
+ ele não entenda nada de Português, ou Espanhol -- tinha alguém traduzindo para 
+ Espanhol.)
+
+ ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ 
+
+Bem, este tutorial realmente chega atrasado e eu me sinto particularmente 
+culpado sobre isto. Todavia, eu ainda incluí outro programa demonstrativo com 
+esta edição de forma que isto compensa um pouco. 
+
+Apenas uma palavrinha sobre o último programa de demonstração - FIRE!.  
+Depois de obter uma versão mais recente do TASM, eu descobri aquele FIRE! não gosta 
+de compilar tudo direitinho, assim tenha certeza de que você tem a versão 
+mais recente do Tutorial Oito (V 1.4) com o bugfix (by Renato - hmmmm, não sei que 
+erro é esse, e não tenho essa versão 1.4 - o cara sumiu - se alguém souber 
+de algum erro me diz que vou ver se sei consertar). Você sempre pode obter 
+diretamente todas as revisões mais novas dos tutoriais de 
+ftp.faroc.com.au no diretório /pub/blackcat/programming/tutorials, e isso é 
+altamente recomendado. 
+
+De qualquer maneira, vamos lá com: 
+
+
+ ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ 
+
+          ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+          ³                                                          ³
+          ³                    E/S DE ARQUIVOS                   	   ³
+          ³                                                          ³
+          ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+
+
+Cedo ou tarde, você vai querer mexer com arquivos. Tudo que você tem que 
+ter em mente aqui é que tudo é BASEADO EM HANDLES. Aqueles de vocês que usaram ou 
+experimentaram com XMS perceberão o que eu quero dizer com handles 
+exatamente, mas se você não, então aqui vai um resumo rápido: 
+
+  * Você abre/cria um arquivo. 
+  * Você recebe um inteiro de 16 bits sem sinal para referenciá-lo. 
+
+Qual a dificuldade nisso? 
+
+
+Nota: Antigamente, antes do DOS 2, você tinha que usar Blocos de Controle de 
+Arquivo (FCB) para referenciar seus arquivos. (Você provavelmente já viu 
+FCBS=xxxx em arquivos de CONFIG.SYS, e isso é para ajudar programas que 
+foram projetados para o XT.)  Nós podemos esquecer agora tudo sobre FCBs, já
+eles estão quase obsoletos. 
+
+
+ ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ 
+
+  Abrindo UM Arquivo:           (Interrupção 21H) 
+
+   AH = 3DH 
+   AL = tipo de operação: 
+
+            0 = operação só de leitura; 
+            1 = operação só de escrita; 
+            2 = operação de leitura/escrita. 
+
+   DS:DX = nome do arquivo
+
+
+  Retorna: 
+
+   Se foi realizada com sucesso, o flag de carry é zerado, e o handle de arquivo 
+   é returnado em AX. Porém, se algo saiu errado, o flag de carry é setado em um, 
+   e o código de erro volta em MACHADO. Para uma lista de todo os códigos de erro,
+   veja a seguinte tabela mais abaixo. 
+
+
+Agora, depois de tudo isso, um exemplo: 
+
+
+   .MODEL SMALL
+   .STACK 200H
+   .DATA
+
+      FileName   DB "EXAMPLE.TXT$"
+      Error      DB "Uh oh$"
+
+   .CODE
+
+   START:
+
+      MOV   AX, @DATA               ; Aponta AX para o segmento de dados
+      MOV   DS, AX                  ; AX --> DX
+      MOV   DX, OFFSET FileName     ; Põe o offset do arquivo a abrir em DX
+      MOV   AH, 3DH                 ; Abre
+      MOV   AL, 00H                 ; só para leitura
+      INT   21H
+
+      JC    Problem                 ; Aconteceu algo de errado?
+
+      ; Aqui você deveria ter o handle AX, e fazer alguma coisa
+
+      JMP   Done                    ; Nada
+
+   Problem:
+
+      MOV   DX, OFFSET Error        ; Uh oh
+      MOV   AH, 09H
+      INT   21H
+
+   Done:
+
+      MOV   AX, 4C00H               ; Pula de volta pro DOS - fechando qualquer 
+      INT   21H                     ; arquivo aberto. Relaxado, nós ainda não sabemos 
+                                    ; como fechar arquivos.
+   END START
+
+
+ ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ 
+
+OK... simples bastante, espero. Agora, suponha que queiramos criar um 
+arquivo novo? É apenas uma outra subfunção simples da interrupção 21H.  
+É assim que se faz:
+
+
+  Criando UM Arquivo Novo:      (Interrupção 21H) 
+
+   AH = 3CH 
+   CX = tipo de arquivo: 
+
+            0 = arquivo normal; 
+            1 = só de leitura; 
+            2 = arquivo escondido; 
+            4 = arquivo de sistema; 
+
+   DS:DX = nome do arquivo 
+
+
+  Retorna: 
+
+   Como antes, se realizar com sucesso, o flag de carry é zerado, e o
+   handle do arquivo é retornado em AX. Note que você deve tomar cuidado
+   com arquivos existentes antes de criar um arquivo novo com mesmo nome.  
+   O DOS não conferirá se um arquivo do mesmo nome já existe, e escreverá 
+   por cima do velho.
+
+   Antes de criar um arquivo novo - tente abrir o arquivo primeiro. Se 
+   você obtiver o código de erro 2 em AX, (arquivo não existe), então prossiga e 
+   crie o arquivo novo. Se você não conseguiu o erro 2, você estará escrevendo 
+   por cima de um arquivo já existente! 
+
+
+ ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ 
+
+Como você deveria saber de experiências com linguagens de alto-nível, você tem que 
+fechar seus arquivos antes de terminar seu programa. (Na verdade, a função
+4CH fecha todos os arquivos abertos de qualquer maneira, mas isso é um modo 
+relaxado de fazer as coisas.) Para fechar um arquivo aberto, você deveria fazer 
+isto: 
+
+
+  Fechando UM Arquivo:           (Interrupção 21H) 
+
+   AH = 3EH 
+   BX = handle de arquivo 
+
+
+  Retorna: 
+
+   De novo, qualquer erro é refletido no flag de carry e AX.
+
+
+ ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ 
+
+Finalmente, códigos de erro. Apenas checando o CF para ver se qualquer 
+coisa saiu errado, nos deixará saber certamente se algo está faltando, 
+mas nós realmente gostamos de mais detalhes. Examinar o AX depois de um erro 
+ser descoberto é o caminho a seguir, e AX poderia conter qualquer um dos 
+códigos seguintes: 
+
+
+        ÉÍÍÍÍÍÍÍÍÍÍÍÍÍÍÑÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ»
+        º  Código ³ Explicação                                        º
+        ÇÄÄÄÄÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¶
+        º 	00H 	³ erro Desconhecido 					    º 
+        º 	01H 	³ número de função inválido				    º 
+        º 	02H 	³ Arquivo não achado					    º 
+        º 	03H 	³ Caminho não achado 					    º 
+        º 	04H 	³ muitos arquivos abertos				    º 
+        º 	05H 	³ Acesso negado 						    º 
+        º 	06H 	³ handle inválido						    º 
+        º 	07H 	³ Blocos de controle destruídos			    º 
+        º 	08H 	³ Falta de memória 					    º 
+        º 	09H 	³ endereço de bloco de controle Ruim 		    º 
+        º 	0AH 	³ ambiente inválido					    º 
+        º 	0BH 	³ formato inválido					    º 
+        º 	0CH 	³ código de acesso inválido				    º 
+        º 	0DH 	³ dados inválidos						    º 
+        º 	0EH 	³ erro desconhecido					    º 
+        º 	0FH 	³ drive inválido						    º 
+        º 	10H 	³ não pode remover diretório atual 			    º 
+        º 	11H 	³ Dispositivo não é o mesmo 				    º 
+        º 	12H 	³ mais nenhum arquivo disponível 			    º
+        º 	13H 	³ Disco protegido contra escrita			    º 
+        º 	14H 	³ unidade Ruim 						    º 
+        º 	15H 	³ Drive não pronto 					    º
+        º 	16H 	³ comando Desconhecido 					    º 
+        º 	17H 	³ erro de CRC						    º 
+        º 	18H 	³ tamanho de estrutura ruim				    º 
+        º 	19H 	³ erro de procura						    º 
+        º 	1AH 	³ mídia inválida						    º
+        º 	1BH 	³ Setor não achado					    º 
+        º 	1CH 	³ Impressora desligada ** 				    º 
+        º 	1DH 	³ erro de escrita						    º 
+        º 	1EH 	³ erro de leitura						    º 
+        º 	1FH 	³ falha geral 						    º 
+	  ÈÍÍÍÍÍÍÍÍÍÍÍÍÍÍÏÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼ 
+
+
+  ** Eu sei, eu não cheguei lá ainda. Eu acho que isso está lá porque o DOS
+     trata tudo como arquivo. 
+
+Ufa!  Tudo cortesia da boa e velha referência técnica do DOS. Algum deles lá 
+encima são bem obscuros - na verdade só há alguns que você precisa de se lembrar.  
+Algum de meu *favoritos * é:  Setor não achado, Erro de procura e Erro de CRC  
+no meio de uma pilha de disquetes relaxados arjeados. É o tipo de porcaria
+que traz recordações.  :) 
+
+
+ ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ 
+
+Certo, assim nós vimos como criar, abrir e fechar arquivos. Agora vamos fazer
+algo com eles. Para ler alguns bytes de um arquivo, você tem que usar função 
+3FH. Assumindo que você já abriu o arquivo de onde você quer ler, você pode 
+usar um pouco de código como o abaixo: 
+
+
+   MOV   AH, 3FH                      ; Lê byte(s)
+   MOV   BX, Handle                   ; arquivo a trabalhar
+   MOV   CX, BytesToRead              ; quanto a ler
+   MOV   DX, OFFSET WhereToPutThem    ; um array ou variável
+   INT   21H
+
+   JC    DidSomethingGoWrong          ; Checa erros
+
+
+Se você está tendo problemas em sacar algo disso - não se preocupe muito. Apenas
+volte aos exemplos acima e veja como pode fazer sentido.  
+Próximo tutorial nós continuaremos com sprites - (e como carrregá-los do disco) - 
+assim você verá um bom exemplo.
+
+Bem... agora, escrevendo em um arquivo. Muito semelhante a ler, nós usamos a função 
+40H. Um código para escrever um byte se pareceria com isso: 
+
+
+   MOV   AH, 40H                      ; Escreve byte(s)
+   MOV   BX, Handle                   ; arquivo para se escrever nele
+   MOV   CX, BytesToWrite             ; quanto escrever
+   MOV   DX, OFFSET WhereToWriteFrom  ; de onde os dados estão vindo
+   INT   21H
+   JC    DidSomethingGoWrong          ; algum erro?
+
+
+Bem, aquilo quase conclui E/S de arquivos para este tutorial. Embora não seja um 
+componente principal da peogramação da linguuagem Assembly, E/S de arquivos é todavia, 
+um conceito importante para se pegar. 
+
+
+ ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ 
+
+          ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+          ³                                                          ³
+          ³              CHAMANDO O ASSEMBLER NO C/C++               ³
+          ³                                                          ³
+          ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+
+
+Eu suponho que já passou da hora de falar sobre como linkar o Assembler no C.  
+Pessoalmente, eu prefiro codificar VGA numa combinação de Assembler/Pascal.  
+Porém, C tem seu lugar, e linkar com C é um assunto importante que nós 
+deveríamos cobrir. 
+
+
+Você deve ter percebido que você pode entrar código Assembly em seu programa de 
+C desse jeito: 
+
+
+   / * Seu código em C vai aqui * / 
+
+   asm { 
+                / * * / 
+                / * Seu código em Assembler vai aqui * / 
+                / * * / 
+   } 
+
+   / * Seu código em C continua daqui * / 
+
+
+Agora, considerando que nós podemos inserir o Assembly diretamente no código em 
+C, por que nos preocuparíamos em escrever código externo? A resposta 
+é bastante simples. Usando rotinas externas, temos código que é mais 
+rápido de se executar, mais rápido de compilar, que pode usar algumas das 
+características especiais de Turbo Assembler - como modo ideal, e pode ser até mesmo 
+portável a outras linguagens. 
+
+Escrever código externo para C é bem simples, e é gratificantemente mais fácil 
+que escrever código externo para Pascal. (Veja o Tutorial Sete). Como você 
+pôde observar no Tutorial Sete, nós tínhamos que declarar o segmento de código e 
+o de dados usando o a meio confusa diretiva SEGMENT. Isto é devido ao modo 
+como o Pascal gosta de organizar a memória, e só há um modo de contornar
+problema - nós podemos usar o modelo TPASCAL. Infelizmente, TPASCAL é um 
+modo antiquado de fazer as coisas, assim nós temos que pôr um pouco de trabalho 
+nisso. Eu não vou falar novamente em TPASCAL, assim nós podemos nos esquecer 
+seguramente de detalhes chatos. 
+
+
+Note que nada disto aplica a nós em C - nós podemos usar felizmente nossos 
+simples e agradáveis esqueletos de Assembler. Há algumas  
+restrições colocadas, entretanto, a nós pela maioria dos compiladores: 
+
+
+   ş O compilador usa SI e DI para armazenar variáveis registradoras.  Se você usou 
+variáveis registradoras em seu código, lembre-se de dar um push e pop em SI e DI em 
+seu código externo. 
+
+   ş O compilador provavelmente não vai dar push e pop em CS, DS, SS e BP, então 
+tenha certeza de ter cuidado se for alterar algum desses registradores.
+
+
+Além desses pequenos detalhes, há pouco que nós precisamos ter em mente.
+Vamos lá!
+
+
+ ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ 
+
+OK... agora nós vamos escrever uma pequena rotina externa e linkar isto ao C. 
+Vamos dar uma olhada num esqueleto básico que apenas põe algum texto na tela. 
+
+
+   ============================  LIBRARY.ASM  =============================
+
+
+   .MODEL    SMALL
+   .DATA
+
+   Message   DB "Well looky here - we got ourselves some text$"
+
+   .CODE
+
+   PUBLIC    _sample
+
+; ---------------------------------------------------------------------------
+
+;
+; void sample();
+;
+
+_sample      PROC   NEAR        ; Declara uma procedure near
+
+   MOV   AH, 00H                ; Acerta o modo de video
+   MOV   AL, 03H                ; Modo 03H
+   INT   10H
+
+   MOV   AH, 09H                ; Imprime uma string
+   MOV   DX, OFFSET Message     ; DS:DX <-- Mensagem
+   INT   21H
+
+   RET                          ; Fora daqui!
+
+_sample      ENDP
+
+END
+
+
+ ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ 
+
+Bem.... não há nada muito engenhoso lá. Agora, e o código C que vai junto com isto? 
+
+
+   =============================  EXAMPLE.C ==============================
+
+
+   extern void sample();
+
+   int main()
+   {
+
+      sample();
+      return 0;
+
+   }
+
+
+ ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ 
+
+E para compilar o lote, a linha abaixo fará o trabalho. 
+
+C:\> TCC EXAMPLE.C LIBRARY.ASM
+
+Claro que, se você está usando então que outro "sabor" de C, substitua TCC com 
+qualquer outro interpretador de linha de comando que você tiver. Também é possível 
+fazer o C reconhecer variáveis declaradas em Assembler, e o seguinte
+esqueleto explica como isso é feito: 
+
+
+   ============================  LIBRARY.ASM  =============================
+
+
+   .MODEL SMALL
+   .DATA
+
+   PUBLIC _YourVariable      ; Declara uma variável externa
+
+   _YourVariable  DW 9999    ; Faz a variável ser uma word valendo 9999
+
+   .CODE
+
+   END
+
+
+
+   =============================  EXAMPLE.C ==============================
+
+
+   extern int YourVariable;
+
+   int main()
+   {
+
+      printf("The Assembler external variable is: %d", YourVariable);
+      return(0);
+
+   }
+
+
+Novamente, compile isto com:  TCC EXAMPLE.C LIBRARY.ASM 
+
+
+Mas que tal passar parâmetros para suas rotinas?  Nós poderíamos fazer isso  
+do modo difícil, como nós fizemos com Pascal, ou alternativamente, poderíamos usar a
+diretiva ARG. 
+
+ARG é brilhante, porque simplifica grandemente as coisas -- mas tem algumas 
+negligências. Isto é, em toda rotina você precisa de umas três instruções 
+adicionais. Se você quer velocidade e não se incomoda com um pouco de trabalho duro, 
+trabalhe diretamente com a pilha como nós fizemos no Tutorial Sete. 
+
+Aqui está como se usa ARG: 
+
+
+   ============================  LIBRARY.ASM  =============================
+
+
+   .MODEL SMALL
+   .DATA
+   .CODE
+
+   PUBLIC _putpixel        ; Declara a procedure externa
+
+; ---------------------------------------------------------------------------
+;
+; void putpixel(int x, int y, char color, int location);
+;
+
+_putpixel   PROC NEAR
+
+   ARG   X : Word, Y : Word, Color : Byte, Location : Word
+
+   PUSH  BP                ; Salva BP
+   MOV   BP, SP            ; BP *deve ser* igual a SP para ARG funcionar
+
+   MOV   AX, [Location]    ; Parâmetros podem ser acessados facilmente agora
+   MOV   ES, AX
+   MOV   BX, [X]
+   MOV   DX, [Y]
+   MOV   DI, BX
+   MOV   BX, DX
+   SHL   DX, 8
+   SHL   BX, 6
+   ADD   DX, BX
+   ADD   DI, DX
+   MOV   AL, [Color]
+   MOV   ES:[DI], AL
+
+   POP   BP                ; BP precisa ser restaurado!
+
+   RET
+
+_putpixel   ENDP
+
+END
+
+
+   =============================  EXAMPLE.C ==============================
+
+
+   extern void putpixel(int x, int y, char color, int location);
+
+   int main()
+   {
+
+      asm {
+         mov   ax, 0x13
+         int   0x10
+      }
+
+      putpixel(100, 100, 12, 0xa000);
+      sleep(2);
+
+      asm {
+         mov   ax, 0x03
+         int   0x10
+      }
+
+      return(0);
+   }
+
+
+
+Não é tão macetoso, hein? Porém, se você escolher escrever rotinas externas
+porque você quer a velocidade que o Assembler pode lhe dar, então acesse
+a pilha do modo difícil. Esses extras push's e pop's realmente podem crescer
+se sua rotina de putpixel for chamada 320x200 vezes! 
+
+
+ ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ 
+
+          ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+          ³                                                          ³
+          ³                UMA INTRODUÇÃO ÀS MACROS                  ³
+          ³                                                          ³
+          ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+
+
+Macros são uma das características mais poderosas que você tem à sua disposição 
+quando está trabalhando com o Assembler. Freqüentemente você se achará 
+repetindo as mesmas poucas linhas de código inúmeras vezes quando estiver escrevendo 
+programas maiores. Você não quer fazer aquela dificuldade de criar um 
+procedimento -- que reduziria a velocidade do código, mas você não quer continuar 
+se repetindo. 
+
+A resposta.... MACROS. 
+
+
+Uma macro é só um conjunto de instruções que recebe um nome pelo qual ela será
+referenciada no código. Você pode definir um macro assim: 
+
+
+   MyMacroName    MACRO
+
+      ;
+      ; Suas instruções vão aqui
+      ;
+
+   ENDM           MyMacroName
+
+
+E dali em diante, sempre que você puser MyMacroName em seu código, serão 
+colocadas as instruções contidas dentro da macro no lugar do nome da macro. 
+
+
+OBS.: É provavelmente melhor declarar qualquer macro antes de declarar o 
+segmento de dados. Para ficar mais claro, coloque todas suas macros em outro arquivo 
+de texto e então use INCLUDE<nomedoarquivo> para incluir as macros. 
+
+
+ ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ 
+
+Macros também podem ter parâmetros e podendo ser muito úteis. Por 
+exemplo, eu usei muito a função DOS 09H para pôr uma string na tela. Eu 
+poderia fazer os programas que eu escrevo mais fáceis de ler à primeira vista 
+criando a seguinte macro: 
+
+   PutText  MACRO TextParam
+
+      MOV   AH, 09H                  ; TextParam é o parâmetro--NÃO 
+      MOV   DX, OFFSET TextParam     ; uma variável.  Substitua TextParam com 
+      INT   21H                      ; qualquer nome que você escolher. 
+
+   ENDM     PutText
+
+
+Então, assumindo no segmento de dados que eu tenha declarado uma string assim: 
+
+   AString   DB "This is a string$"
+
+
+Eu poderia exibir aquela string escrevendo: 
+
+   PutText   AString
+
+
+OBS.:  Quando você está trabalhando com macros, tenha cuidado em observar 
+	 que registradores elas mudam. Se estiver em dúvida, dê um push e um pop em 
+	 quaisquer registradores que você sente que possam ser afetados. 
+
+
+ ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ 
+
+Embora aquela macro simples realmente não fosse nada de especial, macros têm 
+muitas outras utilidades. Eu não vou dizer mais nada sobre macros agora, 
+mas eu as usarei de vez em quando em programas de demonstração no futuro, e 
+você aprenderá outras técnicas que você pode pôr em bom uso. 
+
+De qualquer maneira, vamos ao que eu queria fazer: 
+
+
+ ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ 
+
+          ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+          ³                                                          ³
+          ³                 O PROGRAMA DEMONSTRATIVO                 ³
+          ³                                                          ³
+          ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+
+
+
+No princípio eu ia lançar este tutorial sem um programa demo, mas 
+vendo como eu fui um pouco preguiçoso esse tempo todo, (e também porque 
+um amigo meu há pouco tempo fez uma demonstração como essa), eu decidi 
+incluir um demo de plasma. 
+
+Plasmas podem ser um pouco engenhosas em umas partes -- me levou um bom tempo 
+para fazer a coisa funcionar direito por causa de um problema que eu tive com 
+minha tabela de lookup. Mas se você seguir o algoritmo abaixo, você 
+não deve ter nenhum problema. 
+
+
+ ***  Antes de começar, você precisará de QUATRO variáveis temporárias em       ***
+	seu código. Em Assembler isto pode se pôr um pouco trabalhoso porque você 
+	se achará freqüentemente com falta de registradores. Você poderia declarar 
+	alguns bytes no segmento de dados, mas é mais rápido usar registradores.  
+	Estas quatro variáveis temporárias armazenarão só números entre 0 e 255, 
+	assim elas só precisam ser BYTES. 
+
+      No algoritmo, eu me refiro a estas variáveis temporárias como Temp1, 
+*** Temp2, Temp3 e Temp4.                                              *** 
+
+
+O algoritmo se parece com isso: 
+
+
+   ş Crie uma tabela de lookup 
+
+      Isto é basicamente só uma senóide longa. Você pode experimentar 
+	usar uma onda de co-seno, ou alterar a amplitude da função que você 
+	está usando. Eu criei minha tabela de lookup usando a seguinte expressão: 
+
+     For W := 1 To 512 Do
+      SinTable[W] := Round(Sin(W / 255 * Pi * 2) * 128);
+
+     (SinTable é um array de 512 BYTES)
+
+
+   ş Inicialize a palette
+
+      Eu pessoalmente gosto de fazer minhas palettes depois de ver o demonstrativo 
+	rodando com a palette padrão. Desse modo, fazendo certas cores escuras e outras 
+	muito claras, o resultado é exatamente do jeito que eu quero.
+	Eu descobri que o melhor modo de fazer isto é capturar a tela quando a demonstração 
+	está rodando, com um programa como Screen Thief, então carregar aquela tela 
+	em um programa de pintura que deixe alterar a palette. 
+
+      Depois de conseguir a palette do jeito que você quer, salve-a para o disco como 
+	um arquivo COL (se possível) e então escreve um pequeno programa para ler no 
+	arquivo COL e escrever um arquivo tipo o PLASMA.DAT. 
+
+      Se lembre, Screen Thief é shareware, assim se você for usá-lo, envie para 
+	o autor algum dinheiro, hein? 
+
+
+Loop (1):  Antes de começar a plotar a primeira linha, você deve: 
+
+           * Zerar Temp4; 
+           * Decrementar Temp3 de dois; 
+
+             Você pode fazer experiências com Temp3 -- quanto maior for o número
+		 que você subtrair, mais rápido o plasma vai mover. 
+
+	   Você agora vai para o Loop (2). 
+
+
+Loop (2):  Ao início de cada linha você deve: 
+
+           * Incrementar Temp4 de um; 
+           * Fazer Temp1 = Sintable[Linha corrente + Temp3]; 
+           * Fazer Temp2 = SinTable[Temp4]; 
+
+	   Você agora vai para o Loop (3). 
+
+
+Loop (3):  Para todo pixel na linha atual você deve: 
+
+           * Calcular a cor daquele pixel a ser plotado; 
+
+             O valor de cor daquele pixel é simplesmente definido por: 
+
+             SinTable[Temp1 + Temp2] + SinTable[Linha corrente + Temp2] 
+
+             Infelizmente, isto é um pouco mais difícil de calcular no 
+		 Assembler e acaba levando muitas linhas de código!! 
+
+
+           * Incrementar Temp1 de um; 
+           * Incrementar Temp2 de um; 
+
+
+           Depois de fazer uma linha inteira, você então volta atrás ao Loop (2).
+
+	     Uma vez feitas todas as linhas (200), você pode então voltar ao Loop (1).
+
+
+
+Claro que, você também vai querer pôr algo para checar o retrace, e seria uma boa
+idéia também se alguém apertou alguma tecla!! 
+
+
+NOTA:  Para quem não sabe, o VGA tem um registrador de estado que vale a pena 
+	 prestar atenção em que ele serve. É registrador 03DAH, e conferindo seus 
+	 vários bits, podemos ver o que está acontecendo com o VGA. 
+
+       (Para aqueles que querem saber para quê são exatamente todos os bits,
+	  ache que deveriam obter uma cópia da Ralf Brown's Interrupt List. Isto 
+	  está disponível na minha homepage e ela contém uma lista completa de todas 
+	  as interrupções, registradores e muito mais.) 
+
+       De qualquer modo, nós estamos só interessados no quarto bit do 03DAH que nos 
+	 deixa saber se um retrace está acontecendo. Se pudermos acessar o VGA enquanto 
+	 o canhão de elétrons do monitor está voltando (retrace) ao topo da tela -- nós 
+	 podemos obter um rápido acesso, livre de flicks (tremidas..., sacou? - by Renato)
+	 O que é demais, já que o retrace acontece a cada 1/80 de segundo EM TODOS OS 
+	 COMPUTADORES, é agora nós temos um método de fazer que nosso demo rode numa 
+	 velocidade específica em todas as máquinas. 
+
+       Para conferir se o retrace está acontecendo, nós examinamos simplesmente 
+	 o bit quatro. Se o bit quatro está setado, um retrace está em execução.
+	 Porém, nós não sabemos o quanto de um retrace já aconteceu, e não sabemos 
+	 quanto tempo de acesso live de flicks nós temos. A solução é checar de novo
+	 por um retrace, de modo que podemos estar seguros de que estamos no 
+	 COMEÇO de um. 
+
+       Eu usei retrace no código para ter certeza de que o demo ia
+	 rodar à mesma velocidade em todas as máquinas. (Mais ou menos). 
+
+
+       Também note que meu plasma é mais uma variante de plasma. Você pode, 
+	 e é encorajado a alterar o código -- (tente incrementar os valores de temp 
+	 em vez de decrementar e mudar a quanto o valor de temp é decrementado ou 
+	 mudar o modo como o valor das corer é achado. Também tente mudar a palette, 
+	 porque isto pode fazer o plasma parecer completamente diferente). 
+
+       É possível criar todos os tipos de efeitos só fazendo mudanças simples, 
+	 assim, experimente... seja criativo! 
+
+
+ ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ 
+
+Bem, isso conclui as coisas para este tutorial. Eu não estou precisamente 
+seguro sobre o que eu porei no Tutorial Dez (by Renato - que Tutorial 10? tá 
+sonhando... cadê? bem que eu queria que eles continuassem. Se alguém souber 
+onde o Adam foi parar, me avise.) -- serão cobertos sprites, mas eu posso ver 
+que os tutoriais talvez tendam a efeitos de demonstração e como você pode 
+os codificar em Assembler puro. 
+
+Até a próxima vez,  (by Renato - hahaha. Engraçadinho!)
+
+-- Adam.
+
+
+(by Renato - cadê a finalização de Sempre? Sobre pegar na próxima semana? 
+ Parece que o cara já sabia que esse era o último. 
+ E agora, as minhas despedidas:
+ Bom galera, agradeço a todos vocês que me ajudaram a continuar essa tradução,
+ incentivando-me a terminar logo isso, sempre me escrevendo, cobrando.
+ O interesse demonstrado por vocês foi fundamental para que isso acabasse. 
+ Finalmente, a tradução desses tutoriais de Assembler terminaram.
+ 
+ Se houver erros na tradução, ou alguma frase que não tá dando pra entender,
+ me avisem, que eu traduzo ela de novo!, de modo a ficar inteligível.
+
+ Valeu! 
+
+ Agora, vou ver se eu começo a traduzir os tutoriais de VGA do Denthor.
+ Alguém sabe onde ele foi parar também?
+
+ bye,
+ Renato Nunes Bastos, aka Krull
+ Rio de Janeiro, 3 de Novembro de 1998)

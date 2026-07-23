@@ -1,0 +1,830 @@
+
+
+          ÉÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ»
+          º          Tutorial de Assembler de Adam Hyde 1.0        ÇÄ¿
+          º                                                        º ³
+          º                         PARTE VIII                     º ³
+          º            Traduzido por Renato Nunes Bastos           º ³
+          ÈÍÑÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼ ³
+            ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+
+
+Versão   :  1.2
+Data     :  28-06-1996
+Contato  :  blackcat@vale.faroc.com.au
+            http://www.faroc.com.au/~blackcat
+;Renato  :  bastos@lci.ufrj.br
+            krull@geocities.com
+            http://www.geocities.com/SiliconValley/Park/3174
+
+ ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ 
+
+Bem, bem-vindo de volta programadores de Assembler.  Este tutorial está realmente 
+atrasado, e teria chegado muito mais tarde se não fosse por Bjorn Svensson, e 
+muitos outros como ele, que graças à sua determinação em adquirir Tutorial 8, me 
+persuadiu a escrever esta coisa. É claro, isto significa que eu provavelmente 
+fracassei em todos meus exames das últimas duas semanas, mas a vida é assim. :)
+
+
+Ok, esta semana nós vamos realmente aprender algo.  Vamos dar uma olhada 
+mais de perto em como podemos declarar variáveis, e aprofundar no mundo de 
+estruturas.  Você aprenderá a criar arrays em Assembler, e este conceito é 
+reforçado com o programa demonstrativo que eu incluí - uma rotina de fogo! 
+
+
+ ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ 
+
+         ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+         ³                                                          ³
+         ³               ESTRUTURAS DE DADOS EM ASSEMBLER           ³
+         ³                                                          ³
+         ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+
+
+Bem, até agora você deveria saber que você pode usar o DB, (Declare Byte) e 
+DW, (Declare Word) para criar variáveis. Porém, até agora nós os temos usado como 
+você usaria a declaração de Const em Pascal. Quer dizer, temos usado isto para
+dar a um byte ou a uma word um valor.
+
+Ex.: 
+
+	MyByte DB 10  --  que é o mesmo que  --  Const MyByte : Byte = 10;
+
+
+Contudo, poderíamos dizer: 
+
+   MyByte DB ? 
+
+...e então dizer depois:
+
+   MOV MyByte, 10
+
+
+De fato DB realmente é muito poderoso. Há vários tutoriais atrás, quando você 
+estava aprendendo a escrever strings na tela, você viu algo desse tipo: 
+
+   MyString DB 10, 13 "This is a string$"
+
+
+Agora, o mais curioso de vocês provavelmente teria dito a si prórpio: "Peraí!... 
+aquele cara do tutorial disse que DB declara um BYTE.  Como é que o DB
+pode declarar uma string, então "?  Bem, DB tem a habilidade de reservar espaço 
+para valores de vários bytes - de 1 a tantos bytes quanto você precisa. 
+
+Você também pode ter desejado saber o que os números 10 e 13 antes do texto 
+representavam. Bem, dê uma olhada na sua tabela ASCII e veja o que são o 10 e 
+o 13.  Você notará que 10 é o Line Feed e o 13 é o Carriage Return. 
+Basicamente, é o mesmo que dizer: 
+
+   MyString := #10 + #13 + 'This is a string';
+
+em Pascal. 
+
+ ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ 
+
+
+Ok, então você viu como criar variáveis corretamente. Mas, e constantes? 
+Bem, em Assembler, constantes são conhecidas como Equates. Equates fazem a 
+cofificação em Assembler muito mais fácil, e pode simplificar muito as coisas.
+Por exemplo, se eu tivesse usado o seguinte em tutoriais anteriores: 
+
+   LF   EQU 10
+   CR   EQU 13
+
+   DB   LF, CR "Isso é uma string$"
+
+
+...as pessoas teriam entendido direito aquela coisa de 10 e 13. Mas, para fazer as 
+coisas um pouco mais complicadas, há ainda um outro modo que você pode usar para dar
+valores a identificadores. Você pode fazer como você faria em BASIC: 
+
+   Population  = 4Ch
+   Magnitude   = 0
+
+
+Basicamente, você pode ter em mente os seguintes pontos: 
+
+   ş Uma vez que você tenha usado EQU para dar um valor a um identificador, você não pode 
+mudar isto.
+
+   ş EQU pode ser usado para definir quase qualquer tipo - inclusive strings.  
+Contudo, você não pode fazer isto quando se usa um ' = '.  Um ' = ' só pode 
+definir valores numéricos. 
+
+   ş Você pode usar EQU quase em qualquer lugar de seu programa. 
+
+   ş Valores definidos com ' = ' podem ser mudados. 
+
+ ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ 
+
+
+E agora, vamos a um dos pontos mais macetosos de codificação em Assembler - 
+estruturas. Estruturas não são variáveis, são um TIPO - basicamente um esquema
+de uma variável. 
+
+Como um exemplo, se você tivesse o seguinte em Pascal: 
+
+   Type
+      Date      = Record;
+         Day    : Byte;
+         Month  : Byte;
+         Year   : Word;
+      End;    { Record }
+
+Você poderia representar isto em Assembler como segue: 
+
+   Date         STRUC
+      Day       DB ?
+      Month     DB ?
+      Year      DW ?
+   Date         ENDS
+
+
+Porém, um das vantagens de Assembler é que você pode inicializar todos ou alguns 
+dos campos da estrutura antes mesmo de você se referir à estrutura em seu 
+segmento de código. 
+
+Aquela estrutura acima poderia ser escrita facilmente como: 
+	
+   Date         STRUC
+      Day       DB ?
+      Month     DB 6
+      Year      DW 1996
+   Date         ENDS
+
+
+Alguns pontos importantes para se lembrar são os seguintes: 
+
+   ş Você pode declarar uma estrutura em qualquer lugar em seu código, embora 
+que, para um bom design, você deva colocá-los no segmento de dados, a menos que eles 
+só sejam usados por uma subrotina. 
+
+   ş Definir uma estrutura não reserva qualquer byte de memória para a mesma. Isso 
+só acontece quando você declara uma variável dessa estrutura - aí a memória é alocada. 
+
+ ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ 
+
+          ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+          ³                                                          ³
+          ³     REFERENCIANDO ESTRUTURAS DE DADOS EM ASSEMBLER       ³
+          ³                                                          ³
+          ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+
+
+Bem, você viu como definir estruturas, mas como você se refere de verdade a elas 
+em seu código? 
+
+Tudo o que você tem a fazer, é colocar em algum lugar algumas linhas como as seguintes 
+em seu programa - de preferência no segmento de dados. 
+
+   Date         STRUC
+      Day       DB 19
+      Month     DB 6
+      Year      DW 1996
+   Date         ENDS
+
+   Date_I_Passed_Physics   Date <>   ; Espero!
+
+
+Neste momento, Date_I_Passed_Physics tem todos os seus três campos preenchidos. 
+Dia é setado para 19, Mês para 6 e Ano para 1996. Agora, o que são esses 
+parênteses,"<>", fazendo depois de data? - você pergunta.
+
+Os parênteses nos apresentam um outro modo de alterar os conteúdos 
+dos campos da variável.  Se eu tivesse escrito isto: 
+
+   Date_I_Passed_Physics   Date <10,10,1900>
+
+
+...então os campos teriam sido mudados para os valores nos parênteses. 
+Alternativamente, teria sido possível fazer isto: 
+
+   Date_I_Passed_Physics   Date <,10,>   ;
+
+
+E só agora o campo de Mês foi mudado.  Note que neste exemplo, a segunda 
+vírgula não era necessária, pois nós não mudamos outros campos posteriores.
+É sua escolha, (e do compilador!), se deixar a segunda vírgula ou não. 
+
+
+Agora tudo isso tá indo muito bem, mas como você se estes valores em seu código? 
+Simplesmente basta dizer: 
+
+   MOV   AX, [Date_I_Passed_Physics.Month]    ; ou algo como
+
+   MOV   [Date_I_Passed_Physics.Day], 5       ; ou até mesmo
+
+   CMP   [Date_I_Passed_Physics.Year], 1996
+
+
+Simples, né? 
+
+ ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ 
+
+          ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+          ³                                                          ³
+          ³              CRIANDO ARRAYS EM ASSEMBLER                 ³
+          ³                                                          ³
+          ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+
+
+Certo, arrays são bem fáceis de se implementar. Por exemplo, 
+digamos que você tivesse a seguintes estrutura de array em Pascal: 
+
+   Var 
+      MyArray: Array[0 ..19] of Word; 
+
+
+Para criar um array semelhante em Assembler, você tem que usar o operador 
+DUP.  DUP, ou DUPlique Variável, tem a seguinte sintaxe: 
+
+   ş <rótulo>    <diretiva> <contador>  DUP  (expressão)
+
+   Onde (expressão) é um valor opcional para inicializar o array. 
+
+
+Basicamente, aquele array no Pascal se pareceria com isso: 
+
+   MyArray DW 20 DUP (?) 
+
+
+Ou, se você quisesse inicializar cada valor para zero, então você poderia 
+dizer isto: 
+
+   MyArray DW 20 DUP (0) 
+
+
+E, como outro exemplo de como o Assembler é flexível, você poderia dizer 
+algo desse tipo: 
+
+   MyArray DB 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,,, 
+
+
+...para criar um array de 10 bytes, com todos os dez elementos inicializados em 1, 
+2, 3... 
+
+ ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ 
+
+          ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+          ³                                                          ³
+          ³              INDEXANDO ARRAYS EM ASSEMBLER               ³
+          ³                                                          ³
+          ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+
+
+Bem, agora que você já viu como criar arrays, eu suponho que você queira saber como 
+referenciar elementos individualmente. Bem, digamos que você tivesse o seguinte array:
+
+   OutroArray DB 50 DUP (?) 
+
+
+Se você quisesse mover o elemento 24 para, digamos, BL, então você poderia fazer isto: 
+
+   MOV BL, [OutroArray + 23]; Ou, seria possível dizer: 
+
+   MOV AX, 23, 
+   MOV BL, [OutroArray + AX] 
+
+
+NOTA:  Não esqueça que todos os arrays começam no elemento ZERO. Linguagens de 
+alto-nível como C e Pascal fazem você esquecer isto devido ao modo que eles 
+deixam você referenciar arrays. 
+
+ ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ 
+
+
+Agora, isso foi fácil, mas, e se OutroArray fosse de 50 WORDS, não BYTES? 
+
+   OutroArray DW 50 DUP (?)   ; como esse. 
+
+
+Bem, para acessar o elemento 24, você teria que multiplicar o valor de índice por dois, 
+e então somar isso a OutroArray para conseguir o elemento desejado. 
+
+   MOV AX, 23			; Acesso elemento 24 
+   SHL AX, 1			; Multiplique AX por dois 
+   MOV BX, [OutroArray + AX]	; Adquira elemento 24 em BX 
+
+
+Não é tão difícil assim, né? Porém, este método fica um pouco macetoso quando 
+você não tem cálculos fáceis para fazer quando o índice não é uma potência de dois. 
+
+Digamos que você tivesse um array que tem um tamanho de elemento de 5 bytes. 
+Se nós quiséssemos conferir o sétimo elemento, nós teríamos que fazer algo 
+assim: 
+
+   MOV AX, 6				; Pega o sétimo elemento 
+   MOV BX, 5				; Cada elemento tem cinco bytes
+   MUL BX				; AX = 6 x 5
+   MOV DX, [YetAnotherArray + AX]	; Coloca o elemento 7 em DX 
+
+
+Porém, como eu disse antes, MUL não é um modo muito eficiente de codificação, 
+assim, substituir o MUL por um SHL 2 e um ADD seria a ordem do dia.
+
+ ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ 
+
+
+Antes de continuarmos com mais alguma coisa, eu suponho que seja hora de  
+falar sobre números de ponto flutuante. Agora, números de ponto flutuantes 
+podem ser desajeitados para se manipular em Assembler, assim vê se não sai 
+escrevendo aquele programa de planilha eletrônica que você sempre quis, em 
+código de máquina! Porém, quando estiver trabalhando com mapeamento de textura,
+círculos e outras funções mais complicadas, é inevitável que você precise de 
+algo para declarar números de ponto flutuante. 
+
+Digamos que quiséssemos armazenar Pi. Para declarar Pi, nós precisamos usar a
+DT diretiva. Você poderia declarar Pi assim: 
+
+Pi DT 3.14 
+
+
+DT na verdade reserva dez bytes de memória, assim seria possível declarar Pi com
+um número maior de casas decimais. 
+
+Eu não vou entrar nas particularidades de números de ponto flutuante neste 
+tutorial. Quando nós precisarmos deles mais tarde, eu falo sobre isso. 
+
+ ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ 
+
+
+Certo, no último tutorial disse eu que eu daria algum tipo de resumo do que nós 
+cobrimos durante os últimos quatro meses.  (Ei - isso é como se fosse um tutorial 
+a cada duas semanas, então talvez eles não tenham saído tão irregularmente, afinal 
+de contas!) 
+
+De qualquer maneira, eu vou falar sobre a parte de pegar e setar bits individuais 
+num registrador, porque este é um tópico importante que eu deveria ter coberto há 
+muito tempo atrás. 
+
+ ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ 
+
+
+          ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+          ³                                                          ³
+          ³                    OPERADORES LÓGICOS                    ³
+          ³                                                          ³
+          ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+
+
+Certo, de volta ao Tutorial Cinco, eu dei as três tabelas verdade para E, OU 
+e XOR. 
+
+(A propósito, em uma edição de Tutorial Cinco, eu errei a tabela para XOR, 
+amavelmente apontado por Keith Weatherby, assim se você não tem a versão 
+mais atual, (V 1.3), então pegue agora.  Por favor, embora eu tente o meu melhor 
+para excluir qualquer erro dos Tutoriais, alguns ficam com erros, assim se você achar 
+algum, por favor me avise. 
+
+Mas tenha certeza de que você tem as edições mais recentes dos tutoriais antes de fazer 
+isto!) 
+
+Certo, chega de meus erros. Essas tabelas se pareciam com estas: 
+
+
+                      AND             OR             XOR
+
+                  0 AND 0 = 0     0 OR 0 = 0     0 XOR 0 = 0
+                  0 AND 1 = 0     0 OR 1 = 1     0 XOR 1 = 1
+                  1 AND 0 = 0     1 OR 0 = 1     1 XOR 0 = 1
+                  1 AND 1 = 1     1 OR 1 = 1     1 XOR 1 = 0
+
+
+Isto está tudo muito bem, mas pra quê vamos usar isso? Bem, em primeiro 
+lugar, vamos dar uma olhada no que o AND pode fazer. Nós podemos usar o AND 
+para mascarar bits em um registrador ou variável, e assim setar e resetar bits 
+individuais.
+
+Como um exemplo, usaremos o AND para testar um valor de um único bit. Olhe os 
+exemplos seguintes, e veja como você pode usar AND para seus próprios fins. Um 
+uso bom para AND seria conferir se um caracter lido do teclado é uma maiúscula
+ou não.  (Você pode fazer isto, porque a diferença entre uma maiúscula e sua minúscula 
+é de um bit. 
+
+
+   Ex:  'A' =  65   = 01000001
+        'a' =  97   = 01100001
+
+        'S' =  83   = 01010011
+        's' =  115  = 01110011)
+
+Assim, da mesma forma que você pode azer um AND de números binários, você 
+poderia usar uma aproximação semelhante para escrever uma rotina que confere se 
+um caracter é maiúsculo ou minúsculo. 
+
+
+   Ex:         0101 0011                             0111 0011
+           AND 0010 0000                         AND 0010 0000
+
+             = 0000 0000                           = 0010 0000
+
+      ^^^ Essa é maiúscula ^^^               ^^^ Essa é minúscula ^^^
+
+
+Agora, e o OR? O OR é geralmente usado depois de um AND, mas não tem 
+que ser.  Você pode usar OR para mudar bits individuais em um registrador ou 
+variável sem mudar quaisquer um dos outros bits. Você poderia usar OR para escrever 
+uma rotina para mudar um caracter para maiúsculo se já não for, ou talvez para minúscula 
+se fosse maiúscula. 
+
+
+   Ex:                             0101 0011
+                                OR 0010 0000
+
+                                =  0111 0011
+
+            ^^^ S maiúsculo agora foi mudado para s minúsculo ^^^
+
+
+A combinação de AND/OR é um dos truques mais frequentemente usados no mundo do 
+Assember, assim tenha certeza de que você entendeu bem o conceito.  Você me verá 
+freqüentemente usando-os, tirando proveito da velocidade das instruções. 
+
+Finalmente, e o XOR?  Bem, o OU exclusivo pode ser às vezes muito útil. 
+XOR pode ser de útil para alternar bits individuaisentre 0 e 1 sem 
+ter que saber qual o conteúdo que cada bit tinha anteriormente. Lembre-se, 
+como com OU, uma máscara de zero permite ao bit original continuar com seu valor. 
+
+   Ex:                            1010 0010
+                              XOR 1110 1011
+
+                                = 0100 1001
+
+
+Faça alguma tentativa para aprender estes operadores binários, e o que eles 
+fazem.  Eles são uma ferramenta inestimável quando se está trabalhando com 
+números binários. 
+
+OBS.:  Para simplicidade, o Turbo Assembler lhe permite usar números binários 
+em seu código.  Por exemplo, seria possível dizer, AND AX, 0001000b em vez de AND 
+AX, 8h para testar o bit 3 de AX. Isto pode facilitar as coisas para você quando 
+codificar. 
+
+ ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ 
+
+          ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+          ³                                                          ³
+          ³                    O PROGRAM DEMONSTRATIVO               ³
+          ³                                                          ³
+          ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+
+
+Certo, chega da parte chata - vamos ao programa demonstrativo que eu incluí!
+Eu pensei que já era sem tempo escrever outra demonstração - 100% Assembler 
+desta vez, e vamos a uma rotina de fogo. Rotinas de fogo podem parecer bem 
+efetivas, e são surpreendentemente fáceis de se fazer, assim, pensei, 
+por que não... 
+
+ ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ 
+
+
+Agora, os princípios de uma rotina de fogo são bastante simples.  Você basicamente 
+faz o seguinte: 
+
+   ş Crie um buffer com o qual você vai trabalhar  
+
+     Este buffer pode ser quase de qualquer tamanho, entretanto quanto menor 
+você o fizer, o mais rápido seu programa será, e quanto maior você o fizer, o mais 
+bem definido o fogo será. Você precisa acertar um equilíbrio entre claridade e 
+velocidade. 
+
+     Minha rotina está um pouco lenta, e isto é devido em parte à claridade 
+do fogo.  Eu escolhi 320 x 104 como tamanho do meu buffer, assim eu fiz um 
+compromisso. A resolução horizontal é boa - 1 pixel por elemento de array, 
+mas a resolução vertical é um pouco baixa - 2 pixels por elemento de array. 
+
+     Contudo, eu já vi rotinas onde um buffer de 80 x 50 é usado, significando 
+que há 4 pixels por elemento para o eixo horizontal e vertical.  É rápido, mas 
+com baixíssima definição. 
+
+
+   ş Faça uma palette agradável 
+
+     Seria idéia boa para ter cor 0 como preto, (0, 0, 0) e a cor 255 como 
+branco - (63, 63, 63).  Tudo entre isso deveria ser uma mistura de 
+amarelo-avermelhado flamejante. Eu suponho você poderia ter chamas verdes se você 
+quisesse, mas nós vamos usar as chamas que nós conhecemos agora.  :) 
+
+
+Agora o loop principal começa. No loop você deve: 
+
+   ş Criar uma linha de fundo ramdômica, ou duas linhas de fundo 
+
+     Basicamente, você tem um loop como: 
+
+     For X := 1 To Xmax Do
+      Begin
+         Temp := Random(256);
+         Buffer[X, Ymax - 1] := Temp;
+         Buffer[X, Ymax]     := Temp;
+      End;
+
+      Codifique isso na linguagem de sua escolha, e você está no negócio. 
+
+
+   ş Suavize o array:
+
+     Agora este é o único pedaço com macete. O que você tem que fazer, é como 
+segue: 
+
+       * Comece da segunda linha pra baixo do buffer. 
+       * Mover para baixo, e para cada pixel: 
+
+         * Some os valores dos quatro pixels que cercam o pixel. 
+         * Divida o total por quatro conseguir uma média. 
+         * Tire um da média. 
+         * Ponha a média - 1 no array DIRETAMENTE ACIMA onde o pixel velho estava. 
+(Você pode alterar isto, e digamos, pôr acima e à direita, e então 
+parecerá que a chama está sendo soprada pelo vento.) 
+
+       * Faça isso até você chegar à última linha. 
+
+
+   ş Copie o array para a tela 
+
+     Se seu array é de 320 x 200, então você pode copiar elemento-para-pixel.  Se 
+não é, então coisas são mais difíceis. O que eu tive que fazer era copiar uma linha 
+do array para a tela, abaixar uma linha da tela, copiar a mesma linha do array 
+para a tela, e então entrar numa linha diferente no array e na tela. 
+
+     Deste modo, eu espalhei o fogo um pouco. 
+
+     Você vai, é, querer saber exatamente por que meu array é de 320 x 104 e 
+não de 320 x 100.  Bem, a razão para isto é bastante simples.  Se eu tivesse 
+usado 320 x 100 como minhas dimensões de array, e então copiasse isso para a 
+tela, as últimas quatro linhas teriam parecido bem estranhas.  Elas 
+não teriam sido suavizados corretamente, e o resultado final não estaria de
+todo flamejante.  Assim, eu apenas copiei até a linha 100 para a tela, e deixei o 
+resto pra lá. 
+
+     Como uma experiência, tente mudar a terceira linha abaixo no 
+procedimento de DrawScreen para   MOV BX, BufferY   e mudar as dimensões para
+320x100 e veja o que acontece. 
+
+     MOV   SI, OFFSET Buffer          ; Aponta SI para o início do buffer
+     XOR   DI, DI                     ; Começa a desenhar em 0, 0
+     MOV   BX, BufferY - 4            ; Perde as 4 últimas linhas do
+                                      ; buffer. Estas linhas não vão se parecer
+                                      ; com fogo de jeito nehum.
+
+
+   ş Volta para o início. 
+
+ ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ 
+
+
+Bem, não importa o quão bem eu expliquei isso tudo, é muito difícil de ver o 
+que está acontecendo sem olhar o código. Então agora nós vamos dar uma olhada no
+programa, seguindo o que está acontecendo. 
+
+Bem, em primeiro lugar, você tem o header. 
+
+
+   .MODEL SMALL   ; Segmento de dados < 64K, segmento de código < 64K
+   .STACK 200H    ; Arruma 512 bytes de espaço para a pilha
+   .386
+
+
+Aqui, eu disse que o programa terá um segmento de código e de dados 
+total de menos que 128K. Eu vou dar para o programa uma pilha de 512
+bytes, e permitir instruções do 386. 
+
+
+  .DATA 
+
+CR 	EQU 13 
+LF 	EQU 10 
+
+
+O segmento de dados começa, e eu dou para CR e para LF os valores de "carriage return" e 
+"line feed" (retorno de carro e alimentação de linha, i.e, volta pro início e desce uma 
+linha).
+
+
+BufferX   EQU 320                       ; Largura do buffer de tela
+BufferY   EQU 104                       ; Altura do buffer de tela
+
+AllDone   DB CR, LF, "That was:"
+          DB CR, LF
+          DB CR, LF, "         FFFFFFFFF    IIIIIII     RRRRRRRRR    ..."
+          DB CR, LF, "          FFF           III        RRR   RRR   ..."
+          DB CR, LF, "          FFF           III        RRR   RRR   ..."
+          DB CR, LF, "          FFF           III        RRRRRRRR    ..."
+          DB CR, LF, "          FFFFFFF       III        RRRRRRRR    ..."
+          DB CR, LF, "          FFF           III        RRR  RRR    ..."
+          DB CR, LF, "          FFF           III        RRR   RRR   ..."
+          DB CR, LF, "          FFF           III        RRR    RRR  ..."
+          DB CR, LF, "         FFFFF        IIIIIII     RRRR    RRRR ..."
+          DB CR, LF
+          DB CR, LF
+          DB CR, LF, "   The demo program from Assembler Tutorial 8. ..."
+          DB CR, LF, "   author, Adam Hyde, at: ", CR, LF
+          DB CR, LF, "     ş blackcat@faroc.com.au"
+          DB CR, LF, "     ş http://www.faroc.com.au/~blackcat", CR, LF, "$"
+
+Buffer    DB BufferX * BufferY DUP (?) ; O buffer de tela
+
+Seed      DW 3749h                     ; O valor de seed, e metado do meu número de
+                                       ; telefone - não em hexa. :)
+
+INCLUDE PALETTE.DAT                    ; A palette, gerada com
+                                       ; Autodesk Animator, e um programa simples em 
+                                       ; Pascal.
+
+
+
+Agora, no fim, eu declaro o array e declaro um VALOR DE SEED (semente) para o 
+procedimento Random que segue. A seed é só um número que é necessário para 
+começar o procedimento Random, e pode ser qualquer coisa que você quiser. 
+
+Eu também economizei algum espaço e pus os dados para a palette em um arquivo 
+externo que é incluído no código assembly. Dê uma olhada no arquivo.
+Usar INCLUDE pode economizar muito espaço e confusão. 
+
+
+Eu pulei alguns procedimentos que são bastante auto-explicativos, e fui direto
+para a procedure DrawScreen. 
+
+
+DrawScreen PROC
+   MOV   SI, OFFSET Buffer             ; Aponta SI para o início do buffer
+   XOR   DI, DI                        ; Começa a desenhar em 0, 0
+   MOV   BX, BufferY - 4               ; Perde as últimas 4 linhas do buffer
+                                       ; Essas linhas não se parecem
+                                       ; com fogo, de jeito nenhum
+Row:
+   MOV   CX, BufferX SHR 1             ; 160 WORDS
+   REP   MOVSW                         ; Move-as
+   SUB   SI, 320                       ; Volta pro início da linha do array
+   MOV   CX, BufferX SHR 1             ; 160 WORDS
+   REP   MOVSW                         ; Move-as
+   DEC   BX                            ; Decrementa o número de linhas VGA restantes
+   JNZ   Row                           ; Terminamos?
+   RET
+DrawScreen ENDP
+
+
+Isto também é fácil seguir, e tira proveito de MOVSW, usando-a para mover dados entre DS:SI 
+e ES:DI. 
+
+
+AveragePixels PROC
+   MOV   CX, BufferX * BufferY - BufferX * 2  ; Altera todo o buffer,
+                                              ; exceto a primeira linha e a última
+   MOV   SI, OFFSET Buffer + 320              ; Começa da segunda linha
+
+Alter:
+   XOR   AX, AX                        ; Zera AX
+   MOV   AL, DS:[SI]                   ; Pega o valor do pixel atual
+   ADD   AL, DS:[SI+1]                 ; Pega o valor do pixel à direita
+   ADC   AH, 0
+   ADD   AL, DS:[SI-1]                 ; Pega o valor do pixel à esquerda
+   ADC   AH, 0
+   ADD   AL, DS:[SI+BufferX]           ; Pega o valor do pixel abaixo
+   ADC   AH, 0
+   SHR   AX, 2                         ; Divide o total por quatro
+
+   JZ    NextPixel                     ; O resultado é zero?
+   DEC   AX                            ; Não, então decrementa de um
+
+
+
+NOTA:  	O valor de decay (queda) é UM.  Se você mudar a linha acima 
+       	para, por exemplo "SUB AX, 2" você vai ver que o fogo não chega tão 
+       	alto. Experimente... seja criativo!  :) 
+
+
+NextPixel:
+   MOV   DS:[SI-BufferX], AL           ; Põe o novo valor no array
+   INC   SI                            ; Próximo pixel
+   DEC   CX                            ; Um a menos para fazer
+   JNZ   Alter                         ; Já fizemos todos?
+   RET
+AveragePixels ENDP
+
+
+Agora nós vimos a procedure que faz toda a suavização. Basicamente, nós 
+só temos um loop que soma os valores de cor dos pixels ao redor de um pixel, 
+carregando os valores dos pixels antes. Quando ela tem o total em AX,
+é dividido por quatro para conseguir uma média. A média é então plotada 
+diretamente sobre o pixel atual. 
+
+Para mais informação relativo à instrução de ADC, observe isto em Tutorial 5, e 
+olhe os programas abaixo: 
+
+   Var                                     Var
+      W : Word;                               W : Word;
+
+   Begin                                   Begin
+      Asm                                     Asm
+         MOV  AL, 255                            MOV   AL, 255
+         ADD  AL, 1                              ADD   AL, 1
+         MOV  AH, 0                              MOV   W, AX
+         ADC  AH, 0                           End;
+         MOV  W, AX
+      End;                                    Write(W);
+                                           End;
+      Write(W);
+   End;
+
+ ^^^ Este programa returna 256             ^^^ Este programa returna 0
+
+
+Lembre-se de que ADC é usado para ter certeza que quando um registrador ou 
+variável não é grande bastante para armazenar um resultado, o resultado não será 
+perdido. 
+
+
+OK, depois de pular algumas procedures um pouco mais irrelevantes, chegamos ao 
+corpo principal do programa, que é algo desse tipo: 
+
+
+Start:
+   MOV   AX, @DATA
+   MOV   DS, AX                        ; DS agora aponta para o segmento de dados.
+
+
+
+Nós apontamos DS primeiramente para o segmento de dados, de modo que possamos ter 
+acesso a todas nossas variáveis. 
+
+
+   CALL  InitializeMCGA
+   CALL  SetUpPalette
+
+MainLoop:
+   CALL  AveragePixels
+
+   MOV   SI, OFFSET Buffer + BufferX * BufferY - BufferX SHL 1
+   ; SI agora aponta para o início da segunda última linha (?????? - by Krull)
+   MOV   CX, BufferX SHL 1             ; Prepara para pegar BufferX x 2 números randômicos
+
+BottomLine:
+   CALL   Random                       ; Pega um número randômico
+   MOV    DS:[SI], DL                  ; Usa apenas o byte baixo de DX, i.e.,
+   INC    SI                           ; o número vai ser de 0 --> 255
+   DEC    CX                           ; Um pixel a menos para fazer
+   JNZ    BottomLine                   ; Já acabamos?
+
+
+Aqui, uma nova linha do fundo é calculada. O procedimento Random - muitas 
+graças ao autor desconhecido da USENET - retorna um valor muito alto 
+em DX:AX. Porém, nós só requeremos um número de 0 a 255, assim, usando só DL, 
+nós temos tal número. 
+
+
+   CALL  DrawScreen                    ; Copia o buffer para a VGA
+
+   MOV   AH, 01H                       ; Checa se foi pressionada alguma tecla
+   INT   16H                           ; Há alguma tecla esperando no buffer?
+   JZ    MainLoop                      ; Não, segue em frente
+
+   MOV   AH, 00H                       ; Sim, então pega a tecla
+   INT   16H
+
+   CALL  TextMode
+   MOV   AH, 4CH
+   MOV   AL, 00H
+   INT   21H                           ; Volta ao DOS
+END Start
+
+
+E eu acho que essa última parte também é bem fácil de entender. Eu tentei comentar 
+o fonte o tanto quanto eu pude, talvez um pouco mais fortemente em algumas 
+partes, mas eu espero que agora todo mundo tenha uma idéia de como uma rotina de fogo 
+funciona. 
+
+De qualquer maneira, a meta era não lhe ensinar como fazer uma rotina de fogo, 
+mas como usar arrays, assim se você pegou o negócio do fogo também, então 
+isso é um bônus. Eu me referi ligeiramente diferentemente aos meus arrays de 
+como eu expliquei neste tutorial, mas a teoria ainda é a mesma, e lhe mostra 
+outros modos de fazer as coisas.  Se você não entendeu como se usa arrays com isso 
+tudo, então talvez você nunca entenda, pelo menos não com meu tutorials, sem dúvida. 
+Ei, vai compra um livro de $50!  :) 
+
+
+ ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ 
+
+O Tutorial de semana que vem terá: 
+
+   ş E/S de arquivos 
+   ş Usando Assembler com C/C++ 
+   ş Tabelas de Lookup? 
+   ş Macros. 
+
+Se você deseja ver um tópico discutido em um tutorial futuro, então me escreva, 
+e eu verei o que eu posso fazer. 
+
+
+ ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ 
+
+Não perca!!! Pegue o tutorial da semana que vem da minha homepage em: 
+
+  ş http://www.faroc.com.au/~blackcat 
+  ş http://www.gecotiies.com/SiliconValley/Park/3174
+
+
+Até semana que vem!
+
+- Adam. 
+- Krull.

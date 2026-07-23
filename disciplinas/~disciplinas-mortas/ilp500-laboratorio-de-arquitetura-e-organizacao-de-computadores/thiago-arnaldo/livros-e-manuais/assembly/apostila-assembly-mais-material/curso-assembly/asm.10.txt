@@ -1,0 +1,134 @@
+             i----------------------------------------------©
+             ¦ RBT   ¦   Curso de Assembly   ¦   Aula Nº 10 ¦
+             È----------------------------------------------¥
+
+Por: Frederico Pissarra
+
+
+i------------©
+¦ ASSEMBLY X ¦
+È------------¥
+
+    Mais  instruçöes  lógicas...   Falta-nos  ver  as  intruçöes  de
+deslocamento de bits: SHL, SHR, SAL, SAR, ROL, ROR, RCL e RCR.
+
+    A última letra  nas  instruçöes  acima  especifica  o sentido de
+rotaçäo (R = Right -> direita, L = Left -> esquerda).
+
+    Para exemplificar a mecânica do funcionamento dessas  instruçöes
+recorrerei a graficos (fica mais fácil assim).
+
+    Í-----------À
+    ¦ SHL e SHR ¦
+    Ë-----------¢
+
+        SHL:
+      +-----+     +------------------+
+      ¦Carry¦<----¦                  ¦<----- 0
+      +-----+     +------------------+
+                 msb                lsb
+
+
+        SHR:
+                  +------------------+      +-----+
+           0 ---->¦                  ¦----->¦Carry¦
+                  +------------------+      +-----+
+                 msb                lsb
+
+    SHR e SHL fazem o deslocamento dos bits em direçäo ao flag Carry
+e  acrescentam  0  no  lugar  do último bit que foi deslocado.  Essa
+operaçäo tem o mesmo efeito  de  multiplicar  por 2 (SHL) ou dividir
+por 2 (SHR) um valor.  Com a vantagem  de  näo  gastar  tanto  tempo
+quanto as instruçöes DIV e MUL.
+
+    SHR é a abreviaçäo de  SHift  Right,  enquando  SHL é a de SHift
+Left.
+
+
+    Í-----------À
+    ¦ SAL e SAR ¦
+    Ë-----------¢
+
+    SAL funciona da mesma maneira que SHL.
+
+        SAR: +-----+
+             ¦    +------------------+      +-----+
+             +--->¦                  ¦----->¦Carry¦
+                  +------------------+      +-----+
+                 msb                lsb
+
+    SAR  desloca todos os bits para a direita (o lsb vai para o flag
+carry) e repete o conteúdo do antigo último bit (que foi deslocado).
+
+    SAR  é  a  abreviaçäo  de  SHift  Arithmetic  Right.   Sendo  um
+deslocamento aritimético, näo  poderia  de  desconsiderar o sinal do
+dado deslocado (dai o motivo de repetir o bit mais significativo!).
+
+
+    Í-----------À
+    ¦ RCL e RCR ¦
+    Ë-----------¢
+
+        RCL:
+           +----------------------------------------+
+           ¦                                        ¦
+           ¦    +-----+     +------------------+    ¦
+           +----¦Carry¦<----¦                  ¦<---+
+                +-----+     +------------------+
+                           msb                lsb
+
+
+        RCR:
+            +--------------------------------------+
+            ¦                                      ¦
+            ¦   +------------------+      +-----+  ¦
+            +-->¦                  ¦----->¦Carry+--+
+                +------------------+      +-----+
+               msb                lsb
+
+    RCR  e  RCL  rotacionam  o  dado  "passando  pelo  carry".  Isto
+significa que o bit  menos  significativo  (no  caso  de  ROR)  será
+colocado  no  flag  de carry e que o conteúdo antigo deste flag será
+colocado no bit mais significativo do dado.
+
+
+    Í-----------À
+    ¦ ROL e ROR ¦
+    Ë-----------¢
+
+        ROL:
+                          +-------------------------+
+                          ¦                         ¦
+                +-----+   ¦ +------------------+    ¦
+                ¦Carry¦<----¦                  ¦<---+
+                +-----+     +------------------+
+                           msb                lsb
+
+
+        ROR:
+            +-------------------------+
+            ¦                         ¦
+            ¦   +------------------+  ¦   +-----+
+            +-->¦                  ¦----->¦Carry¦
+                +------------------+      +-----+
+               msb                lsb
+
+    Aqui a rotaçao e' feita  da  maneira correta...  o flag de carry
+apenas indica o ultimo bit que "saiu" e foi para o outro lado...
+
+    A sintaxe dessas instruçöes é a seguinte:
+
+ +-----------------------------------------------------------------+
+ ¦  SHL AX,1                                                       ¦
+ ¦  SHR BL,1                                                       ¦
+ ¦  RCL DX,CL                                                      ¦
+ ¦  ROL ES:[DI],CL                                                 ¦
+ +-----------------------------------------------------------------+
+
+    Note que o segundo operando é  um contador do número de rotaçöes
+ou shifts seräo efetuadas.  Nos microprocessadores 80286  em  diante
+pode-se usar um valor diferente de 1, no 8088/8086 näo pode!
+
+    Repare  também  que  podemos  usar  APENAS o registrador CL como
+operando da direita se quisermos usar algum registrador!
+
