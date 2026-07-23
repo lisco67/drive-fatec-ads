@@ -1,0 +1,49 @@
+-- ----------------------------------------------------------------------------------------
+-- Gabriel Issa Shammas (GIS) - 01 de janeiro de 2000 a 31 de dezembro de 2020
+-- ----------------------------------------------------------------------------------------
+-- QUERY028- GIS_TB01S005_CONTINENTE
+--
+-- Mostrar o valor inteiro de várias linhas e calcule uma soma de verificação agregada para
+-- cada grupo.
+-- Atenção: Colocar label (rótulo) na coluna resultante.
+--
+-- ----------------------------------------------------------------------------------------
+-- Atenção. Indicação do BD a ser usado. Se for o caso, mude o nome do Banco.
+-- ----------------------------------------------------------------------------------------
+--
+USE BDGIS;
+--
+-- ----------------------------------------------------------------------------------------
+-- Seleção de todos os dados para visualização do conteúdo da tabela.
+-- ----------------------------------------------------------------------------------------
+--
+Select checksum_agg(*) 'Checksum agg'
+  From dbo.GIS_TB01S005_CONTINENTE;
+--
+-- ----------------------------------------------------------------------------------------
+-- Comentários.
+-- ----------------------------------------------------------------------------------------
+--
+-- A cláusula FROM é a única cláusula obrigatória no comando SELECT.
+--
+-- As Funções de Agregação são declaradas no comando SELECT  tal qual se faz com a declara-
+-- ção de uma coluna.
+--
+-- Uma função de agregação, ao ser exibida, terá como nome de coluna  "COLUMN NO NAME",  ou
+-- seja, "Coluna Sem Nome", porque sua origem não é da própria tabela.
+--
+-- Para evitar este nome de coluna, utiliza-se de um label ou rótulo de coluna.
+--
+-- Esta função CHECKSUM_AGG é uma função agregada que usa um único valor inteiro de  várias
+-- linhas e calcula uma soma de verificação agregada para cada grupo.
+-- Eles podem ser usados juntos em várias colunas de soma de verificação em um grupo.
+--
+-- Já o CHECKSUM calculava um hash para um ou mais valores  em uma única linha  e retornava
+-- um valor inteiro.
+--
+-- ----------------------------------------------------------------------------------------
+-- Fim TB01S005 QUERY028
+-- ----------------------------------------------------------------------------------------
+--
+--
+

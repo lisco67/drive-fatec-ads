@@ -1,0 +1,16 @@
+-- ----------------------------------------------------------------------------------------
+-- Gabriel Issa Shammas (GIS) - 01 de janeiro de 2000 a 31 de dezembro de 2020
+-- ----------------------------------------------------------------------------------------
+-- QUERY016- GIS_TB01S005_CONTINENTE
+--
+-- Qual é o total de continentes existentes?
+-- Atenção: Fazer a contagem de forma distinta a partir de uma coluna.
+--          Por exemplo, utilizar a coluna  SIGLA  para a contagem de linhas (tuplas).
+-- Atenção: Neste caso não fará diferença,  pois esta coluna  possui valores diferentes  em
+-- cada linha (tupla).
+--
+-- ----------------------------------------------------------------------------------------
+-- Fim TB01S005 QUERY016
+-- ----------------------------------------------------------------------------------------
+--
+--

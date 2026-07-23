@@ -1,0 +1,164 @@
+#Criação da base Biblioteca
+
+create database biblioteca;
+use biblioteca;
+
+
+create table categoria(
+ codcategoria integer primary key auto_increment,
+ descricao varchar(30),
+ tempo integer,
+ valMulta float default 0
+);
+
+
+create table associado(
+ codAssociado integer primary key auto_increment,
+ nome varchar(60) not null,
+ cpf varchar(15) not null unique key,
+ ra varchar(15),
+ categoria integer,
+ endereco varchar(80),
+ foreign key (categoria) references categoria (codcategoria)
+);
+
+create table livro(
+ codLivro integer primary key auto_increment,
+ titulo varchar(60) not null,
+ isbn varchar(15) not null,
+ exemplar integer not null,
+ assunto varchar(30),
+ edicao varchar(3),
+ ano varchar(4),
+ autor varchar(80), 
+ unique key (isbn, exemplar)
+);
+
+create table emprestimo(
+ codEmprestimo integer primary key auto_increment,
+ dat_dev date,
+ dat_emp date,
+ codAssociado integer not null,
+ foreign key (codAssociado) references associado(codAssociado)
+);
+
+create table itens (
+ codItem integer primary key auto_increment,
+ codEMprestimo integer not null,
+ codLivro integer not null,
+ unique key(codEmprestimo, codLivro),
+ foreign key (codEmprestimo) references emprestimo (codEmprestimo),
+ foreign key (codLivro) references livro (codLivro)
+); 
+
+
+create table telefones (
+ associado integer not null,
+ telefone varchar(10) not null,
+ foreign key (associado) references associado (codassociado),
+ primary key (associado, telefone)
+);
+
+
+insert into categoria (descricao, tempo, valMulta) values
+('Professor',15,0.90),
+('Funcionário',7,0.80),
+('Aluno',7,1.10),
+('Visitante',7,2.50);
+
+insert into associado (nome, cpf, categoria, endereco) values
+('Carlos','123',2,'Rua das orquídeas, 234'),
+('Marcos','455',1,'Rua João Passos, 102'),
+('Vania','231',2,'Rua Amando de Barros, 31'),
+('Roberto','122',3,'Rua das hortênsias, 34'),
+('Marcia','444',3,'Rua da Paz, 44'),
+('Ana','456',3,'Rua oito, 98'),
+('Marcio','765',4,'Rua dez, 301'),
+('Edson','459',1,'Rua das orquídeas, 22'),
+('Analia','333',1,'Rua João Passos, 78'),
+('Marta','987',3,'Rua Amando de Barros, 82'),
+('Mauricio','767',4,'Rua das hortênsias, 200'),
+('Marcos','432',2,'Rua da Paz, 10'),
+('Edivaldo','334',3,'Rua oito, 78'),
+('Leandro','112',4,'Rua dez, 91');
+
+insert into telefones (associado, telefone) values
+(1,'3815-1616'),
+(2,'3882-1212'),
+(2,'3882-0707'),
+(3,'3882-9595'),
+(4,'9995-9998'),
+(5,'9152-9852'),
+(5,'9452-3352'),
+(6,'8112-5523'),
+(7,'8452-8365'),
+(7,'3882-9562'),
+(7,'3815-1616'),
+(8,'9995-9998'),
+(9,'3882-0707'),
+(10,'8855-9966'),
+(11,'3882-9595'),
+(12,'9852-6655'),
+(13,'3882-7474'),
+(14,'9852-8899'),
+(14,'9798-8888');
+
+insert into livro (titulo, isbn, exemplar, assunto, edicao, ano, autor) values
+('Java: Como programar','9788576055631',1,'Programação','8','2010','Deitel e Deitel'),
+('Java: Como programar','9788576055631',2,'Programação','8','2010','Deitel e Deitel'),
+('Introdução a teoria geral da adm.','9788535246711',1,'Adm.','8','2011','Chiavenato'),
+('Introdução a economia','9788522107056',1,'Economia','5','2010','Mankiw'),
+('Java: Como programar','8576050196',1,'Programação','6','2005','Deitel e Deitel'),
+('Java: Como programar','8576050196',2,'Programação','6','2005','Deitel e Deitel'),
+('Introdução a economia','9788522107056',2,'Economia','5','2010','Mankiw'),
+('Introdução a teoria geral da adm.','9788535246711',2,'Adm.','8','2011','Chiavenato'),
+('Java: Como programar','9788576055631',3,'Programação','8','2010','Deitel e Deitel'),
+('Introdução a economia','9788522107056',3,'Economia','5','2010','Mankiw'),
+('Introdução a economia','9788522107056',4,'Economia','5','2010','Mankiw'),
+('Java: Como programar','8576050196',3,'Programação','6','2005','Deitel e Deitel'),
+('Java: Como programar','9788576055631',4,'Programação','8','2010','Deitel e Deitel'),
+('Java: Como programar','9788576055631',5,'Programação','8','2010','Deitel e Deitel'),
+('Teoria Geral da Adm.','9788535234565',1,'Adm.','2','2011','Andrade e Amboni');
+
+insert into emprestimo (dat_emp, dat_dev, codAssociado) values
+('2003-03-15','2003-03-20',10),
+('2008-06-10','2008-06-17',10),
+('2007-05-28','2007-06-05',1),
+('2005-04-17','2005-04-30',2),
+('2003-05-18','2004-06-17',9),
+('2008-06-20','2008-07-20',2),
+('2009-04-05','2009-05-01',9),
+('2010-03-07',null,9),
+('2009-01-20','2009-02-10',3),
+('2008-04-04','2008-05-01',4),
+('2010-03-06','2010-04-02',5),
+('2011-04-01',null,6),
+('2012-03-08','2012-03-13',7),
+('2012-03-08',null,11);
+
+
+insert into itens (codEmprestimo, codLivro) values
+(1,5),
+(1,6),
+(2,8),
+(3,9),
+(4,1),
+(5,2),
+(6,3),
+(7,7),
+(7,4),
+(8,5),
+(8,1),
+(8,8),
+(9,10),
+(10,6),
+(10,2),
+(10,3),
+(10,4),
+(11,9),
+(11,10),
+(12,9),
+(12,6),
+(13,2),
+(14,4);
+

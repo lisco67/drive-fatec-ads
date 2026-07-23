@@ -1,0 +1,46 @@
+-- ----------------------------------------------------------------------------------------
+-- Gabriel Issa Shammas (GIS) - 01 de janeiro de 2000 a 31 de dezembro de 2020
+-- ----------------------------------------------------------------------------------------
+-- QUERY017- GIS_TB02S002_SUB_CONTINENTE
+--
+-- Qual é a soma das áreas de todos os subcontinentes?
+-- Atenção: Colocar label (rótulo) na coluna resultante.
+--          Esta é uma outra forma de solicitar a mesma informação da query anterior.
+--
+-- ----------------------------------------------------------------------------------------
+-- Atenção. Indicação do BD a ser usado. Se for o caso, mude o nome do Banco.
+-- ----------------------------------------------------------------------------------------
+--
+USE BDGIS;
+--
+-- ----------------------------------------------------------------------------------------
+-- Seleção de todos os dados para visualização do conteúdo da tabela.
+-- ----------------------------------------------------------------------------------------
+--
+Select sum(ext_km2) 'Área de todos subcontinentes'
+  From dbo.GIS_TB02S002_SUB_CONTINENTE;
+--
+-- ----------------------------------------------------------------------------------------
+-- Comentários.
+-- ----------------------------------------------------------------------------------------
+--
+-- A cláusula FROM é a única cláusula obrigatória no comando SELECT.
+--
+-- As funções de agregação são declaradas no comando SELECT  tal qual se faz com a declara-
+-- ção de uma coluna.
+--
+-- Como a coluna resultante da execução de uma função de agregagação não veio de uma coluna
+-- específica da tabela, esta coluna não tem nome. No cabeçalho desta coluna irá constar  o
+-- título sem nome (NO COLUMN NAME).
+--
+-- Esta não é uma boa forma de apresentar  uma determinada informação, sendo necessário al-
+-- terar o nome da coluna de modo que o seu conteúdo seja claro  para quem estiver lendo  o
+-- relatório.
+--
+-- Para evitar este nome de coluna, utiliza-se de um label ou rótulo de coluna.
+--
+-- ----------------------------------------------------------------------------------------
+-- Fim TB02S002 QUERY017
+-- ----------------------------------------------------------------------------------------
+--
+--

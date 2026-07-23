@@ -1,0 +1,17 @@
+-- ----------------------------------------------------------------------------------------
+-- Gabriel Issa Shammas (GIS) - 01 de janeiro de 2000 a 31 de dezembro de 2020
+-- ----------------------------------------------------------------------------------------
+-- QUERY012- GIS_TB02S001_CONTINENTE_GENTILICO
+--
+-- Selecionar todos os gentílicos de continente, explicitando as colunas no comando e colo-
+-- cando label nestas colunas, para que o usuário possa melhor entender o relatório gerado.
+-- Atenção: Selecionar apenas os gentílicos da África.
+--          Você não sabe qual é o código da África.
+--          Exibir o nome do continente ao lado do código do continente.
+--          Usar o Join Natural (Natural Join).
+--
+-- ----------------------------------------------------------------------------------------
+-- Fim TB02S001 QUERY012
+-- ----------------------------------------------------------------------------------------
+--
+--

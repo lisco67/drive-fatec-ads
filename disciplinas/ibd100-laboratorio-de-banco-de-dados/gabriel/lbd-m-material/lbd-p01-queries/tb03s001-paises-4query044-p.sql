@@ -1,0 +1,14 @@
+-- ----------------------------------------------------------------------------------------
+-- Gabriel Issa Shammas (GIS) - 01 de janeiro de 2000 a 31 de dezembro de 2020
+-- ----------------------------------------------------------------------------------------
+-- QUERY044- GIS_TB03S001_PAISES
+--
+-- Qual é a soma das áreas de todos os países?
+-- Atenção: Colocar label (rótulo) na coluna.
+-- Esta é uma outra forma de pedir a mesma informação solicitada na query anterior.
+--
+-- ----------------------------------------------------------------------------------------
+-- Fim TB03S001 QUERY044
+-- ----------------------------------------------------------------------------------------
+--
+--

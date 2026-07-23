@@ -1,0 +1,15 @@
+-- ----------------------------------------------------------------------------------------
+-- Gabriel Issa Shammas (GIS) - 01 de janeiro de 2000 a 31 de dezembro de 2014
+-- ----------------------------------------------------------------------------------------
+-- Doc- QUERY004- dbo.GIS_TB03S001_PAISES
+--
+-- Selecionar todos os países da tabela dbo.GIS_TB03S001_PAISES, explicitando as colunas no
+-- comando e colocando label nestas colunas, para que o usuário possa melhor entender o re-
+-- latório gerado.
+-- Atenção: Retirar a partícula "AS" do comando SELECT.
+--
+-- ----------------------------------------------------------------------------------------
+-- Fim TB03S001 QUERY004
+-- ----------------------------------------------------------------------------------------
+--
+--

@@ -1,0 +1,15 @@
+-- ----------------------------------------------------------------------------------------
+-- Gabriel Issa Shammas (GIS) - 01 de janeiro de 2000 a 31 de dezembro de 2020
+-- ----------------------------------------------------------------------------------------
+-- QUERY012- GIS_TB03S001_PAISES
+--
+-- Selecionar todos os países, explicitando as colunas no comando  e colocando label nestas
+-- colunas, para que o usuário possa melhor entender o relatório gerado. 
+-- Atenção: Ordenar a saída pela coluna COD_DDI, em ordem decrescente, e também pela coluna
+--          sigla2, em ordem crescente, e também pela coluna nome, em ordem crescente.
+--
+-- ----------------------------------------------------------------------------------------
+-- Fim TB03S001 QUERY012
+-- ----------------------------------------------------------------------------------------
+--
+--

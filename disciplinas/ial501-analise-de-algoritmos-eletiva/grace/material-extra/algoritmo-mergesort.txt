@@ -1,0 +1,53 @@
+void merge (int M[5o], int inicio, int fim)
+{
+int meio;
+comparações[3]++;
+if (inicio < fim)
+{
+meio = ((inicio + fim)/2);
+merge (M, inicio, meio);
+merge (M, meio+1, fim);
+intercala (M, inicio, meio, fim);
+}
+}
+void intercala (int M[50], int inicio, int fim)
+{
+int primeiro, res, segundo, k;
+int C[]50;
+primeiro = res = inicio;
+segundo = meio + 1;
+while (primeiro <= meio && segundo <= fim)
+{
+comparacoes[3]++;
+if (M[primeiro] <= M[segundo])
+{
+atribuicoes [3]++;
+C[res]= M[primeiro];
+primeiro++;
+}
+else
+{
+atribuicoes[3]++;
+C[res] = M[segundo];
+segundo++;
+}
+res++;
+}
+comparacoes[3]++;
+if (primeiro > meio)
+for (k=segundo; k<=meio; k++)
+{
+atribuicoes[3]++;
+C[res] = M[k];
+res++;
+}
+else
+for (k=primeiro; k<=meio; k++)
+{
+atribuicoes[3]++;
+C[res] = M[k];
+res++;
+}
+for (k=inicio; k<=fim; k++)
+M[k] = C[k];
+}

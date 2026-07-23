@@ -1,0 +1,114 @@
+01) Criar as tabelas e os relacionamentos do caso Comprobem com base no Anexo 1 – Detalhamento do Modelo Lógico
+
+CREATE TABLE Centro_Custo (
+    CodCC VARCHAR(10) PRIMARY KEY,
+    NomeCC VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE Secao (
+    CodSec VARCHAR(10) PRIMARY KEY,
+    NomeSec VARCHAR(50) NOT NULL,
+    CodCC VARCHAR(10),
+    FOREIGN KEY (CodCC) REFERENCES Centro_Custo(CodCC)
+);
+
+CREATE TABLE Almoxarife (
+    nAlmox INT PRIMARY KEY,
+    Almoxarife VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE Material (
+    CdMat INT PRIMARY KEY,
+    DescrMatPrima VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE Requisicao (
+    NumReq INT PRIMARY KEY,
+    DtReq DATE NOT NULL,
+    CodSec VARCHAR(10),
+    nAlmox INT,
+    FOREIGN KEY (CodSec) REFERENCES Secao(CodSec),
+    FOREIGN KEY (nAlmox) REFERENCES Almoxarife(nAlmox)
+);
+
+CREATE TABLE Req_Mat (
+    NumReq INT,
+    CdMat INT,
+    QtdReq INT NOT NULL,
+    VlrUnit DECIMAL(10, 2) NOT NULL,
+    PRIMARY KEY (NumReq, CdMat),
+    FOREIGN KEY (NumReq) REFERENCES Requisicao(NumReq),
+    FOREIGN KEY (CdMat) REFERENCES Material(CdMat)
+);
+
+02) Incluir os dados nas tabelas do caso Comprobem, com base no Anexo 2 – Tabela de Dados
+
+INSERT INTO Centro_Custo (CodCC, NomeCC)
+VALUES
+('10A', 'Sub-1'),
+('10B', 'Sub-2'),
+('10C', 'Sub-3');
+
+INSERT INTO Secao (CodSec, NomeSec, CodCC)
+VALUES
+('020', 'Manutenção', '10A'),
+('021', 'Produção', '10B'),
+('022', 'Qualidade', '10C');
+
+INSERT INTO Almoxarife (nAlmox, Almoxarife)
+VALUES
+(1001, 'João da Silva'),
+(1002, 'Maria de Souza');
+
+INSERT INTO Material (CdMat, DescrMatPrima)
+VALUES
+(100, 'Enxofre'),
+(101, 'Cloro');
+
+INSERT INTO Requisicao (NumReq, DtReq, CodSec, nAlmox)
+VALUES
+(101, '2024-12-01', '020', 1001),
+(102, '2024-12-02', '021', 1002);
+
+INSERT INTO Req_Mat (NumReq, CdMat, QtdReq, VlrUnit)
+VALUES
+(101, 100, 10, 15.00),
+(102, 101, 5, 20.00);
+
+03) Cadastrar um novo registro de Centro de Custo, Seção, Almoxarife e Material.
+
+INSERT INTO Centro_Custo (CodCC, NomeCC)
+VALUES ('11A', 'Novo Centro');
+
+INSERT INTO Secao (CodSec, NomeSec, CodCC)
+VALUES ('023', 'Logística', '11A');
+INSERT INTO Almoxarife (nAlmox, Almoxarife)
+VALUES (1003, 'Carlos Pereira');
+
+INSERT INTO Material (CdMat, DescrMatPrima)
+VALUES (102, 'Carbonato');
+
+04) Alterar o nome da seção que você criou na questão anterior para "Seção Teste 001" e o Centro de Custo para "11A".
+
+UPDATE Secao
+SET NomeSec = 'Seção Teste 001'
+WHERE CodSec = '020';
+
+UPDATE Centro_Custo
+SET NomeCC = '11A'
+WHERE CodCC = '10A';
+
+05) Escrever o comando para excluir o centro de custo "10C".
+
+DELETE FROM Centro_Custo
+WHERE CodCC = '10C';
+
+06) Adicionar o campo valor unitário na tabela de material com as mesmas características do campo valor unitário da tabela Req_Mat.
+
+ALTER TABLE Material
+ADD VlrUnit DECIMAL(10, 2);
+
+07) Excluir o campo valor unitário da tabela de material.
+
+ALTER TABLE Material
+DROP COLUMN VlrUnit;

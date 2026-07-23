@@ -1,0 +1,17 @@
+-- ----------------------------------------------------------------------------------------
+-- Gabriel Issa Shammas (GIS) - 01 de janeiro de 2000 a 31 de dezembro de 2020
+-- ----------------------------------------------------------------------------------------
+-- QUERY033- GIS_TB01S005_CONTINENTE
+--
+-- Qual é o total de continentes?
+-- Qual é a área total de todos os continentes?
+-- Qual é a área média dos continentes?
+-- Qual é a área do menor dos continentes?
+-- Qual é a área do maior dos continentes?
+-- Atenção: imprimir os valores juntos.
+--
+-- ----------------------------------------------------------------------------------------
+-- Fim TB01S005 QUERY033
+-- ----------------------------------------------------------------------------------------
+--
+--

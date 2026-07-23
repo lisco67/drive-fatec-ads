@@ -1,0 +1,55 @@
+-- ----------------------------------------------------------------------------------------
+-- Gabriel Issa Shammas (GIS) - 01 de janeiro de 2000 a 31 de dezembro de 2020
+-- ----------------------------------------------------------------------------------------
+-- INS00003- GIS_TB01S005_CONTINENTE
+--
+-- Não efetue a eliminação de nenhum registro desta tabela.
+-- Realizar a inserção que se encontra abaixo na tabela dbo.GIS_TB01S005_CONTINENTE.
+--     (8, 'Fantasia', 'FAN', NULL, NULL, NULL);
+-- Estamos colocando o valor nulo (NULL)  na data atual de criação dos registros,  que é  o
+-- sexto valor a ser inserido.
+-- Após a inserção, exibir os dados da tabela.
+--
+-- Explique o resultado.
+--
+-- ----------------------------------------------------------------------------------------
+-- Atenção. Indicação do BD a ser usado. Se for o caso, mude o nome do Banco.
+-- ----------------------------------------------------------------------------------------
+--
+USE BDGIS;
+--
+-- ----------------------------------------------------------------------------------------
+-- Inserção dos dados
+-- ----------------------------------------------------------------------------------------
+--
+Insert into dbo.GIS_TB01S005_CONTINENTE values
+ (8, 'Fantasia', 'FAN', NULL, NULL, NULL);
+--
+-- ----------------------------------------------------------------------------------------
+-- Seleção de todos os dados para visualização do conteúdo da tabela.
+-- ----------------------------------------------------------------------------------------
+--
+Select *
+  From dbo.GIS_TB01S005_CONTINENTE;
+--
+-- ----------------------------------------------------------------------------------------
+-- Comentários
+-- ----------------------------------------------------------------------------------------
+--
+-- Desta vez não ocorreu nenhum erro  na execução do script  porque o  comando Insert  está
+-- gravando 6 (seis) valores, que correspondem às 6 (seis) colunas da tabela.
+--
+-- No entanto, a coluna DATA_ATUAL  (que é o sexto valor)  deveria conter a  data atual  do
+-- sistema em que cada tupla (ou registro ou linha) foi inserida na tabela.
+--
+-- A coluna DATA_ATUAL não deve ficar com o valor nulo pois isso não condiz com a finalida-
+-- de da coluna, que é mostrar a data e hora da inserção do registro.
+--
+-- Assim, apesar de não ter ocorrido erro na execução deste script,  o seu resultado  não é
+-- aquele que queremos.
+--
+-- ----------------------------------------------------------------------------------------
+-- Fim TB01S005 INS00003
+-- ----------------------------------------------------------------------------------------
+--
+--

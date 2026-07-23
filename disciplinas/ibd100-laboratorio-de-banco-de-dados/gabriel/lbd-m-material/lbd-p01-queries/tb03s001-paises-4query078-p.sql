@@ -1,0 +1,21 @@
+-- ----------------------------------------------------------------------------------------
+-- Gabriel Issa Shammas (GIS) - 01 de janeiro de 2000 a 31 de dezembro de 2020
+-- ----------------------------------------------------------------------------------------
+-- QUERY078- GIS_TB03S001_PAISES
+--
+-- Selecionar todos os países da tabela dbo.GIS_TB03S001_PAISES, rotulando as colunas.
+-- Colocar o nome de cada continente ao lado do respectivo código de continente.
+-- Selecionar apenas os países do continente Ásia.
+-- Ordenar a saída pela coluna NOME do país, em ordem crescente.
+-- Atenção: Usar o Subselect.
+-- Atenção: Notar que  não é possível imprimir o  nome do continente  a partir da tabela de
+--          continentes, pois a seleção externa ocorre somente na tabela de país.
+--          Mas,  como se trata de apenas  um continente,  é possível imprimir o nome desse
+--          continente para as linhas exibidas, considerando este nome como uma constante.
+--          É conveniente colocar um label de coluna (rótulo) para essa coluna.
+--
+-- ----------------------------------------------------------------------------------------
+-- Fim TB03S001 QUERY078
+-- ----------------------------------------------------------------------------------------
+--
+--

@@ -1,0 +1,17 @@
+-- ----------------------------------------------------------------------------------------
+-- Gabriel Issa Shammas (GIS) - 01 de janeiro de 2000 a 31 de dezembro de 2020
+-- ----------------------------------------------------------------------------------------
+-- QUERY069- GIS_TB03S001_PAISES
+--
+-- Selecionar todos os países da tabela dbo.GIS_TB03S001_PAISES, explicitando as colunas no
+-- comando e colocando label nestas colunas, para que o usuário possa melhor entender o re-
+-- latório gerado.
+-- Atenção: Colocar o nome do continente ao lado do código do continente.
+-- Atenção: Colocar o nome do subcontinente ao lado do código do subcontinente.
+-- Atenção: Usar Inner Join.
+--
+-- ----------------------------------------------------------------------------------------
+-- Fim TB03S001 QUERY069
+-- ----------------------------------------------------------------------------------------
+--
+--

@@ -1,0 +1,14 @@
+-- ----------------------------------------------------------------------------------------
+-- Gabriel Issa Shammas (GIS) - 01 de janeiro de 2000 a 31 de dezembro de 2020
+-- ----------------------------------------------------------------------------------------
+-- QUERY028- GIS_TB01S005_CONTINENTE
+--
+-- Mostrar o valor inteiro de várias linhas e calcule uma soma de verificação agregada para
+-- cada grupo.
+-- Atenção: Colocar label (rótulo) na coluna resultante.
+--
+-- ----------------------------------------------------------------------------------------
+-- Fim TB01S005 QUERY028
+-- ----------------------------------------------------------------------------------------
+--
+--

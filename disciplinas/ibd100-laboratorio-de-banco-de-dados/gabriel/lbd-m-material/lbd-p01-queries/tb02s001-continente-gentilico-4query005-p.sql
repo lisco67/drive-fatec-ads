@@ -1,0 +1,15 @@
+-- ----------------------------------------------------------------------------------------
+-- Gabriel Issa Shammas (GIS) - 01 de janeiro de 2000 a 31 de dezembro de 2020
+-- ----------------------------------------------------------------------------------------
+-- QUERY005- GIS_TB02S001_CONTINENTE_GENTILICO
+--
+-- Selecionar todos os gentílicos de continente, explicitando as colunas no comando e colo-
+-- cando label nestas colunas, para que o usuário possa melhor entender o relatório gerado.
+-- Atenção: Ordenar a saída pela coluna COD_CONTINENTE, em ordem crescente,  e  pela coluna
+-- SEXO, em ordem crescente.
+--
+-- ----------------------------------------------------------------------------------------
+-- Fim TB02S001 QUERY005
+-- ----------------------------------------------------------------------------------------
+--
+--

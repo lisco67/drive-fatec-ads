@@ -1,0 +1,39 @@
+-- ----------------------------------------------------------------------------------------
+-- Gabriel Issa Shammas (GIS) - 01 de janeiro de 2000 a 31 de dezembro de 2020
+-- ----------------------------------------------------------------------------------------
+-- P03- Locadora de Veículos
+--
+-- GIS RENT-A-CAR é uma locadora de veículos internacional, com filiais em diversos países,
+-- tendo várias filiais em diversos estados do Brasil.
+-- Na GIS RENT-A-CAR, veículos são alugados por clientes, com o acompanhamento de um fun-
+-- cionário.
+-- A locadora mantém o cadastro de clientes, funcionários, veículos e oficinas atualizados.
+-- Os funcionários possuem dependentes, que são registrados, pois possuem benefícios com a
+-- empresa.
+-- o aluguel do veículo é diário, podendo ou não haver cobrança adicional por cada quilô-
+-- metro rodado.
+-- Na data da retirada do veículo, é informada a data prevista de devolução do mesmo.
+-- Cada veículo da frota da locadora possui uma categoria, que determina o valor de alu-
+-- guel conforme o tipo do mesmo.
+-- Cada categoria de veículos pode englobar veículos de marcas e modelos diferentes.
+-- A frota de veículos é composta por veículos de diversas categorias, marcas, modelos,
+-- cores, e anos de fabricação.
+-- O cliente que aluga o veículo deve possuir CNH válida.
+-- O cliente pode registrar um outro condutor para o mesmo veículo, desde que o mesmo tenha
+-- CNH válida.
+-- Cada cliente pode alugar somente um veículo.
+-- Cada veículo da frota possui um histórico de manutenção, que é realizada periodicamente,
+-- e em função de necessidades específicas, em oficinas cadastradas junto à Locadora. Estas
+-- oficinas contam com funcionários habilitados e especializados, devidamente cadastrados.
+-- A retirada e a devolução do veículo alugado podem ocorrer em locais distintos.
+-- Antes da retirada do veículo, é feita uma verificação do estado do veículo.
+-- Na devolução do veículo, é feita uma nova verificação do estado do veículo, para verifi-
+-- car se houve algum dano ou prejuízo para o veículo.
+-- Data de entrega: 12 de maio de 2020 (Tarde)
+-- Data de entrega: 15 de maio de 2020 (Manhã)
+--
+-- ----------------------------------------------------------------------------------------
+-- Fim P03- Locadora de Veículos
+-- ----------------------------------------------------------------------------------------
+--
+--

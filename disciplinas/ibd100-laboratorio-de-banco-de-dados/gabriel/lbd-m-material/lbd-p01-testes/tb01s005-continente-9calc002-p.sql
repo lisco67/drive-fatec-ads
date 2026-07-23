@@ -1,0 +1,14 @@
+-- ----------------------------------------------------------------------------------------
+-- Gabriel Issa Shammas (GIS) - 01 de janeiro de 2000 a 31 de dezembro de 2020
+-- ----------------------------------------------------------------------------------------
+-- CALC0002- GIS_TB01S005_CONTINENTE
+--
+-- Sabendo que ao criar esta tabela com uma chave primária (PK ou Primary Key), o SGBD cria
+-- automaticamente um índice primário (IP) para esta tabela, calcular o tamanho da tupla do
+-- Índice Primário (IP) desta tabela, em bytes.
+--
+-- ----------------------------------------------------------------------------------------
+-- Fim TB01S005 CALC0002
+-- ----------------------------------------------------------------------------------------
+--
+--

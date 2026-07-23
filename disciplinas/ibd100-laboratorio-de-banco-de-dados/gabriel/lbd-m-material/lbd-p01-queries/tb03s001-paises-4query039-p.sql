@@ -1,0 +1,21 @@
+-- ----------------------------------------------------------------------------------------
+-- Gabriel Issa Shammas (GIS) - 01 de janeiro de 2000 a 31 de dezembro de 2020
+-- ----------------------------------------------------------------------------------------
+-- QUERY039- GIS_TB03S001_PAISES
+--
+-- Quais são os países cuja coluna observação (obs) encontra-se com valor nulo?
+-- Atenção: Exibir os dados, colocando na primeira coluna a  Data e Hora Internacional,  ou
+-- seja, a data e hora conforme o Meridiano de Greenwich ou ainda, a data e hora de Londres
+-- ou UTC (Universal Time Coordinate).
+-- Atenção: Na segunda coluna colocar a Data e a Hora correntes  ou Data e Hora local  ou a
+-- Data e Hora de Brasília.
+-- Atenção: Colocar uma coluna de separação (-) entre a Data e Hora Internacional  e a Data
+-- e a Data e Hora Local.
+-- Atenção: Colocar uma coluna de separação (-)  entre a Data e Hora Local  e os demais da-
+-- dos.
+--
+-- ----------------------------------------------------------------------------------------
+-- Fim TB03S001 QUERY039
+-- ----------------------------------------------------------------------------------------
+--
+--

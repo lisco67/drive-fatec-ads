@@ -1,0 +1,15 @@
+-- ----------------------------------------------------------------------------------------
+-- Gabriel Issa Shammas (GIS) - 01 de janeiro de 2000 a 31 de dezembro de 2020
+-- ----------------------------------------------------------------------------------------
+-- QUERY081- GIS_TB03S001_PAISES
+--
+-- Qual é o nome do(s) continente(s) que possui(em) países com área maior do que a média da
+-- extensão dos países?
+-- Atenção: Usar subselect.
+-- Atenção: Usar o predicado de lista no comando Select.
+--
+-- ----------------------------------------------------------------------------------------
+-- Fim TB03S001 QUERY081
+-- ----------------------------------------------------------------------------------------
+--
+--

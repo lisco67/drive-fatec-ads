@@ -1,0 +1,79 @@
+-- ----------------------------------------------------------------------------------------
+-- Gabriel Issa Shammas (GIS) - 01 de janeiro de 2000 a 31 de dezembro de 2020
+-- ----------------------------------------------------------------------------------------
+-- QUERY077- GIS_TB03S001_PAISES
+--
+-- Quais são os países com área maior do que a área média dos países da América?
+-- Atenção: Colocar o nome do continente ao lado do código do continente.
+-- Atenção: Colocar o nome do subcontinente ao lado do código do subcontinente.
+-- Atenção: Usar Inner Join.
+-- Atenção: Usar o predicado de lista no subselect de primeiro nível.
+-- Atenção: Usar o predicado de lista no subselect de segundo nível.
+-- Atenção: Esta query é igual a anterior, apenas utilizando um predicado diferente.
+--
+-- ----------------------------------------------------------------------------------------
+-- Atenção. Indicação do BD a ser usado. Se for o caso, mude o nome do Banco.
+-- ----------------------------------------------------------------------------------------
+--
+USE BDGIS;
+--
+-- ----------------------------------------------------------------------------------------
+-- Seleção de todos os dados para visualização do conteúdo da tabela.
+-- ----------------------------------------------------------------------------------------
+--
+Select P1.codigo              'Código do país',
+       P1.nome                'Nome do país',
+       P1.descrição           'Descrição do país',
+       P1.sigla2              'Sigla 2 do país',
+       P1.sigla3              'Sigla 3 do país',
+       P1.sigla3a             'Sigla 3a do país',
+       P1.cod_ddi             'Cód. DDI do país',
+       P1.cod_continente      'Cód. do Continente',
+       C1.nome                'Nome do Continente',
+       P1.cod_subcontinente   'Cód. do Subcontinente',
+       S1.nome                'Nome do Subcontinente',
+       P1.ext_km2             'Área (Km quadr.)',
+       P1.obs                 'Comentário'
+  From dbo.GIS_TB03S001_PAISES P1
+       Inner Join
+       dbo.GIS_TB01S005_CONTINENTE  C1
+       on P1.cod_continente = C1.codigo
+        Inner Join
+        dbo.GIS_TB02S002_SUB_CONTINENTE  S1
+        on P1.cod_subcontinente = S1.codigo
+  Where P1.ext_km2 >
+    (Select avg(ext_km2) 'Área média dos países da América'   -- Subselect Nível 1
+       From dbo.GIS_TB03S001_PAISES
+       Where cod_continente in                             -- Predicado de lista
+         (Select codigo                                         -- Subselect Nível 2
+            From dbo.GIS_TB01S005_CONTINENTE
+            Where nome in ('América')));                  -- Predicado de lista
+--
+-- ----------------------------------------------------------------------------------------
+-- Comentários.
+-- ----------------------------------------------------------------------------------------
+--
+-- Cada Inner Join  (ou seja, cada junção entre duas tabelas)  necessita de um predicado de
+-- join.
+--
+-- O predicado de join nada mais é do que a igualdade entre a chave estrangeira (FK) de uma
+-- tabela com a chave primária (PK) de outra tabela.
+--
+-- O predicado de join consta da cláusula FROM, precedido da partícula ON.
+--
+-- Quando há mais de um join (ou seja, mais de uma junção de tabelas), haverá um INNER JOIN
+-- para cada join.
+--
+-- A ausência do predicado de join resulta em um erro de execução da query.
+--
+-- O SUBSELECT é um comando SELECT dentro de outro comando SELECT.
+--
+-- A execução do SUBSELECT se dá do final para o começo.
+--
+-- A execução do Subselect pode ser feita juntamente com a execução do Join.
+--
+-- ----------------------------------------------------------------------------------------
+-- Fim TB03S001 QUERY077
+-- ----------------------------------------------------------------------------------------
+--
+--

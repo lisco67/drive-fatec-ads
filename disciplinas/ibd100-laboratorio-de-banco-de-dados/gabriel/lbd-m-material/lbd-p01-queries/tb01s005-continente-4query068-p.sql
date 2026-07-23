@@ -1,0 +1,17 @@
+-- ----------------------------------------------------------------------------------------
+-- Gabriel Issa Shammas (GIS) - 01 de janeiro de 2000 a 31 de dezembro de 2020
+-- ----------------------------------------------------------------------------------------
+-- QUERY068- GIS_TB01S005_CONTINENTE
+--
+-- A partir da primeira coluna, exibir a parte correspondente  ao ano da data internacional
+-- e, em seguida, exibir a parte correspondente ao mês e à parte correspondente ao dia.
+-- Em seguida, exibir o dia corrido da data, a semana da data, o dia da semana  e o quartil
+-- da data.
+-- Exibir também a hora da data, o minuto, o segundo, o milisegundo, o microsegundo e o na-
+-- nosegundo da data.
+--
+-- ----------------------------------------------------------------------------------------
+-- Fim TB01S005 QUERY068
+-- ----------------------------------------------------------------------------------------
+--
+--

@@ -1,0 +1,17 @@
+Estudo de Caso para Banco de Dados
+
+DISTRIBUIDORA DE FILMES PARAMONTE
+
+A distribuidora de filmes Paramonte é proprietária de vários cinemas, em diversas cidades. Cada cinema possui uma ou várias salas de exibição.
+Um filme pode estar em cartaz em mais de um cinema ao mesmo tempo, isto é, um filme pode estar sendo exibido em vários cinemas e, é claro, em várias cidades ao mesmo tempo. 
+Cada cinema possui um nome fantasia, endereço, telefone, CNPJ e razão social. As salas possuem o nome de algum artista famoso e é importante saber a capacidade de lotação.
+Cada filme é registrado com um título, duração, censura, ano e um conjunto de atores que formam seu elenco, bem como, seu diretor. Existe um único diretor para cada filme.
+Os atores de um filme podem atuar em diversos filmes, assim como o diretor pode também ser ator no mesmo filme que dirige, ou ainda, ser ator em outro filme.
+Tanto o ator como o diretor possuem um código, nome, nacionalidade e idade.
+
+Com base no texto acima, pede-se:
+
+•	Desenvolver os Modelos Entidade-Relacionamento conceitual e lógico. 
+•	Indicar os principais atributos das entidades e dos relacionamentos, quando houver, destacando os atributos identificadores e elos. 
+•	Apresentar as cardinalidades mínima e máxima de cada relacionamento.
+

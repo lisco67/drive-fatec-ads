@@ -1,0 +1,75 @@
+-- ----------------------------------------------------------------------------------------
+-- Gabriel Issa Shammas (GIS) - 01 de janeiro de 2000 a 31 de dezembro de 2020
+-- ----------------------------------------------------------------------------------------
+-- QUERY027- GIS_TB01S005_CONTINENTE
+--
+-- Mostrar o valor da soma de verificação calculado sobre uma linha de uma tabela  ou sobre
+-- uma lista de expressões.
+-- Atenção: Colocar label (rótulo) na coluna resultante.
+--
+-- ----------------------------------------------------------------------------------------
+-- Atenção. Indicação do BD a ser usado. Se for o caso, mude o nome do Banco.
+-- ----------------------------------------------------------------------------------------
+--
+USE BDGIS;
+--
+-- ----------------------------------------------------------------------------------------
+-- Seleção de todos os dados para visualização do conteúdo da tabela.
+-- ----------------------------------------------------------------------------------------
+--
+Select checksum(*) 'Checksum'
+  From dbo.GIS_TB01S005_CONTINENTE;
+--
+-- ----------------------------------------------------------------------------------------
+-- Comentários.
+-- ----------------------------------------------------------------------------------------
+--
+-- A cláusula FROM é a única cláusula obrigatória no comando SELECT.
+--
+-- As Funções de Agregação são declaradas no comando SELECT  tal qual se faz com a declara-
+-- ção de uma coluna.
+--
+-- Uma função de agregação, ao ser exibida, terá como nome de coluna  "COLUMN NO NAME",  ou
+-- seja, "Coluna Sem Nome", porque sua origem não é da própria tabela.
+--
+-- Para evitar este nome de coluna, utiliza-se de um label ou rótulo de coluna.
+--
+-- Esta função retorna o valor da soma de verificação calculado sobre uma linha  de uma ta-
+-- bela ou sobre uma lista de expressões.
+-- CHECKSUM destina-se ao uso na construção de índices de hash.
+--
+-- A função CHECKSUM retorna o valor de soma de verificação computado em uma linha da tabe-
+-- la, ou em uma lista de expressões. Use CHECKSUM para criar índices de hash.
+--
+-- CHECKSUM calcula um valor de hash, chamado de soma de verificação, em sua lista de argu-
+-- mentos.
+-- Use esse valor de hash para criar índices de hash.
+-- Um índice de hash ocorrerá se a função CHECKSUM  tiver argumentos de coluna  e um índice
+-- for criado com base no valor de CHECKSUM calculado.
+-- Isso pode ser usado para pesquisas de igualdade em colunas.
+-- A função CHECKSUM  atende às  propriedades da função de hash:  CHECKSUM aplicado  a duas
+-- listas de expressões retornarão  o mesmo valor se os elementos  correspondentes das duas
+-- listas tiverem o mesmo tipo de dados e se esses elementos correspondentes tiverem igual-
+-- dade quando comparados com o operador de igualdade (=).
+-- Valores nulos de um  tipo especificado são definidos  para serem comparados  como iguais
+-- para fins da função CHECKSUM.
+-- Se pelo menos um dos valores na  lista de expressões for lterado,  a soma de verificação
+-- de lista provavelmente será alterada.
+-- No entanto, isso não é garantido. Portanto, para detectar se os valores foram alterados,
+-- recomendamos o uso de CHECKSUM  somente se o aplicativo  puder tolerar uma alteração au-
+-- sente ocasional. Caso contrário, considere a possibilidade de usar o HashBytes.
+-- Com um algoritmo de hash MD5 especificado, a probabilidade de que HashBytes retornará  o
+-- mesmo resultado para duas entradas diferentes é muito menor em comparação com CHECKSUM.
+-- A ordem de expressão afeta o valor CHECKSUM computado.
+-- A ordem das colunas usada para CHECKSUM(*) é a mesma especificada na definição de tabela
+-- ou exibição.
+-- Isso inclui as colunas computadas.
+-- O valor de CHECKSUM depende do agrupamento.
+-- O mesmo  valor armazenado com um  agrupamento diferente  retornará  um valor de CHECKSUM
+-- diferente.
+--
+-- ----------------------------------------------------------------------------------------
+-- Fim TB01S005 QUERY027
+-- ----------------------------------------------------------------------------------------
+--
+--

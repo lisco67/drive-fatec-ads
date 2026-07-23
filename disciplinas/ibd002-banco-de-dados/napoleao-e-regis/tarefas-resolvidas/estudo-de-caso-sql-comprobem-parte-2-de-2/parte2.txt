@@ -1,0 +1,116 @@
+01) Mostre quantas requisições foram solicitadas pela seção Produção-1; exibir o nome da seção e a quantidade de requisições.
+
+SELECT NomeSec, COUNT(*) AS Quantidade_Requisicoes
+FROM Requisicao R
+JOIN Secao S ON R.CodSec = S.CodSec
+WHERE NomeSec = 'Produção-1'
+GROUP BY NomeSec;
+
+02) Mostre o valor total solicitado por cada seção. Exibir o código e nome da seção e a soma dos valores das requisições.
+
+SELECT NomeSec, SUM(QtdReq * VlrUnit) AS Valor_Total
+FROM Req_Mat RM
+JOIN Requisicao R ON RM.NumReq = R.NumReq
+JOIN Secao S ON R.CodSec = S.CodSec
+GROUP BY NomeSec;
+
+03) Mostre quanto foi gasto pela Seção de Manutenção. Exibir o nome da seção e o total gasto.
+
+SELECT NomeSec, SUM(QtdReq * VlrUnit) AS Total_Gasto
+FROM Req_Mat RM
+JOIN Requisicao R ON RM.NumReq = R.NumReq
+JOIN Secao S ON R.CodSec = S.CodSec
+WHERE NomeSec = 'Manutenção'
+GROUP BY NomeSec;
+
+04) Mostre o valor médio atendido pelos almoxarifes que não têm "Antônio" nem "João" em seu nome.
+
+SELECT Almoxarife
+FROM Almoxarife
+WHERE Almoxarife NOT LIKE '%Antônio%' AND Almoxarife NOT LIKE '%João%';
+
+05) Mostre os almoxarifes responsáveis pelas requisições 102, 103, 105 e 111.
+
+SELECT DISTINCT A.Almoxarife
+FROM Requisicao R
+JOIN Almoxarife A ON R.nAlmox = A.nAlmox
+WHERE R.NumReq IN (102, 103, 105, 111);
+
+06) Mostre as matérias-primas que não foram solicitadas pelo centro de custo '10A'.
+
+SELECT DISTINCT M.DescrMatPrima
+FROM Material M
+WHERE M.CdMat NOT IN (
+    SELECT RM.CdMat
+    FROM Req_Mat RM
+    JOIN Requisicao R ON RM.NumReq = R.NumReq
+    JOIN Secao S ON R.CodSec = S.CodSec
+    WHERE S.CodCC = '10A'
+);
+
+07) Mostre a matéria-prima que tem o maior valor unitário.
+
+SELECT Descricao_Materia_Prima, Valor_Unitario
+FROM Materia_Prima
+WHERE Valor_Unitario = (SELECT MAX(Valor_Unitario) FROM Materia_Prima);
+
+08) Mostre a quantidade média de requisições atendidas por almoxarife.
+
+SELECT Almoxarife, AVG(Quantidade_Requisitada) AS Media_Requisicoes
+FROM Requisicoes
+GROUP BY Almoxarife;
+
+09) Mostre um ranking das 3 requisições com maior quantidade solicitada. Exibir o número da requisição e a quantidade requisitada.
+
+SELECT Numero_Requisicao, Quantidade_Requisitada
+FROM Requisicoes
+ORDER BY Quantidade_Requisitada DESC
+LIMIT 3;
+
+10) Mostre a primeira e a última requisição da matéria-prima Enxofre. Exibir a descrição da matéria-prima e a data da requisição.
+
+SELECT Descricao_Materia_Prima, MIN(Data_Requisicao) AS Primeira_Requisicao, MAX(Data_Requisicao) AS Ultima_Requisicao
+FROM Requisicoes
+JOIN Materia_Prima ON Requisicoes.ID_Materia_Prima = Materia_Prima.ID
+WHERE Descricao_Materia_Prima = 'Enxofre';
+
+11) Mostre quais foram as movimentações realizadas pela matéria-prima enxofre. Exibir a descrição da matéria-prima, a data de movimentação, o número da requisição e a quantidade movimentada.
+
+SELECT Materia_Prima.Descricao_Materia_Prima, Movimentacoes.Data_Movimentacao, Requisicoes.Numero_Requisicao, Movimentacoes.Quantidade
+FROM Movimentacoes
+JOIN Materia_Prima ON Movimentacoes.ID_Materia_Prima = Materia_Prima.ID
+JOIN Requisicoes ON Movimentacoes.ID_Requisicao = Requisicoes.ID
+WHERE Materia_Prima.Descricao_Materia_Prima = 'Enxofre';
+
+12) Mostre todas as matérias-primas movimentadas entre os dias 01/06/2002 e 02/06/2002. Mostre a descrição da matéria prima e a data da requisição.
+
+SELECT Materia_Prima.Descricao_Materia_Prima, Movimentacoes.Data_Movimentacao
+FROM Movimentacoes
+JOIN Materia_Prima ON Movimentacoes.ID_Materia_Prima = Materia_Prima.ID
+WHERE Movimentacoes.Data_Movimentacao BETWEEN '2002-06-01' AND '2002-06-02';
+
+13) Mostre todas as requisições de material solicitadas pela seção 020 do Centro de Custo 10A; mostrar o código da seção, o número das requisições, a descrição das matérias-primas e a quantidade movimentada.
+
+SELECT Secao.Codigo_Secao, Requisicoes.Numero_Requisicao, Materia_Prima.Descricao_Materia_Prima, Movimentacoes.Quantidade
+FROM Requisicoes
+JOIN Movimentacoes ON Requisicoes.ID = Movimentacoes.ID_Requisicao
+JOIN Materia_Prima ON Movimentacoes.ID_Materia_Prima = Materia_Prima.ID
+JOIN Secao ON Requisicoes.ID_Secao = Secao.ID
+JOIN Centro_Custo ON Secao.ID_Centro_Custo = Centro_Custo.ID
+WHERE Secao.Codigo_Secao = '020' AND Centro_Custo.Codigo = '10A';
+
+14) Mostre quais Centros de Custos foram atendidos pelos almoxarifes João da Silva e João Antônio; Mostre os nomes dos Almoxarifes e os códigos e os nomes do Centros de Custos.
+
+SELECT Almoxarife.Nome, Centro_Custo.Codigo, Centro_Custo.Nome
+FROM Movimentacoes
+JOIN Almoxarife ON Movimentacoes.ID_Almoxarife = Almoxarife.ID
+JOIN Requisicoes ON Movimentacoes.ID_Requisicao = Requisicoes.ID
+JOIN Secao ON Requisicoes.ID_Secao = Secao.ID
+JOIN Centro_Custo ON Secao.ID_Centro_Custo = Centro_Custo.ID
+WHERE Almoxarife.Nome IN ('João da Silva', 'João Antônio');
+
+15) Escreva o comando SQL que exiba a tabela do ComproBem, exatamente como está impresso no estudo de caso, porém ordenada pela data de requisição em ordem decrescente.
+
+SELECT *
+FROM ComproBem
+ORDER BY Data_Requisicao DESC;

@@ -1,0 +1,50 @@
+-- ----------------------------------------------------------------------------------------
+-- Gabriel Issa Shammas (GIS) - 01 de janeiro de 2000 a 31 de dezembro de 2020
+-- ----------------------------------------------------------------------------------------
+-- QUERY064- GIS_TB01S005_CONTINENTE
+--
+-- Atenção: Exibir os dados, colocando na primeira coluna a data e a hora correntes (ou se-
+--          ja, a data e hora locais ou de Brasília).
+--          Colocar uma coluna de separação entre a data corrente e os demais dados, de mo-
+--          do que o nome desta coluna fique em branco.
+--          Em seguida, efetuar a diferença desta data  para a data 28 de novembro de 2017,
+--          em ordem inversa.
+--          Mostrar o resultado da diferença em anos.
+--
+-- ----------------------------------------------------------------------------------------
+-- Atenção. Indicação do BD a ser usado. Se for o caso, mude o nome do Banco.
+-- ----------------------------------------------------------------------------------------
+--
+USE BDGIS;
+--
+-- ----------------------------------------------------------------------------------------
+-- Seleção de todos os dados para visualização do conteúdo da tabela.
+-- ----------------------------------------------------------------------------------------
+--
+Select Getdate()    'Hora de Brasília',
+       '   '        ' ',
+       DateDiff (Year, '2017-11-28', Getdate()) AS 'Diferença de data';
+--
+-- ----------------------------------------------------------------------------------------
+-- Comentários.
+-- ----------------------------------------------------------------------------------------
+--
+-- A função DateDiff retorna um valor que corresponde à contagem dos limites  das datas es-
+-- pecificadas entre a data inicial e a data final.
+--
+-- O valor inicial é subtraído do valor final da data.
+--
+-- O resultado é dado em anos, porque foi especificado YEAR como primeiro parâmetro da fun-
+-- ção.
+--
+-- Reparar que não é necessário selecionar nenhum dado de nenhuma tabela para exibir a data
+-- e hora correntes e nem para fazer os cálculos.
+--
+-- A função GETDATE() recolhe a data e hora correntes (ou seja, a data e hora locais ou da-
+-- ta e hora de Brasília).
+--
+-- ----------------------------------------------------------------------------------------
+-- Fim TB01S005 QUERY064
+-- ----------------------------------------------------------------------------------------
+--
+--

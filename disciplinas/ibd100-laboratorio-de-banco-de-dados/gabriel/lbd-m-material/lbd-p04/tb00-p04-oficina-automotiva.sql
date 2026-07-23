@@ -1,0 +1,67 @@
+-- ----------------------------------------------------------------------------------------
+-- Gabriel Issa Shammas (GIS) - 01 de janeiro de 2000 a 31 de dezembro de 2020
+-- ----------------------------------------------------------------------------------------
+-- P04- OFICINA AUTOMOTIVA
+--
+-- GIS OFFIC-CAR é uma oficina automotiva  com padrão e atuação internacional,  com filiais
+-- em diversos países e em vários estados do Brasil, formando uma Oficina Autorizada da Re-
+-- de LatinoAmericana de Serviços e Apoio a Automóveis e Utilitários.
+-- A Rede LatinoAmericana de Serviços e Apoio a Automóveis e Utilitários exige que a ofici-
+-- na forneça uma listagem com os funcionários que trabalharam nos últimos 2 anos na ofici-
+-- na. Para cada funcionário é exigido: nome completo, data de ingresso na oficina, endere-
+-- ço completo, data de saída (se tiver ocorrido), idade, sexo, cargo na oficina e  grau de
+-- escolaridade.
+-- Também é feito um controle de todos os dados relativos aos dependentes de cada funcioná-
+-- rio, incluindo o grau de escolaridade.
+-- Além disso, para cada funcionário será exigida uma lista de cursos complementares que e-
+-- ventualmente tenha feito informando, para cada curso: data de conclusão,   título conce-
+-- dido,  instituição onde fez o curso  (com nome,  endereço e dados cadastrais completos),
+-- carga horária e tipo de reparo habilitado.
+-- A oficina deve analisar previamente o calendário e o preço dos cursos nas diversas  ins-
+-- tituições para agendar os cursos necessários para os funcionários.
+-- A oficina deverá fornecer também um lista de todos os veículos que passaram por  reparos
+-- nos últimos 2 anos. Devem ser informados os dados dos veículos  (sua marca, modelo, pla-
+-- ca, chassis, ano de fabricação, cor, nome do proprietário, endereço completo do proprie-
+-- tário, telefones e e-mail do proprietário), o tipo de reparo executado (por exemplo, fu-
+-- nilaria, pintura, mecânica, etc.), a data de início e data de término do reparo.
+-- Para cada reparo efetuado em um veículo deverá ser fornecida  uma lista de todos os fun-
+-- cionários da oficina que trabalharam no reparo, informando a data de início e de término
+-- de ação de cada funcionário, o salário dele e o valor hora/homem.
+-- Cada veículo pode passar por mais de um reparo.
+-- A oficina credenciada deve oferecer, pelo menos, dez tipos de reparos diferentes.
+-- A oficina deve, ainda,  manter uma relação atualizada  dos seus fornecedores  e das res-
+-- pectivas peças, de modo a garantir a qualidade dos serviços prestados. Graças a isso,  é
+-- possível efetuar um acompanhamento de todas as peças trocadas na oficina,  o que permite
+- uma garantia mínima de 90 (noventa) dias para a maioria dos serviços prestados.
+-- A oficina também poderá atender companhias de seguros de automóveis.
+-- A oficina  pode oferecer um desconto de 5% (cinco por cento)  nos serviços realizados em
+-- veículos com seguro, desde que não seja para a própria Seguradora.
+-- A oficina deve manter um cadastro atualizado das Companhias de Seguro  com que trabalha,
+-- indicando a data de validade do convênio.
+-- Também é permitido à oficina  uma política diferenciada  de remuneração de seus  funcio-
+-- nários, de modo que eles possam receber, além do salário, o equivalente a até 5%  (cinco
+-- por cento)  do valor dos serviços realizados por eles,  valor esse repassado  ao cliente
+-- com a alínea "mão-de-obra".
+-- Antes de realizar todo e qualquer serviço,  é preparado um orçamento  para que o cliente
+-- tenha conhecimento dos serviços necessários e dos valores envolvidos e,  somente  após o
+-- aceite do orçamento, é que os serviços são iniciados.
+-- Orçamentos rejeitados não são guardados.
+-- Como política de qualidade, é exigido que, caso os serviços não sejam completados na da-
+-- ta prevista ou caso o cliente reclame de alguma falha, a oficina ofereça um desconto  de
+-- até 5% (cinco por cento) sobre a fatura, valor este descontado da comissão que seria re-
+-- passado(s) ao funcionário(s).
+-- ----------------------------------------------------------------------------------------
+-- Ainda dentro da política de qualidade,  o cadastro de clientes  deve ser o mais completo
+-- possível, indicando inclusive a relação de dependentes,  o mesmo valendo para o cadastro
+-- do veículo, que deve registrar o uso do mesmo (se é apenas para passeio, para trabalho e
+-- passeio, etc.), o perfil da garagem (ao relento, garagem fechada, garagem aberta, etc.),
+-- a existência ou não de alarme  (preferencialmente com marca)  e outras informações rele-
+-- vantes para estabelecer o melhor perfil possível tanto do cliente como do veículo.
+--
+-- Data de entrega: 12 de maio de 2020 (Tarde)
+-- Data de entrega: 15 de maio de 2020 (Manhã)
+-- ----------------------------------------------------------------------------------------
+-- Fim P04- Locadora de Veículos
+-- ----------------------------------------------------------------------------------------
+--
+--

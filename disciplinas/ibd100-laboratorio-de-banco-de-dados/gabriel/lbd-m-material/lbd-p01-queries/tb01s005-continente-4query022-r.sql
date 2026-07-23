@@ -1,0 +1,42 @@
+-- ----------------------------------------------------------------------------------------
+-- Gabriel Issa Shammas (GIS) - 01 de janeiro de 2000 a 31 de dezembro de 2020
+-- ----------------------------------------------------------------------------------------
+-- QUERY022- GIS_TB01S005_CONTINENTE
+--
+-- Qual é o desvio padrão da superfície dos continentes?
+-- Atenção: Colocar label (rótulo) na coluna resultante.
+--
+-- ----------------------------------------------------------------------------------------
+-- Atenção. Indicação do BD a ser usado. Se for o caso, mude o nome do Banco.
+-- ----------------------------------------------------------------------------------------
+--
+USE BDGIS;
+--
+-- ----------------------------------------------------------------------------------------
+-- Seleção de todos os dados para visualização do conteúdo da tabela.
+-- ----------------------------------------------------------------------------------------
+--
+Select stdev(ext_km2) 'Desvio Padrão da superfície dos continentes'
+  From dbo.GIS_TB01S005_CONTINENTE;
+--
+-- ----------------------------------------------------------------------------------------
+-- Comentários.
+-- ----------------------------------------------------------------------------------------
+--
+-- A cláusula FROM é a única cláusula obrigatória no comando SELECT.
+--
+-- As Funções de Agregação são declaradas no comando SELECT  tal qual se faz com a declara-
+-- ção de uma coluna.
+--
+-- Uma função de agregação, ao ser exibida, terá como nome de coluna  "COLUMN NO NAME",  ou
+-- seja, "Coluna Sem Nome", porque sua origem não é da própria tabela.
+--
+-- Para evitar este nome de coluna, utiliza-se de um label ou rótulo de coluna.
+--
+-- Este comando retorna o desvio padrão dos valores da coluna (Standard Deviation).
+--
+-- ----------------------------------------------------------------------------------------
+-- Fim TB01S005 QUERY022
+-- ----------------------------------------------------------------------------------------
+--
+--

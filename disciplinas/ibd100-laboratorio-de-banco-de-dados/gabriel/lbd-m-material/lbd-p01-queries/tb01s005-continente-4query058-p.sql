@@ -1,0 +1,14 @@
+-- ----------------------------------------------------------------------------------------
+-- Gabriel Issa Shammas (GIS) - 01 de janeiro de 2000 a 31 de dezembro de 2020
+-- ----------------------------------------------------------------------------------------
+-- QUERY058- GIS_TB01S005_CONTINENTE
+--
+-- Quais são os continentes cuja coluna observação (obs) encontra-se com valor nulo?
+-- Atenção: Exibir os dados, colocando na primeira coluna a Data e a Hora conforme  o Meri-
+-- diano de Greenwich ou Data e hora de Londres (ou UTC- Universal Time Coordinate).
+--
+-- ----------------------------------------------------------------------------------------
+-- Fim TB01S005 QUERY058
+-- ----------------------------------------------------------------------------------------
+--
+--

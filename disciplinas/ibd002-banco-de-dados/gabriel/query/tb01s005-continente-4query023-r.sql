@@ -1,0 +1,64 @@
+-- ----------------------------------------------------------------------------------------
+-- Gabriel Issa Shammas (GIS) - 01 de janeiro de 2000 a 31 de dezembro de 2020
+-- ----------------------------------------------------------------------------------------
+-- QUERY023- GIS_TB01S005_CONTINENTE
+--
+-- Qual é o desvio padrão da superfície dos continentes?
+-- Atenção: Colocar label (rótulo) na coluna resultante.
+-- Atenção: Não usar a função STDEV, mas sim STDEVP.
+--
+-- ----------------------------------------------------------------------------------------
+-- Atenção. Indicação do BD a ser usado. Se for o caso, mude o nome do Banco.
+-- ----------------------------------------------------------------------------------------
+--
+USE BDGIS;
+--
+-- ----------------------------------------------------------------------------------------
+-- Seleção de todos os dados para visualização do conteúdo da tabela.
+-- ----------------------------------------------------------------------------------------
+--
+Select stdevp(ext_km2) 'Desvio Padrão da superfície dos continentes'
+  From dbo.GIS_TB01S005_CONTINENTE;
+--
+-- ----------------------------------------------------------------------------------------
+-- Comentários.
+-- ----------------------------------------------------------------------------------------
+--
+-- A cláusula FROM é a única cláusula obrigatória no comando SELECT.
+--
+-- As Funções de Agregação são declaradas no comando SELECT  tal qual se faz com a declara-
+-- ção de uma coluna.
+--
+-- Uma função de agregação, ao ser exibida, terá como nome de coluna  "COLUMN NO NAME",  ou
+-- seja, "Coluna Sem Nome", porque sua origem não é da própria tabela.
+--
+-- Para evitar este nome de coluna, utiliza-se de um label ou rótulo de coluna.
+--
+-- Este comando retorna o desvio padrão dos valores da coluna (Standard Deviation).
+--
+-- A função STDEV é usada quando o grupo de números sendo avaliados é apenas uma amostragem
+-- parcial de toda a população.
+-- O denominador para dividir a soma dos desvios quadrados é N-1 , onde N é o número de ob-
+-- servações (uma contagem de itens no conjunto de dados).
+-- Tecnicamente, subtrair o valor 1 é referido como "não tendencioso".
+--
+-- já a função STDEVP  é usada quando o grupo de números que está sendo avaliado  está com-
+-- pleto, ou seja, é toda a população de valores.
+-- Neste caso, o 1 não é subtraído e o denominador  para dividir a soma dos desvios quadra-
+-- dos é simplesmente N, o número de observações  (uma contagem de itens no conjunto de da-
+-- dos).
+-- Tecnicamente, isso é chamado de "tendencioso".
+-- Lembrando que o P em STDEVP significa "População".
+-- Como o conjunto de dados não é uma mera amostra,  mas é constituído de TODOS  os valores
+-- reais, essa função de desvio padrão pode retornar um resultado mais preciso.
+--
+-- (Fonte: https://social.msdn.microsoft.com/Forums/en-US/0d8edea2-f08e-41b7-b120-8ac08855c23b/
+--         difference-between-stdev-amp-stdevp?forum=sqlanalysisservices
+--
+-- ----------------------------------------------------------------------------------------
+-- Fim TB01S005 QUERY023
+-- ----------------------------------------------------------------------------------------
+--
+--
+
+ 

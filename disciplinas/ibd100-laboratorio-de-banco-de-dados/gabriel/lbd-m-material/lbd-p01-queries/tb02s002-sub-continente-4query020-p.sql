@@ -1,0 +1,20 @@
+-- ----------------------------------------------------------------------------------------
+-- Gabriel Issa Shammas (GIS) - 01 de janeiro de 2000 a 31 de dezembro de 2020
+-- ----------------------------------------------------------------------------------------
+-- QUERY020- GIS_TB02S002_SUB_CONTINENTE
+--
+-- Quantos são os subcontinentes existentes?
+-- Atenção: Colocar label (rótulo) nas colunas resultantes.
+-- Atenção: Imprimir também:
+--          Qual é a soma das áreas de todos os subcontinentes?
+--          Qual é a média das áreas de todos os subcontinentes?
+--          Qual é a maior área de um subcontinente?
+--          Qual é a menor área de um subcontinente?
+--          Qual é o desvio padrão da área de todos os subcontinentes?
+--          Qual é a variância da área de todos os subcontinentes?
+--
+-- ----------------------------------------------------------------------------------------
+-- Fim TB02S002 QUERY020
+-- ----------------------------------------------------------------------------------------
+--
+--

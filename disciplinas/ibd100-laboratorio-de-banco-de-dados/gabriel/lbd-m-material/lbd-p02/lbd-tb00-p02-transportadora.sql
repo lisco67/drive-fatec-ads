@@ -1,0 +1,75 @@
+-- ----------------------------------------------------------------------------------------
+-- Gabriel Issa Shammas (GIS) - 01 de janeiro de 2000 a 31 de dezembro de 2020
+-- ----------------------------------------------------------------------------------------
+-- P02- Transportadora
+--
+-- GIS TRANSPORTUDO é uma transportadora  que possui uma matriz no Brasil,  com várias fi-
+-- liais distribuídas por diversos estados do país e também em vários países.
+-- A GIS TRANSPORTUDO retira, transporta  e entrega mercadorias para todo o Brasil  e paí-
+-- ses da América do Sul e América Central.
+-- A transportadora conta com uma frota diversificada de caminhões, VANs e VUCs.
+-- Os veículos são diferenciados para transporte de mercadorias, como VUC,  TOCO (semi-pe-
+-- sado), Truck (pesado), Cavalo Mecânico (extra-pesado),  Cavalo Mecânico Trucado  ou LS,
+-- Bitrem (ou Treminhão), Rodotrem e Guincho (para reboque de outros veículos).
+-- Os veículos podem ser de marcas, cores e ano de fabricação diferentes.
+-- A frota é renovada a cada 5 anos, sendo que a cada ano são adquiridos novos veículos.
+-- Veículos que completam 5 anos de utilização são vendidos ou alugados. Todas estas tran-
+-- sações ficam registradas na empresa.
+-- Todos os motoristas dos veículos, clientes, mercadorias, trajetos, oficinas e funcioná-
+-- rios são devidamente cadastrados.
+-- Todo e qualquer transporte de carga é feito com dois motoristas.
+-- Cada motorista possui uma ficha cadastral e ficha médica completas,  atualizadas sempre
+-- que necessário.
+-- Cada motorista é acompanhado constantemente.
+-- A empresa mantém um mapeamento de todas as praças de pedágios, com os valores atualiza-
+-- dos.
+-- O frete é tabelado e a empresa respeita esta tabela.
+-- Todas as saídas e chegadas são programadas.
+-- Toda retirada e entrega de mercadorias são registradas.
+-- Toda carga é registrada em manifestos, onde consta o valor da mesma.
+-- Cada viagem deve ser autorizada por um funcionário supervisor,  devidamente identifica-
+-- do. A autorização contém a data, hora, local e id do supervisor.
+-- Nenhum motorista é escalado como motorista principal  para duas ou mais  viagens longas
+-- sucessivas. Entende-se por viagem longa aquela viagem superior a 400 Km.
+-- Um motorista não pode ficar como motorista primário por mais de 4 (quatro) horas.
+-- Atingido este tempo,  o motorista primário e o motorista secundário devem trocar de po-
+-- sição. Esta mudança é sempre registrada.
+-- Os eventos de uma viagem são registrados  no que é chamado Diário de Bordo.  Cada ocor-
+-- rência possui data, hora, identificação do veículo, da viagem e do motorista.
+-- As folgas dos motoristas são controladas.
+-- Os motoristas não recebem salário,  mas são pagos por quilometragem rodada,  conforme a
+-- carga que transportam. Quanto maior o peso da carga, maior é o valor pago  por quilôme-
+-- tro rodado.
+-- Na volta da viagem, não há pagamento.
+-- As refeições dos motoristas e o abastecimento do veículo é reembolsado pela transporta-
+-- dora, desde que sejam devidamente documentadas e registradas. A empresa  realiza perio-
+-- dicamente uma estatística dos gastos com refeições e dos gastos com combustíveis  e ma-
+-- nutenção dos veículos.
+-- Eventuais gastos com manutenção do veículo durante a viagem também são reembolsados.
+-- Cada veículo da frota possui um histórico de manutenção,  que é realizada periodicamen-
+-- te, e em função de necessidades específicas, em oficinas cadastradas junto  à Locadora.
+-- Estas oficinas  contam com funcionários habilitados  e especializados,  devidamente ca-
+-- dastrados.
+--
+-- Pede-se:
+-- Criar os scripts de criação das tabelas
+-- Implementar a Integridade Referencial em ao menos 2 (duas) tabelas
+-- Criar os scripts de carga de cada uma das tabelas
+-- Anotar adequadamente as regras de negócio complementares às regras aqui informadas
+-- Vincular este projeto com o Projeto 01- Geográfico
+-- Criar os scripts com queries para as tabelas. Queries simples (para uma tabela) e que-
+-- ries compostas (para várias tabelas). As queries devem contemplar funções de agregação,
+-- funções de data e hora, funções de string e, se for o caso, funções de sistema e de u-
+-- suário.
+-- Responder aos scripts com queries que serão submetidos (estes scripts estarão disponí-
+-- veis após a terceira semana de desenvolvimento.
+-- Elaborar telas de inserção de dados para pelo menos duas tabelas. Pode utiliza lingua-
+-- gem de programação Java, C# ou Python.
+-- Data de entrega: 26 de maio de 2020 (Tarde)
+-- Data de entrega: 29 de maio de 2020 (Manhã)
+--
+-- ----------------------------------------------------------------------------------------
+-- Fim P02- Transportadora
+-- ----------------------------------------------------------------------------------------
+--
+--

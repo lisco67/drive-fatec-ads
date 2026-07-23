@@ -1,0 +1,39 @@
+-- ----------------------------------------------------------------------------------------
+-- Gabriel Issa Shammas (GIS) - 01 de janeiro de 2000 a 31 de dezembro de 2020
+-- ----------------------------------------------------------------------------------------
+-- QUERY001- GIS_TB02S002_SUB_CONTINENTE
+--
+-- Selecionar todos os subcontinentes.
+--
+-- ----------------------------------------------------------------------------------------
+-- Atenção. Indicação do BD a ser usado. Se for o caso, mude o nome do Banco.
+-- ----------------------------------------------------------------------------------------
+--
+USE BDGIS;
+--
+-- ----------------------------------------------------------------------------------------
+-- Seleção de todos os dados para visualização do conteúdo da tabela.
+-- ----------------------------------------------------------------------------------------
+--
+Select *
+  From dbo.GIS_TB02S002_SUB_CONTINENTE;
+--
+-- ----------------------------------------------------------------------------------------
+-- Comentários.
+-- ----------------------------------------------------------------------------------------
+--
+-- No comando SELECT, o '*' indica que se deseja recuperar todas as colunas que  compõem  a
+-- tupla.
+--
+-- Tupla é sinônimo de registro ou linha da tabela, ou ainda, conjunto de colunas.
+--
+-- A cláusula FROM é a única cláusula obrigatória no comando SELECT.
+--
+-- Como não existe a cláusula WHERE,  que é um filtro de seleção de tuplas,  serão selecio-
+-- nadas todas as tuplas.
+--
+-- ----------------------------------------------------------------------------------------
+-- Fim TB02S002 QUERY001
+-- ----------------------------------------------------------------------------------------
+--
+--

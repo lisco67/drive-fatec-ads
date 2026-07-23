@@ -1,0 +1,20 @@
+-- ----------------------------------------------------------------------------------------
+-- Gabriel Issa Shammas (GIS) - 01 de janeiro de 2000 a 31 de dezembro de 2020
+-- ----------------------------------------------------------------------------------------
+-- TEOR0006- GIS_TB01S005_CONTINENTE
+--
+-- Quem cria o Índice Primário (IP) (Primary Index)?
+--
+-- ----------------------------------------------------------------------------------------
+-- Resposta.
+-- ----------------------------------------------------------------------------------------
+--
+-- O Índice Primário (IP) (Primary Index)  desta tabela é criado automaticamente pelo  SGBD
+-- (Sistema Gerenciador de Banco de Dados) quando da execução do script de criação da tabe-
+-- la contendo a definição da Chave Primária (Primary Key ou PK).
+--
+-- ----------------------------------------------------------------------------------------
+-- Fim TB01S005 TEOR0006
+-- ----------------------------------------------------------------------------------------
+--
+--

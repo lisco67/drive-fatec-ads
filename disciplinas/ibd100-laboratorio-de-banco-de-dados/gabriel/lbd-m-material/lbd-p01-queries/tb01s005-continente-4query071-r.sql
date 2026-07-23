@@ -1,0 +1,39 @@
+-- ----------------------------------------------------------------------------------------
+-- Gabriel Issa Shammas (GIS) - 01 de janeiro de 2000 a 31 de dezembro de 2020
+-- ----------------------------------------------------------------------------------------
+-- QUERY071- GIS_TB01S005_CONTINENTE
+--
+-- Exibir o dia da data corrente.
+--
+-- ----------------------------------------------------------------------------------------
+-- Atenção. Indicação do BD a ser usado. Se for o caso, mude o nome do Banco.
+-- ----------------------------------------------------------------------------------------
+--
+USE BDGIS;
+--
+-- ----------------------------------------------------------------------------------------
+-- Seleção de todos os dados para visualização do conteúdo da tabela.
+-- ----------------------------------------------------------------------------------------
+--
+Select Day (getdate());
+--  
+-- ----------------------------------------------------------------------------------------
+-- Comentários.
+-- ----------------------------------------------------------------------------------------
+--
+-- A função Day retorna um valor que corresponde ao dia do mês da data especificada.
+--
+-- Reparar que não é necessário selecionar nenhum dado de nenhuma tabela para exibir a data
+-- e hora correntes e nem para fazer os cálculos.
+--
+-- A função GETDATE() recolhe a data e hora correntes (ou seja, a data e hora locais ou da-
+-- ta e hora de Brasília).
+--
+-- A função Getutcdate()  recolhe a data e hora internacionais  (ou seja,  a data e hora de
+-- Londres ou de Greenwich.
+--
+-- ----------------------------------------------------------------------------------------
+-- Fim TB01S005 QUERY071
+-- ----------------------------------------------------------------------------------------
+--
+--

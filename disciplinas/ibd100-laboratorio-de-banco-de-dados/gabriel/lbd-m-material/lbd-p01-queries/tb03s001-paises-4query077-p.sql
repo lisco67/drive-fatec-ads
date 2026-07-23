@@ -1,0 +1,18 @@
+-- ----------------------------------------------------------------------------------------
+-- Gabriel Issa Shammas (GIS) - 01 de janeiro de 2000 a 31 de dezembro de 2020
+-- ----------------------------------------------------------------------------------------
+-- QUERY077- GIS_TB03S001_PAISES
+--
+-- Quais são os países com área maior do que a área média dos países da América?
+-- Atenção: Colocar o nome do continente ao lado do código do continente.
+-- Atenção: Colocar o nome do subcontinente ao lado do código do subcontinente.
+-- Atenção: Usar Inner Join.
+-- Atenção: Usar o predicado de lista no subselect de primeiro nível.
+-- Atenção: Usar o predicado de lista no subselect de segundo nível.
+-- Atenção: Esta query é igual a anterior, apenas utilizando um predicado diferente.
+--
+-- ----------------------------------------------------------------------------------------
+-- Fim TB03S001 QUERY077
+-- ----------------------------------------------------------------------------------------
+--
+--

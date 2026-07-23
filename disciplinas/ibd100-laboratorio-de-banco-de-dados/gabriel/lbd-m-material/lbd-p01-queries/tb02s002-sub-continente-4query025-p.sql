@@ -1,0 +1,18 @@
+-- ----------------------------------------------------------------------------------------
+-- Gabriel Issa Shammas (GIS) - 01 de janeiro de 2000 a 31 de dezembro de 2014
+-- ----------------------------------------------------------------------------------------
+-- Gabriel Issa Shammas (GIS) - 01 de janeiro de 2000 a 31 de dezembro de 2020
+-- ----------------------------------------------------------------------------------------
+-- QUERY025- GIS_TB02S002_SUB_CONTINENTE
+--
+-- Selecionar todos os subcontinentes, explicitando as colunas no comando e colocando label
+-- nestas colunas, para que o usuário possa melhor entender o relatório gerado.
+-- Atenção: Exibir apenas os subcontinentes com área menor  do que a área média dos subcon-
+--          tinentes
+--          Ordenar a saída pelo nome do subcontinente, em ordem crescente.
+--
+-- ----------------------------------------------------------------------------------------
+-- Fim TB02S002 QUERY025
+-- ----------------------------------------------------------------------------------------
+--
+--

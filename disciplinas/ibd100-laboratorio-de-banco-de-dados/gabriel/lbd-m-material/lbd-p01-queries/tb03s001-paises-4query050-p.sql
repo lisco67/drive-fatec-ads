@@ -1,0 +1,16 @@
+-- ----------------------------------------------------------------------------------------
+-- Gabriel Issa Shammas (GIS) - 01 de janeiro de 2000 a 31 de dezembro de 2020
+-- ----------------------------------------------------------------------------------------
+-- QUERY050- GIS_TB03S001_PAISES
+--
+-- Qual é a quantidade total de países?
+-- Atenção: Imprimir também a área de todos os países.
+--          Imprimir também a área média dos países.
+--          Imprimir também a área do menor dos países.
+--          Imprimir também a área do maior dos países.
+--
+-- ----------------------------------------------------------------------------------------
+-- Fim TB03S001 QUERY050
+-- ----------------------------------------------------------------------------------------
+--
+--

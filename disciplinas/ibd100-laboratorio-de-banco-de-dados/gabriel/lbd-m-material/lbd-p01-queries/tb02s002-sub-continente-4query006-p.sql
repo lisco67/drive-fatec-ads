@@ -1,0 +1,15 @@
+-- ----------------------------------------------------------------------------------------
+-- Gabriel Issa Shammas (GIS) - 01 de janeiro de 2000 a 31 de dezembro de 2020
+-- ----------------------------------------------------------------------------------------
+-- QUERY006- GIS_TB02S002_SUB_CONTINENTE
+--
+-- Selecionar todos os subcontinentes, explicitando as colunas no comando e colocando label
+-- nestas colunas, para que o usuário possa melhor entender o relatório gerado.
+-- Atenção: Ordenar a saída pela coluna COD_CONTINENTE,  em ordem crescente,  e pela coluna
+-- NOME do sub-continente, em ordem decrescente.
+--
+-- ----------------------------------------------------------------------------------------
+-- Fim TB02S002 QUERY006
+-- ----------------------------------------------------------------------------------------
+--
+--

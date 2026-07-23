@@ -1,0 +1,81 @@
+#1
+select ass.nome, ass.cpf, ass.ra, cat.descricao, cat.valMulta
+from associado ass, categoria cat
+where ass.categoria = cat.codcategoria;
+
+#2
+select ass.nome, ass.cpf, tel.telefone
+from associado ass, telefones tel
+where ass.codassociado = tel.associado;
+
+#3
+select li.titulo, li.isbn, li.exemplar, li.edicao, li.autor
+from livro li
+order by li.autor, li.titulo;
+
+#4
+select li.titulo, li.isbn, li.exemplar, emp.dat_emp, emp.dat_dev
+from livro li, emprestimo emp, itens it
+where li.codlivro = it.codlivro
+and emp.codemprestimo = it.codemprestimo
+order by emp.dat_emp desc; 
+
+#5
+select li.titulo, li.isbn, li.exemplar
+from livro li, emprestimo emp, itens it
+where li.codlivro = it.codlivro
+and emp.codemprestimo = it.codemprestimo
+and emp.dat_dev is null;
+
+#6
+select ass.nome, ass.cpf, ass.ra, cat.descricao, emp.dat_emp
+from associado ass, categoria cat, emprestimo emp
+where ass.categoria = cat.codcategoria
+and emp.codassociado = ass.codassociado
+and emp.dat_dev is null
+order by cat.descricao, ass.nome;
+
+#7
+select ass.nome, emp.dat_emp, emp.dat_dev, li.titulo, li.isbn, li.exemplar
+from associado ass, emprestimo emp, livro li, itens it
+where ass.codassociado = emp.codassociado
+and it.codemprestimo = emp.codemprestimo
+and it.codlivro = li.codlivro
+and emp.dat_emp between '2003-01-01' and '2009-12-31'; 
+
+#8
+select ass.nome, ass.cpf, ass.ra, max(emp.dat_emp) ultimo
+from associado ass, emprestimo emp
+where ass.codassociado = emp.codassociado
+group by ass.codassociado;
+
+#9
+select li.titulo, li.isbn, li.exemplar, li.autor, min(emp.dat_emp) primeiro
+from livro li, emprestimo emp, itens it
+where it.codlivro = li.codlivro
+and it.codemprestimo = emp.codemprestimo
+group by li.codlivro;
+
+#10
+select li.titulo, li.isbn, li.exemplar, li.autor, count(emp.codEmprestimo) total
+from livro li, emprestimo emp, itens it
+where it.codlivro = li.codlivro
+and it.codemprestimo = emp.codemprestimo
+group by li.codlivro;
+
+#11
+select ass.nome, ass.cpf, ass.ra, cat.descricao, count(emp.codemprestimo) emprestou
+from associado ass, categoria cat, emprestimo emp
+where ass.categoria = cat.codcategoria
+and emp.codassociado = ass.codassociado
+group by ass.codassociado
+having emprestou > 2;
+
+#12
+select ass.nome, ass.cpf, ass.ra, cat.descricao, (sum(datediff(sysdate(),emp.dat_emp) - cat.tempo)) * cat.valMulta total
+from associado ass, categoria cat, emprestimo emp
+where ass.categoria = cat.codcategoria
+and emp.codassociado = ass.codassociado
+and emp.dat_dev is null
+group by ass.codassociado;
+

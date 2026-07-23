@@ -1,0 +1,17 @@
+-- ----------------------------------------------------------------------------------------
+-- Gabriel Issa Shammas (GIS) - 01 de janeiro de 2000 a 31 de dezembro de 2020
+-- ----------------------------------------------------------------------------------------
+-- QUERY041- GIS_TB02S002_SUB_CONTINENTE
+--
+-- Selecionar todos os subcontinentes, explicitando as colunas no comando e colocando label
+-- nestas colunas, para que o usuário possa melhor entender o relatório gerado.
+-- Atenção: Exibir apenas os subcontinentes cujo nome não possui a letra "R" ou a letra "I"
+--          em alguma posição, mas nesta sequência.
+--          Tanto a letra "R" como a letra "I" podem ser maiúsculas ou minúsculas.
+--          Ordenar a saída pelo nome do subcontinente, em ordem crescente.
+--
+-- ----------------------------------------------------------------------------------------
+-- Fim TB02S002 QUERY041
+-- ----------------------------------------------------------------------------------------
+--
+--

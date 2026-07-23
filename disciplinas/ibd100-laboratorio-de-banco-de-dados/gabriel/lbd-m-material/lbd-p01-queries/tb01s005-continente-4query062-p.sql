@@ -1,0 +1,21 @@
+-- ----------------------------------------------------------------------------------------
+-- Gabriel Issa Shammas (GIS) - 01 de janeiro de 2000 a 31 de dezembro de 2020
+-- ----------------------------------------------------------------------------------------
+-- QUERY062- GIS_TB01S005_CONTINENTE
+--
+-- Atenção: Exibir os dados, colocando na primeira, na segunda e na terceira colunas a Data
+-- e a Hora correntes (ou seja, a data e hora locais ou data e hora de Brasília).
+-- Para a primeira coluna, somar o valor 01 no dia. 
+-- Para a segunda coluna, somar o valor 02 no mês. 
+-- Para a terceira coluna, somar o valor 03 no ano. 
+-- Atenção: Exibir os dados, colocando na quarta, na quinta e na sexta colunas a  Data  e a
+-- Hora de Greenwich (ou seja, a data e hora internacional ou data e hora de Londres).
+-- Para a quarta coluna, somar o valor 01 no dia. 
+-- Para a quinta coluna, somar o valor 02 no mês. 
+-- Para a sexta coluna, somar o valor 03 no ano. 
+--
+-- ----------------------------------------------------------------------------------------
+-- Fim TB01S005 QUERY062
+-- ----------------------------------------------------------------------------------------
+--
+--

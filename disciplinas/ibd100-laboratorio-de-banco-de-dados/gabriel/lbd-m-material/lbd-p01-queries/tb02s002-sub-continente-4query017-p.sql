@@ -1,0 +1,14 @@
+-- ----------------------------------------------------------------------------------------
+-- Gabriel Issa Shammas (GIS) - 01 de janeiro de 2000 a 31 de dezembro de 2020
+-- ----------------------------------------------------------------------------------------
+-- QUERY017- GIS_TB02S002_SUB_CONTINENTE
+--
+-- Qual é a soma das áreas de todos os subcontinentes?
+-- Atenção: Colocar label (rótulo) na coluna resultante.
+--          Esta é uma outra forma de solicitar a mesma informação da query anterior.
+--
+-- ----------------------------------------------------------------------------------------
+-- Fim TB02S002 QUERY017
+-- ----------------------------------------------------------------------------------------
+--
+--

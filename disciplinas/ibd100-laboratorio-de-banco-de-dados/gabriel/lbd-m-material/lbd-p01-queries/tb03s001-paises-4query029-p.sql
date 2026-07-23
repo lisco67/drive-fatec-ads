@@ -1,0 +1,15 @@
+-- ----------------------------------------------------------------------------------------
+-- Gabriel Issa Shammas (GIS) - 01 de janeiro de 2000 a 31 de dezembro de 2020
+-- ----------------------------------------------------------------------------------------
+-- QUERY029- GIS_TB03S001_PAISES
+--
+-- Quais são os países cujo nome  não possui as letras "r" e "i",  nesta ordem  ou na ordem
+-- inversa?
+-- Atenção: Considerar que a letra na 1a. posição é maiúscula.
+-- Atenção: Usar o predicado LIKE.
+--
+-- ----------------------------------------------------------------------------------------
+-- Fim TB03S001 QUERY029
+-- ----------------------------------------------------------------------------------------
+--
+--

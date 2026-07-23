@@ -1,0 +1,23 @@
+
+delimiter //
+CREATE PROCEDURE exercicio1 (IN v_desc varchar(30), IN v_temp int, IN v_multa float)
+BEGIN
+	INSERT INTO categoria (descricao, tempo, valMulta) VALUES (v_desc, v_temp, v_multa);
+END
+//
+
+call exercicio1('Aula Função', 10, 0.25) //
+
+CREATE FUNCTION exercicio2()
+RETURNS INTEGER
+deterministic
+BEGIN
+	DECLARE total integer;
+    select count(*) into total from livro;    
+	RETURN total;	
+END
+//
+
+select exercicio2() //
+
+select titulo, count(codLivro) qtd, count(codLivro)/exercicio2() proporcao from livro group by titulo //

@@ -1,0 +1,24 @@
+-- ----------------------------------------------------------------------------------------
+-- Gabriel Issa Shammas (GIS) - 01 de janeiro de 2000 a 31 de dezembro de 2020
+-- ----------------------------------------------------------------------------------------
+-- TEOR0002- GIS_TB01S005_CONTINENTE
+--
+-- Qual é o comando SQL utilizado para se obter a cardinalidade desta tabela?
+--
+-- ----------------------------------------------------------------------------------------
+-- Resposta.
+-- ----------------------------------------------------------------------------------------
+--
+-- O comando para se obter a cardinalidade desta tabela é:
+--
+-- Select COUNT(*) 'Cardinalidade'
+--  From GIS_TB01S005_CONTINENTE;
+--
+-- Lembrando apenas que a função de agregação é impressa sem nome de coluna  (COLUMN NO NA-
+-- ME), daí colocarmos a palavra CARDINALIDADE no label desta coluna.
+--
+-- ----------------------------------------------------------------------------------------
+-- Fim TB01S005 TEOR0002
+-- ----------------------------------------------------------------------------------------
+--
+--

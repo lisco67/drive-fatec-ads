@@ -1,0 +1,15 @@
+-- ----------------------------------------------------------------------------------------
+-- Gabriel Issa Shammas (GIS) - 01 de janeiro de 2000 a 31 de dezembro de 2020
+-- ----------------------------------------------------------------------------------------
+-- QUERY030- GIS_TB02S002_SUB_CONTINENTE
+--
+-- Qual é a área média dos subcontinentes da América e Ásia?
+-- Atenção: Colocar label (rótulo) na coluna resultante.
+-- Atenção: Usar necessariamente o predicado de igualdade.
+--          Verificar o que ocorre na execução desta consulta.
+--
+-- ----------------------------------------------------------------------------------------
+-- Fim TB02S002 QUERY030
+-- ----------------------------------------------------------------------------------------
+--
+--

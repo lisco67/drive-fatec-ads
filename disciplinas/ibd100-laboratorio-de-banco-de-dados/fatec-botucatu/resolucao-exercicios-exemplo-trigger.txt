@@ -1,0 +1,31 @@
+
+#1
+create table sequencial(
+id integer primary key auto_increment,
+nome varchar(20),
+sequencial integer);
+
+
+#2
+delimiter //
+create trigger tsequencial
+before update on sequencial
+for each row
+  begin
+    if new.sequencial < old.sequencial then
+       set new.sequencial = old.sequencial;
+    end if;   
+  end;
+  //
+  
+#3
+SELECT * FROM aulabd.sequencial //
+
+insert into sequencial (nome, sequencial) values ('NFSe', 1) //
+
+update sequencial set sequencial = 2 where id = 1 //
+update sequencial set sequencial = 20 where id = 1 //
+update sequencial set sequencial = 3 where id = 1 //
+update sequencial set sequencial = 51 where id = 1 //
+update sequencial set sequencial = 50 where id = 1 //
+

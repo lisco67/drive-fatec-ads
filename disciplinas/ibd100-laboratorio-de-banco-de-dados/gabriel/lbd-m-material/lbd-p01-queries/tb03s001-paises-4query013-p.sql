@@ -1,0 +1,15 @@
+-- ----------------------------------------------------------------------------------------
+-- Gabriel Issa Shammas (GIS) - 01 de janeiro de 2000 a 31 de dezembro de 2020
+-- ----------------------------------------------------------------------------------------
+-- QUERY013- GIS_TB03S001_PAISES
+--
+-- Selecionar todos os países, explicitando as colunas no comando  e colocando label nestas
+-- colunas, para que o usuário possa melhor entender o relatório gerado. 
+-- Atenção: Substituir a coluna NOME pela posição que ela ocupa na tabela, que é 2.
+--          Verificar o que acontece.
+--
+-- ----------------------------------------------------------------------------------------
+-- Fim TB03S001 QUERY013
+-- ----------------------------------------------------------------------------------------
+--
+--

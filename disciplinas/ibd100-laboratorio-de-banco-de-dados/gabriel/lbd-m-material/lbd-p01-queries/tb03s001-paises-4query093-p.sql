@@ -1,0 +1,17 @@
+-- ----------------------------------------------------------------------------------------
+-- Gabriel Issa Shammas (GIS) - 01 de janeiro de 2000 a 31 de dezembro de 2020
+-- ----------------------------------------------------------------------------------------
+-- QUERY093- GIS_TB03S001_PAISES
+--
+-- Selecionar todos os países com nome iniciando com a letra "B" ou com a letra "C" e com a
+-- letra "l" na 3a. posição, que não faça parte da Europa.
+-- Atenção: Colocar o nome do continente ao lado do código do continente.
+-- Atenção: Colocar o nome do subcontinente ao lado do código do subcontinente.
+-- Atenção: Usar Join Natural (Natural Join).
+-- Atenção: Não usar o predicado Like.
+--
+-- ----------------------------------------------------------------------------------------
+-- Fim TB03S001 QUERY093
+-- ----------------------------------------------------------------------------------------
+--
+--

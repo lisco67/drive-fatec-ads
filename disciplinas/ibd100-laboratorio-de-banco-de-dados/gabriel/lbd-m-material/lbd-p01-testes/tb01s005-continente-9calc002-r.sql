@@ -1,0 +1,71 @@
+-- ----------------------------------------------------------------------------------------
+-- Gabriel Issa Shammas (GIS) - 01 de janeiro de 2000 a 31 de dezembro de 2020
+-- ----------------------------------------------------------------------------------------
+-- CALC0002- GIS_TB01S005_CONTINENTE
+--
+-- Sabendo que ao criar esta tabela com uma chave primária (PK ou Primary Key), o SGBD cria
+-- automaticamente um índice primário (IP) para esta tabela, calcular o tamanho da tupla do
+-- Índice Primário (IP) desta tabela, em bytes.
+--
+-- ----------------------------------------------------------------------------------------
+-- Resposta.
+-- ----------------------------------------------------------------------------------------
+--
+-- A tupla é o conjunto de colunas, logo basta somar a quantidade de bytes de cada coluna e
+-- teremos a quantidade de bytes da linha (ou da tupla).
+--
+-- Para o índice primário (IP), sabe-se que todo índice é uma relação binária (ou uma tabe-
+-- la de grau 2) pois tem 2 (duas) colunas: uma destinada à chave (key) da tabela e a outra
+-- contendo o endereço da linha da tabela que contém o registro com a respectiva chave.
+--
+-- O tamanho da chave (key) é obtido consultando a tabela e verificando o tamanho da  chave
+-- primária (PK ou Primary Key).
+--
+-- O endereço (constante da segunda coluna do índice) é uma coluna cujo data type  (tipo de
+-- dado) é INT, ou seja, é um coluna com tamanho de 4 (quatro) bytes.
+--
+-- Assim: 3 + 4 = 7 bytes.
+--
+-- Então, a tupla do índice primário (IP) desta tabela possui 7 bytes.
+--
+-- ----------------------------------------------------------------------------------------
+-- Comentários.
+-- ----------------------------------------------------------------------------------------
+--
+-- Para coluna com tipo de dado  NUMERIC (2, 0), consideramos tamanho de 2 bytes.
+--
+-- Para coluna com tipo de dado  NUMERIC (11, 2), consideramos tamanho de 11 bytes.
+--
+-- Para coluna com tipo de dado  CHAR (5), consideramos tamanho de 5 bytes.
+--
+-- Para coluna com tipo de dado  VARCHAR (20), consideramos tamanho de 20 bytes.
+--
+-- Para coluna com tipo de dado  INT (Integer), consideramos tamanho de 4 bytes.
+--
+-- Para coluna com tipo de dado  SMALLINT (Small Integer), consideramos tamanho de 2 bytes.
+--
+-- Para coluna com tipo de dado  DATETIME, consideramos tamanho de 8 bytes.
+--
+-- Para coluna com tipo de dado  DATE, consideramos tamanho de 4 bytes.
+--
+-- Para coluna com tipo de dado  TIME, consideramos tamanho de 4 bytes.
+--
+-- Para colunas com tipo de dados NUMERIC ou DECIMAL, não estamos considerando as  técnicas
+-- de compactação de campos numéricos, que pode variar conforme o fabricante.
+--
+-- Para colunas com tipo de dados  VARCHAR ou VARINT, não estamos considerando  os bytes a-
+-- dicionais para cada coluna de tamanho variável.
+--
+-- Para colunas que aceitam o valor  NULL, não estamos considerando os bytes adicionais pa-
+-- ra cada coluna com valor nulo.
+--
+-- Para efeito de esclarecimento inicial no cálculo do tamanho da tupla, consideramos  ape-
+-- nas os valores nominais das colunas.
+--
+-- Todo índice possui tupla com grau 2, ou seja, as linhas do índice possuem 2 colunas.
+--
+-- ----------------------------------------------------------------------------------------
+-- Fim TB01S005 CALC0002
+-- ----------------------------------------------------------------------------------------
+--
+--

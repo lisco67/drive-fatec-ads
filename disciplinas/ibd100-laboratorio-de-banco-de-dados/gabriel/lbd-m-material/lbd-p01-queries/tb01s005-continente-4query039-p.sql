@@ -1,0 +1,14 @@
+-- ----------------------------------------------------------------------------------------
+-- Gabriel Issa Shammas (GIS) - 01 de janeiro de 2000 a 31 de dezembro de 2020
+-- ----------------------------------------------------------------------------------------
+-- QUERY039- GIS_TB01S005_CONTINENTE
+--
+-- Quais são os continentes  cuja superfície (extensão)  é maior do que o continente  com a
+-- menor superfície (extensão) e é menor do que o continente com a maior superfície (exten-
+-- são)?
+--
+-- ----------------------------------------------------------------------------------------
+-- Fim TB01S005 QUERY039
+-- ----------------------------------------------------------------------------------------
+--
+--

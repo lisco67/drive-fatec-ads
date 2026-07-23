@@ -1,0 +1,14 @@
+-- ----------------------------------------------------------------------------------------
+-- Gabriel Issa Shammas (GIS) - 01 de janeiro de 2000 a 31 de dezembro de 2020
+-- ----------------------------------------------------------------------------------------
+-- QUERY027- GIS_TB01S005_CONTINENTE
+--
+-- Mostrar o valor da soma de verificação calculado sobre uma linha de uma tabela  ou sobre
+-- uma lista de expressões.
+-- Atenção: Colocar label (rótulo) na coluna resultante.
+--
+-- ----------------------------------------------------------------------------------------
+-- Fim TB01S005 QUERY026
+-- ----------------------------------------------------------------------------------------
+--
+--
