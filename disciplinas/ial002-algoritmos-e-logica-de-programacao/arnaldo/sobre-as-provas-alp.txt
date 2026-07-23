@@ -1,0 +1,21 @@
+A P1 foi:
+(Total 4 pontos)
+
+- Primeiro teste de mesa (valendo 1 ponto)
+- Segundo teste de mesa
+(valendo 1 ponto)
+- Escrever um código que descobre se o ano é bissexto ou não, usando a função “format” e código enxuto e otimizado 
+(valendo 2 pontos)
+
+--
+A P2 foi:
+(Total 4 pontos)
+
+- Primeiro teste de mesa, praticamente igual ao da PS 
+(valendo 1 ponto)
+
+- Segundo teste de mesa, praticamente igual ao da PS também, usando a função “for range”
+(valendo 1 ponto)
+
+- Tinha duas questões e você tinha que escolher apenas uma pra resolver. Uma das opções eu lembro que era igual à questão 04 da PS. A outra opção eu não lembro.
+(valendo 2 pontos)
