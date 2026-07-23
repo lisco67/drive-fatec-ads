@@ -1,0 +1,4 @@
+﻿Elabore uma categorização da variável salário
+Se salário <= 1250 , Baixo
+Se 1250<salário<=1500, Médio
+Se salário>1500, Alto 

@@ -1,0 +1,5 @@
+## função variância ##
+variancia<-function(x){
+  var<-sum((x-mean(x))^2)/(length(x)-1)
+  return(var)
+}
