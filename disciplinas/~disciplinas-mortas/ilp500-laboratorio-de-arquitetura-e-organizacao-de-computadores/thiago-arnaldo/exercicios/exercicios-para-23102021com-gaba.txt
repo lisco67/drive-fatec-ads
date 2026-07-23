@@ -1,0 +1,182 @@
+
+1) 
+Considere que o sistema operacional ocupa 850(10) Bytes de RAM, 
+que o programa tem o segmento de código com 205(10) bytes, 
+segmento de dados com 138(10) bytes, 
+segmento Extra com 206(10) bytes e 
+segmento de pilha com 16(10) bytes (SP aponta para 16(10))
+
+
+--- (10) Indica valores expressos em decimal. 
+a) Represente em HEXADECIMAL o valor dos registradores CS, DS, ES e SS e SP, 
+imediatamente após a carga do programa na RAM (Padrão do sistema operacional), 
+
+b) Represente em HEXADECIMAL o valor dos registradores DS e ES após serem remanejados 
+para endereçar seus respectivos segmentos, e do registrador SP após a execução de uma 
+instrução pop AX,  pop DX . 
+
+Responda no quadro de respostas conforme o modelo abaixo:
+Carga: CS= DS= ES= SS= SP= 
+
+Remanejados: DS= ES= SP=
+
+
+2)
+Represente os valores na ordem de saída da pilha, para a seguinte sequência de comandos:
+push 6, push 7, pop, push 8, push 8, pop, pop, push 9, push 9, pop, push 0, pop, pop,
+push 6, pop, pop.
+
+       
+pilha
+
+
+saida pinha
+
+
+7 8 8 9 0 9 6 6
+
+
+
+
+3) Baseado nos Programas que mostraram o Alfabeto, façam um programa utilizando Pilha para mostrar :
+
+AzBy.......YbZa
+
+
+
+
+SEG_COD           SEGMENT                           ; PROG3    inicio segto. de codigo
+ASSUME CS:SEG_COD,DS:SEG_COD,SS:SEG_COD,ES:SEG_COD  ; posiciona regs segtos
+PROG1 PROC                                          ; procedure
+                                                    
+MOV AH, 02
+MOVE DL, 41H 
+MOV CX,41H
+PUSH CX
+MOV CX, 7AH
+PUSH CX
+MOV CX, 26
+
+VOLTA:
+INT 21H
+POP BX
+PUSH DX
+MOV DL,BL
+INT 21H
+DEC BX
+POP DX
+INC DL
+PUSH BX
+LOOP VOLTA
+
+MOV AH,4Ch
+INT 21H
+PROG1  ENDP                                         ; final da procedure
+SEG_COD ENDS                                        ; final do segmento
+END PROG1                                           ; inicia exec em PROG1
+
+
+4 - Utilizando o Comando G= do Debug acione o manipulador da int 19h
+
+19x 4h= 64
+
+FB 07 70 00
+
+EL = 0070:07FB
+
+G = 0070:07FB
+
+5-ALTERE A TABELA DE VETORES DE INTERRUPÇÕES PARA:
+A) EXECUTAR O MANIPULADOR DA INT. 19h QUANDO FOR
+PRESSIONADA A TECLA “PRINT SCREEN” (INT 05h).
+
+05 X 4 = 14 (DESLOCAMENTO DA INT 5)
+
+19x 4h= 64 (DESLOCAMENTO DA INT 19)
+
+FB 07 70 00 (CONTEUDO DA INT 19 NA TVI A PARTIR DO DESLOCAMENTO 64)
+
+
+E 0:14 FB 07 70 00 
+
+
+00700
++07FB
+-------
+00EFB
+
+B) EXECUTAR O ENDEREÇO DE RESET (FFFF0h) QUANDO FOR
+PRESSIONADA A TECLA “PRINT SCREEN” (INT 05h).
+
+E 0:14 00 00 FF FF 
+6) Considere que o sistema operacional ocupa 1455(10) Bytes de RAM, que o programa tem o segmento de código com 458(10) bytes, 
+segmento de dados com 275(10) bytes, segmento Extra com 512(10) bytes e de pilha com 48(10) bytes. 
+Represente em  hexadecimal o valor dos registradores CS, DS, ES, SS e SP, imediatamente após a carga do programa na RAM (Padrão do sistema operacional), 
+dos registradores DS e ES após remanejados para apontar  seus respectivos segmentos, e  valor de SP após colocar 2 bytes na pilha (push AX).  
+			
+              Carga:   CS=                DS=               ES=                SS=              SP=                    
+								     
+              Remanejados :             DS=	             ES=                                     SP=	
+
+
+				---------------------
+				|                           |
+				|                           | 
+				|   SP 48 = 30       | 
+SS		BA0        	---------------------
+				|                           |
+				|   512 = 200h      | 
+				|   SEG EXTRA   |
+		9A0                              ---------------------				
+		993                              ---------------------
+				|                            |
+				|   275 = 113h       | 
+				|   SEG DADOS  | 
+		880            	---------------------
+		87A	                  ---------------------
+				|                             |
+				|   458 = 1CAh      | 
+				|   SEG CODIGO  | 
+CS 		6B0            ---------------------
+				|                             |
+				|                             | 
+				|   PSP 100H         |
+DS/ES                          5B0           ----------------------- 				
+		5AF                             -----------------------
+				|                               |
+				|     SO 1455 =5AFh | 
+				|                               | 
+		  00000h                     ------------------------
+
+
+			
+              Carga:   CS=   6B        DS=  5B             ES= 5B               SS=   BA           SP= 30                    
+								     
+              Remanejados :             DS=	88             ES=  9A                                        SP= 2E	                            
+
+
+
+7)  Baseado no Trecho do programa abaixo. Qual será a saída (resultado) apresentado?  
+
+MOV AH, 02
+MOVE DL, 7AH 
+MOV CX,41H
+PUSH CX
+MOV CX, 41H
+PUSH CX
+MOV CX, 26
+
+VOLTA:
+INT 21H
+POP BX
+PUSH DX
+MOV DL,BL
+INT 21H
+INC BX
+POP DX
+DEC DL
+PUSH BX
+LOOP VOLTA
+
+saida 
+zAyB.......aZ
