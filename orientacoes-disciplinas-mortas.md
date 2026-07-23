@@ -11,7 +11,7 @@
 2. O coordenador precisa autorizar o curso desssa disciplina como compensação de carga-horária.
 
 ## Disciplinas equivalentes [em construção]
-Para checar os horários de cada disciplina, acesse o site da FatecSP [https://www.fatecsp.br/paginas/grade_horaria.php#titulo1]
+Para checar os horários de cada disciplina, [acesse o site da FatecSP](https://www.fatecsp.br/paginas/grade_horaria.php#titulo1)
 
 ### MATEMÁTICA DISCRETA / MATEMÁTICA (CALCULO 1)
 
