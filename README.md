@@ -4,10 +4,28 @@ Continuação do [antigo Drive](https://drive.google.com/drive/folders/1yqSr2BiL
 
 ## IMPORTANTE
 :alarm_clock: [Horários e salas](https://www.fatecsp.br/paginas/grade_horaria.php#titulo1)  
+### 🗓️ Calendário de Agosto (prioridades)
+03/08 - Início das aulas  
+10/08 - Prazo final solicitar aproveitamentos de estudos via SIGA  
+10/08 - Prazo final de matrículas de **alunos veteranos** para vagas remanescentes, transferências e alteração na matrícula para acomodação de horário  
+31/08 - Prazo final de matrículas de alunos ingressantes  
+📅 [Calendário completo](\calendario-2026)
 
 💻 [Sobre estágio](/orientacoes-estagio.md)  
-
 🌍 [Matrícula de disciplinas em outra fatec](/orientacoes-disciplinas-em-outra-fatec.md)  
+
+## CONTATOS
+|Local|E-mail|Telefone|
+|-----|------|--------|
+|Seção de Alunos|secaluno@fatecsp.br|3312-2209|
+|Seção de Ex-Alunos|secexalu@fatecsp.br|3312-2206|
+|Biblioteca|biblioteca@fatecsp.br|Área Técnica - 3322-2211 // Atendimento - 3322-2212|
+|Relações Empresariais|estagios@fatecsp.br|3322-2223|
+|Serviços Operacionais|dir_serv@fatecsp.br|3322-2205|
+|Serviços Acadêmicos|f002acad@cps.sp.gov.br|3322-2249
+|Serviços Administrativos Internos|dir_adm@fatecsp.br|3322-2206|
+|Achados e Perdidos|protocol@fatecsp.br|3322-2200|
+|Coordenação de ADS|coord.ads@fatecsp.br 
 
 ## 💀 Grade antiga
 ### Disciplinas que não estarão disponíveis a partir do próximo semestre (jan/2027)
@@ -22,20 +40,6 @@ Continuação do [antigo Drive](https://drive.google.com/drive/folders/1yqSr2BiL
 ❗[Orientações completas e lista de equivalências](/orientacoes-disciplinas-mortas.md)  
 💀[Disciplinas mortas](/disciplinas/~disciplinas-mortas)
   
-### Mudanças nas disciplinas novas
-#### Disciplinas com alteração de sigla
-| Disciplina                |sigla antiga|sigla nova |
-|---------------------------|------------|-----------|
-| Engenharia de Software I  |   IES100   |  IES036   |  
-| Engenharia de Software II |   IES200   |  IES037   |
-| Comunicação e Expressão   |   LPO001   |  COM141   |
-| Alg. e Lógica de Prog.    |   IAL002   |  IAL027   |
-| Arq. e Org. de Comput.    |   IAC001   |  IAC012   |
-
-#### Disciplinas que foram fundidas ou divididas
-- Banco de dados -> dividas em I e II
-- Sistemas Operacionais I e II -> fundidas 
-
 ## Outros
 💑 [Planilha de Networking](/networking-fatec.xlsx)  
 
