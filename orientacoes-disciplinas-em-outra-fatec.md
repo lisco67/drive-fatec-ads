@@ -19,13 +19,6 @@ Informações a serem enviadas por email para a _Fatec onde pretende cursar_ **e
 - COORDENAÇÃO: 
   Gabriel Issa Jabra Shammas: coord.ads@fatecsp.br
 
-## FATEC IPIRANGA
-[Clique aqui](https://fatecipiranga.cps.sp.gov.br/solicitacao-para-disciplinas-fatec-ipiranga/) para solicitar a matrícula interfatec
-
-### Contatos  
-- SECRETARIA: f204acad@cps.sp.gov.br, com cópia
-- COORDENAÇÃO: f204ads@cps.sp.gov.br
-
 ## FATEC ZONA SUL
 ### Contatos  
 - Email Fatec Zona Sul (EAD): f137acad@cps.sp.gov.br  
@@ -34,6 +27,28 @@ Informações a serem enviadas por email para a _Fatec onde pretende cursar_ **e
 - coordenação: 
   * ff137coord.ads@cps.sp.gov.br
   * eliseu.silva4@fatec.sp.gov.br
+
+### Disciplinas na Fatec ZS
+#### Presencial
+- ISO-200 - Sistemas Operacionais II (Noturno)  
+- ISG-003 - Segurança da Informação (Noturno)  
+    
+#### Remoto
+
+|Código e matéria Fatec ZS|Código da matéria equivalente fatec SP|Professor|Periodo|dia da aula|
+|------------------------|--------------------------------------|---------|-------|-----------|
+gestão e governança (ITI-019)|ITI-004|WALCYR|Matutino|Quarta feira|
+Inteligencia  Artificial (IIA-011)|IIA-014|EDSON LUIZ|Matutino|Segunda-feira
+Ética (HSO-020)|HSE-001|ADMARCIO|Noturno|Quinta Feira
+
+
+## FATEC IPIRANGA
+[Clique aqui](https://fatecipiranga.cps.sp.gov.br/solicitacao-para-disciplinas-fatec-ipiranga/) para solicitar a matrícula interfatec
+
+### Contatos  
+- SECRETARIA: f204acad@cps.sp.gov.br, com cópia
+- COORDENAÇÃO: f204ads@cps.sp.gov.br
+
 
 ## FATEC FERAZ DE VASCONCELOS
 E-mail: f292acad@cps.sp.gov.br (presencial)
