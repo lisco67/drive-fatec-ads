@@ -42,6 +42,7 @@ Continuação do [antigo Drive](https://drive.google.com/drive/folders/1yqSr2BiL
   
 ## Outros
 💑 [Planilha de Networking](/networking-fatec.xlsx)  
+📐 [Reforco de matemática](/reforco-matematica)
 
 📝 Projetos pedagógicos e ementas:  
     |_ [Grade antiga](/curriculo/proj-pedagogico-ads-antigo.pdf)  
