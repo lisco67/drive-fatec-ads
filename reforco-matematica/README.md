@@ -1,10 +1,18 @@
 # Sobre o reforço de matemática
 [site](https://sites.google.com/a/fatecsp.br/matematica/site-da-%C3%A1rea-de-matem%C3%A1tica/refor%C3%A7o-em-matem%C3%A1tica/inscri%C3%A7%C3%B5es
-)  
+) 
+
+### Resumo
 - São aulas 1h sobre conteúdos básicos do ensino médio;
 - Horário: segundas, terças e algumas quartas, das 18h às 19h;
 - Você ganha 1 ponto na média se tirar mais que 5 na prova e tiver presença de %75 (pode faltar cerca de 5 ou 6 aulas);
 
+### Disciplinas onde o ponto extra é aceito
+- Cálculo ou Cálculo I _(Edifícios, Eletrônica Industrial, Estradas, Fabricação Mecânica, Gestão da Produção Industrial, Hidráulica e Saneamento Ambiental, Instalações Elétricas, Materiais, Mecânica de Precisão, Microeletrônica, Projetos Mecânicos, Refrigeração e Climatização, Soldagem)_;
+- Métodos Quantitativos (Gestão da Qualidade);
+- Fundamentos de Matemática (Hidráulica e Saneamento Ambiental);
+- Matemática Aplicada à Gestão da Produção (Gestão da Produção Industrial);
+  
 ### Professores
 - Alexandre Solis <3 
 - Andrea Ribari Yoshizawa
