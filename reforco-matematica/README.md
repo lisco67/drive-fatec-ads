@@ -15,3 +15,6 @@
 - Seizen Yamaskiro
 - Suzana Abreu de O. Souza
 - Walter Paulette
+
+### OBS
+A prova de 2023 (que está na pasta) foi beeeem diferente da de 2026/1 (que foi bem mais ismples e com menos questões)
