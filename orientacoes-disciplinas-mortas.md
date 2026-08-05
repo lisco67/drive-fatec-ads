@@ -56,7 +56,3 @@ Para checar os horários de cada disciplina, [acesse o site da FatecSP](https://
 3. Isso passará pela aprovação do coordenador do curso da disciplina escolhida, que aceitará ou não a sua matrícula
 Se a disciplina for de ADS mesmo, a burocracia é bem menor.
 
-
-### Agradecimentos especiais
-_Marcelo Luque_, que leu a Deliberação 106.
-
